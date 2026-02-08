@@ -1,0 +1,9 @@
+# Decisiones pendientes de Angel
+pending: []
+# Formato futuro:
+# - id: 1
+#   date: "YYYY-MM-DD"
+#   topic: "Qué necesita decidir Angel"
+#   context: "Por qué es importante"
+#   status: pending | resolved
+#   resolution: "Qué decidió Angel"

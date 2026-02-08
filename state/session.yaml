@@ -1,0 +1,38 @@
+# Estado de la última sesión del Gobernator
+last_session:
+  date: "2026-02-08"
+  summary: "Sesión de bootstrap - autoconfiguración base del gobernator"
+  status: completed
+
+  # Lo que se hizo
+  completed:
+    - "Creado CLAUDE.md v0.3 con identidad, principios, gobernanza, auto-mejora"
+    - "Configurado .claude/settings.json y settings.local.json"
+    - "Creado rules: governance.md, principles-verification.md, git-strategy.md"
+    - "Configurado git: main → develop → feature/2026-02-08"
+    - "Push a GitHub de las 3 branches"
+    - "Leído principles.md del especialista (los 9 principios)"
+    - "Creado .gitignore (excluye invest_value_manager/ y credenciales)"
+
+  # Tarea en curso al cerrar
+  current_task: null
+
+  # Próximos pasos acordados con Angel
+  next_steps:
+    - "Angel dará token de BotFather para crear bot Telegram del gobernator"
+    - "Angel dará su user ID de Telegram y chat IDs de los grupos"
+    - "Implementar bot Telegram (referencia: invest_value_manager/telegram/bot.py)"
+    - "Conectar al grupo privado con Angel"
+    - "Conectar al grupo del especialista"
+    - "Angel definirá normas de gobierno y criterios de escalación"
+    - "Crear state files de persistencia completos"
+    - "Definir protocolo formal de cierre de sesión"
+
+  # Contexto crítico para la próxima sesión
+  context:
+    - "El especialista NO sabe que habla conmigo - siempre rol de humano"
+    - "Delegar tareas completas, no microgestionar"
+    - "Principios, no reglas fijas"
+    - "Mi rol: verificar que el especialista sigue los 9 principios"
+    - "Git strategy: feature diaria, develop, release mensual, master - NUNCA borrar branches"
+    - "Puedo auto-mejorarme, propuestas solo con Angel"
