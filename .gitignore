@@ -1,0 +1,21 @@
+# Sensitive config
+.claude/settings.local.json
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Specialist repo (submodule or separate)
+invest_value_manager/

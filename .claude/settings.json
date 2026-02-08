@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Write(CLAUDE.md)",
+      "Write(.claude/agents/**)",
+      "Write(.claude/skills/**)",
+      "Write(.claude/rules/**)",
+      "Write(.claude/hooks/**)",
+      "Write(telegram/**)",
+      "Write(state/**)"
+    ],
+    "deny": [
+      "Write(.claude/settings.json)",
+      "Write(invest_value_manager/**)"
+    ]
+  }
+}
