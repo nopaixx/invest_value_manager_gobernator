@@ -109,10 +109,56 @@ Invest Value Manager (especialista, repo independiente)
 
 ## Reglas Operativas
 
-1. No modificar nada en `invest_value_manager/` directamente
+1. No modificar nada en `invest_value_manager/` directamente - solo lectura
 2. La comunicación con el especialista será via Telegram (pendiente de implementar)
 3. La comunicación con Angel será via otro grupo de Telegram (pendiente de implementar)
 4. Las mejoras al especialista se hacen via instrucciones delegadas, nunca editando su código
+5. Puedo leer el repo del especialista libremente (git log, ficheros, branches) para supervisar
+
+---
+
+## Git Strategy (detalle en `.claude/rules/git-strategy.md`)
+
+Misma estrategia para ambos repos:
+
+```
+master ← release/YYYY-MM ← develop ← feature/YYYY-MM-DD
+```
+
+- **Feature diaria**: `feature/YYYY-MM-DD` - todo el trabajo del día
+- **Develop**: integración, recibe merges de features
+- **Release mensual**: `release/YYYY-MM` desde develop, merge a master
+- **NUNCA eliminar branches** - sirven de historial para Angel
+
+Para el especialista: le pido via Telegram que haga commit, push, y siga esta estrategia.
+Para mí: gestiono mi propio git directamente.
+
+---
+
+## Persistencia y Recovery
+
+### Ficheros de estado (`state/`)
+```
+state/
+├── session.yaml       # Tarea en curso, último mensaje al especialista, estado
+├── task_log.yaml      # Historial de tareas delegadas con status
+├── git_status.yaml    # Branches activas, último merge, última release
+└── escalations.yaml   # Decisiones pendientes de Angel
+```
+
+### Protocolo de recovery (al ser reiniciado)
+1. Leer `state/session.yaml` - ¿hay tarea en curso?
+2. Leer `state/git_status.yaml` - ¿hay merges/releases pendientes?
+3. Leer `state/escalations.yaml` - ¿hay algo pendiente de Angel?
+4. Leer git log del especialista - ¿hubo actividad desde mi última sesión?
+5. Retomar donde me quedé
+
+### Protocolo de interacción con el especialista
+1. **ANTES** de enviar: actualizar `session.yaml` con qué voy a pedir y por qué
+2. **ENVIAR**: instrucción completa via Telegram
+3. **RECIBIR**: actualizar `session.yaml` con la respuesta
+4. **VERIFICAR**: comprobar principios
+5. **CERRAR**: actualizar `task_log.yaml` con resultado
 
 ---
 
@@ -123,6 +169,9 @@ Invest Value Manager (especialista, repo independiente)
 - [ ] Conexión al grupo del especialista (pendiente)
 - [ ] Normas de gobierno (pendiente - Angel las definirá)
 - [ ] Criterios de escalación a Angel (pendiente)
+- [x] Git strategy configurada (main → develop → feature/2026-02-08)
+- [x] Rules de gobernanza y verificación de principios
+- [ ] State files de persistencia (esquema definido, pendiente crear)
 
 ---
 
@@ -154,13 +203,18 @@ invest_value_manager_gobernator/
 │   ├── settings.local.json      # Config local (git-ignored)
 │   ├── rules/                   # Reglas de comportamiento
 │   │   ├── governance.md        # Identidad, delegación, auto-mejora
-│   │   └── principles-verification.md  # Protocolo de verificación de principios
+│   │   ├── principles-verification.md  # Verificación de los 9 principios
+│   │   └── git-strategy.md      # Estrategia de branches para ambos repos
 │   ├── hooks/                   # Hooks de sesión (por configurar)
 │   ├── skills/                  # Skills del gobernator (por crear)
 │   └── agents/                  # Agentes del gobernator (por crear)
 ├── telegram/                    # Bot de Telegram (pendiente)
-├── state/                       # Estado del gobernator
-└── invest_value_manager/        # Especialista (solo lectura)
+├── state/                       # Persistencia entre sesiones
+│   ├── session.yaml             # Tarea en curso, último estado
+│   ├── task_log.yaml            # Historial de tareas delegadas
+│   ├── git_status.yaml          # Estado de branches y merges
+│   └── escalations.yaml         # Decisiones pendientes de Angel
+└── invest_value_manager/        # Especialista (SOLO LECTURA)
 ```
 
 ---
