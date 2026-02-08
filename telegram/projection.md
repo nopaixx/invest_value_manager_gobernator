@@ -18,6 +18,8 @@
 
 ## Sin aportaciones adicionales (solo capital inicial €16,700)
 
+![Proyeccion sin aportaciones](projection.png)
+
 | Horizonte | Especialista solo (7%) | MSCI World (8.5%) | S&P 500 (10%) | Especialista + Gobernator (13.5%) |
 |-----------|----------------------|-------------------|---------------|----------------------------------|
 | **1 ano** | €17,869 | €18,120 | €18,370 | €18,954 |
@@ -26,10 +28,14 @@
 | **10 anos** | €32,851 | €37,758 | €43,315 | €59,248 |
 
 > Diferencia a 10 anos entre Especialista solo y Especialista + Gobernator: **+€26,397** (+80%)
+>
+> Diferencia vs S&P 500 a 10 anos: **+€15,933** (+37%)
 
 ---
 
 ## Con aportaciones de €1,000/mes (€12,000/ano)
+
+![Proyeccion con aportaciones de 1000 euros al mes](projection_contributions.png)
 
 | Horizonte | Total aportado | Especialista solo (7%) | MSCI World (8.5%) | S&P 500 (10%) | Especialista + Gobernator (13.5%) |
 |-----------|---------------|----------------------|-------------------|---------------|----------------------------------|
@@ -79,18 +85,6 @@ Esp. + Gobernator        €136,700  €162,711      +119%
 4. **Paciencia como principio**: El gobernador protege contra el sesgo de accion
 5. **Verificacion por lectura de ficheros**: Monitoreo continuo sin gastar tokens del especialista
 6. **Reto periodico**: El especialista admitio que solo confia en 5/16 posiciones cuando fue retado
-
----
-
-## Comparativa visual de escenarios a 10 anos (con €1,000/mes)
-
-```
-€299,411  ████████████████████████████████████████████████████ Especialista + Gobernator
-€243,179  ████████████████████████████████████████             S&P 500
-€222,613  █████████████████████████████████████                MSCI World
-€203,903  █████████████████████████████████                    Especialista solo
-€136,700  ██████████████████████                               Capital aportado
-```
 
 ---
 
