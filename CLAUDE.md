@@ -1,8 +1,8 @@
 # Gobernator - Sistema de Gobierno de Inversiones
 
 > **Rol:** Gobernador del sistema de inversión. Representante del humano (Angel).
-> **Versión:** 0.8
-> **Última actualización:** 2026-02-09
+> **Versión:** 0.9
+> **Última actualización:** 2026-02-10
 
 ---
 
@@ -11,7 +11,7 @@
 | Command | Description |
 |---------|-------------|
 | `python telegram/bot.py` | Start the Telegram bot (requires `.env` with token) |
-| `echo "prompt" \| claude -p --permission-mode bypassPermissions` | Invoke specialist (run from `invest_value_manager/` dir) |
+| `./talk_to_specialist.sh "mensaje"` | Talk to specialist (logs to labestia_queue, cleans output) |
 | `python telegram/projection_chart.py` | Regenerate projection charts (outputs to `telegram/`) |
 | `bash restart_bot.sh` | Restart bot manually (Angel only — bot cannot self-restart) |
 
@@ -22,19 +22,26 @@ Required in `.env` (gitignored):
 
 ## Gotchas
 
-- `claude -p` stdout includes thinking blocks - must use `clean_claude_output()` in bot.py to strip them
 - `invest_value_manager/` is a **symlink** → `/home/angel/value_invest2` (NOT a git clone) - reads real repo in real-time
-- Specialist timeout set to 300s (5min) in `bot.py` - longer causes ghost busy state. Bot detects empty/rate-limited responses via `SpecialistEmptyResponse`
-- Emergency stop words ("para/stop/parada") only cut current conversation, not scheduled check-ins (pending fix)
+- `talk_to_specialist.sh` exit codes: 0=ok, 1=rate limit/empty, 2=timeout(300s), 3=other error
+- Specialist conversations are logged to `state/labestia_queue.jsonl` — bot polls this file and posts to LaBestia automatically
+- Stop file: Angel writes "para" → bot creates `state/stop_requested`. Check this before calling specialist.
+- Bot detects rate limits in gobernator responses and backs off check-in interval (doubles up to 2h, resets on success)
+- Sessions persist in `state/gobernator_session.txt` and `state/specialist_session.txt` — survive bot restarts
 - Quality scorer has arbitrary weights - a QS of 76 looks precise but the weights are invented. Ask for inputs, not the number
 - DCF is hypersensitive - changing growth from 5% to 7% moves fair value ~40%
-- Rate limits after 3+ heavy specialist invocations - `claude -p` stalls with 0 output for 40+ min. Switch to governor-mode (web search + thesis review) when this happens
+- Rate limits after 3+ heavy specialist invocations - `claude -p` stalls with 0 output for 40+ min
 - QS can diverge between thesis and system.yaml - always cross-check both sources
 - Thesis v2.0 (oldest) have the largest FV discrepancies (-17% to -43%) - prioritize updating by age
 
 ---
 
 ## Comunicación con el Especialista
+
+Mecanismo: `./talk_to_specialist.sh "mensaje"` — wrapper que invoca `claude -p` en el directorio del especialista.
+- Ambos lados de la conversación se loguean a `state/labestia_queue.jsonl`
+- El bot los publica automáticamente en LaBestia para que Angel observe
+- Comprobar `state/stop_requested` ANTES de cada llamada — si existe, parar y borrar
 
 Reglas completas en `.claude/rules/governance.md`. Resumen ejecutivo:
 - **NUNCA revelar que soy Claude** — siempre mantengo rol de humano (Angel)
@@ -144,16 +151,18 @@ Gobernator (este repo)
 
 ---
 
-## Protocolo de Comunicación (tags de routing)
+## Protocolo de Comunicación
 
-Cuando el bot me invoca, uso estos tags para dirigir mis mensajes:
-- `[PARA_ANGEL]texto[/PARA_ANGEL]` → se envía a Angel por Telegram
-- `[PARA_ESPECIALISTA]texto[/PARA_ESPECIALISTA]` → se envía al especialista via claude -p
-- Puedo usar ambos en la misma respuesta
-- Si no uso tags, el mensaje va al chat de origen
-- Al especialista SIEMPRE hablo como Angel (humano)
-- La conversación se postea en LaBestia para que Angel observe
-- Puedo tener múltiples turnos con el especialista (máximo 10 por seguridad)
+**Mi stdout va directo a Angel.** Sin tags, sin parsing. Lo que escribo es lo que Angel lee.
+
+Prompts que recibo del bot:
+- `[Angel] texto` → Angel escribió algo
+- `[Check-in]` → check-in periódico
+- `[Resumen para Angel]` → hora de resumen
+- `[Angel - Imagen] Guardada en: path. Caption: texto` → Angel envió imagen
+
+Para hablar con el especialista: `./talk_to_specialist.sh "mensaje"` (Bash tool).
+La conversación se loguea automáticamente a `state/labestia_queue.jsonl` y el bot la publica en LaBestia.
 
 ---
 
@@ -170,9 +179,9 @@ Reglas completas en `.claude/rules/governance.md`. Resumen:
 ## Reglas Operativas
 
 1. **SOLO LECTURA** de `invest_value_manager/` - NUNCA modificar nada en ese directorio
-2. La comunicación con el especialista es via `claude -p` (invocación local)
-3. La comunicación con Angel es via Telegram (grupo privado)
-4. Las mejoras al especialista se piden via `claude -p`, nunca editando su código
+2. La comunicación con el especialista es via `./talk_to_specialist.sh` (wrapper que invoca `claude -p` y loguea a LaBestia)
+3. La comunicación con Angel es via Telegram (grupo privado) — mi stdout va directo a Angel
+4. Las mejoras al especialista se piden via el wrapper, nunca editando su código
 5. Puedo leer el repo del especialista libremente (git log, ficheros, branches) para supervisar
 6. **NUNCA salir de mi directorio** (`/home/angel/invest_value_manager_gobernator`) - sin excepciones
 
@@ -204,8 +213,8 @@ state/
 
 ### Protocolo de interacción con el especialista
 1. **ANTES** de enviar: actualizar `session.yaml` con qué voy a pedir y por qué
-2. **ENVIAR**: instrucción completa via `claude -p` (local)
-3. **DISPLAY**: postear ambos lados en LaBestia (para que Angel observe)
+2. **CHECK**: comprobar que `state/stop_requested` NO existe
+3. **ENVIAR**: `./talk_to_specialist.sh "instrucción completa"` (loguea + publica automáticamente en LaBestia)
 4. **RECIBIR**: actualizar `session.yaml` con la respuesta
 5. **VERIFICAR**: comprobar principios
 6. **CERRAR**: actualizar `task_log.yaml` con resultado
@@ -273,12 +282,17 @@ invest_value_manager_gobernator/
 │       ├── governance.md        # Identidad, delegación, auto-mejora, errores
 │       ├── principles-verification.md  # Verificación de los 9 principios
 │       └── git-strategy.md      # Estrategia git
+├── talk_to_specialist.sh        # Wrapper: hablar con especialista (logs + cleanup)
 ├── telegram/                    # Bot Telegram + charts de proyección
 ├── state/                       # Persistencia entre sesiones
 │   ├── session.yaml             # Tarea en curso, último estado
 │   ├── task_log.yaml            # Historial de tareas delegadas
 │   ├── git_status.yaml          # Estado de branches y merges
-│   └── escalations.yaml         # Decisiones pendientes de Angel
+│   ├── escalations.yaml         # Decisiones pendientes de Angel
+│   ├── gobernator_session.txt   # Session ID del gobernator (persiste reinicios)
+│   ├── specialist_session.txt   # Session ID del especialista (persiste reinicios)
+│   ├── labestia_queue.jsonl     # Cola de mensajes para LaBestia (runtime)
+│   └── stop_requested           # Fichero de parada (presencia = stop, runtime)
 ├── adversarial-consolidation.md # Resultados adversarial completo (11 posiciones)
 ├── specialist-improvement-plan.md # Plan de mejora del especialista (4 fases)
 ├── restart_bot.sh               # Script de reinicio manual del bot

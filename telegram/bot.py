@@ -5,8 +5,7 @@ import os
 import json
 import re
 import uuid
-import tempfile
-from datetime import time, timezone, timedelta
+from datetime import timedelta, timezone
 
 from dotenv import load_dotenv
 from telegram import Update
@@ -15,44 +14,67 @@ from pathlib import Path
 
 load_dotenv()
 
+# --- Constants ---
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 ANGEL_USER_ID = int(os.environ.get("ANGEL_USER_ID", "998346625"))
 BOT_USER_ID = int(TOKEN.split(":")[0])
 WORKDIR = "/home/angel/invest_value_manager_gobernator"
-SPECIALIST_WORKDIR = os.path.join(WORKDIR, "invest_value_manager")
 CONFIG_FILE = os.path.join(WORKDIR, "telegram", "config.json")
-SPECIALIST_TIMEOUT = 3600  # 1 hour - match gobernator timeout, heavy tasks need time
-
-# Session IDs - generated at startup to isolate from interactive Claude Code sessions
-# /nueva and /nueva_especialista regenerate these for fresh sessions
-gobernator_session_id = str(uuid.uuid4())
-specialist_session_id = str(uuid.uuid4())
-
+STATE_DIR = os.path.join(WORKDIR, "state")
+GOBERNATOR_SESSION_FILE = os.path.join(STATE_DIR, "gobernator_session.txt")
+SPECIALIST_SESSION_FILE = os.path.join(STATE_DIR, "specialist_session.txt")
+STOP_FILE = os.path.join(STATE_DIR, "stop_requested")
+QUEUE_FILE = os.path.join(STATE_DIR, "labestia_queue.jsonl")
+GOBERNATOR_TIMEOUT = 600  # 10 min — gobernator may multi-turn with specialist
+STOP_KEYWORDS = {"para", "stop", "parada"}
+BASE_CHECKIN_INTERVAL = 15 * 60  # 15 min in seconds
+MAX_CHECKIN_INTERVAL = 2 * 60 * 60  # 2h max backoff
 CET = timezone(timedelta(hours=1))
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(message)s")
 log = logging.getLogger("gobernator")
 
-# Session state
-new_session = False
-specialist_new_session = False
-gobernator_session_started = False  # True after first successful call
-specialist_session_started = False
-bot_username = None
-
-# Concurrency state
+# --- Runtime state ---
 busy = False
-stop_requested = False
-specialist_turn = 0
-MAX_SPECIALIST_TURNS = 10
 pending_angel_messages = []
+bot_username = None
+checkin_interval = BASE_CHECKIN_INTERVAL  # current interval (may be backed off)
 
-STOP_KEYWORDS = {"para", "stop", "parada"}
+
+# --- Session management ---
+
+def get_session_id():
+    """Read or create gobernator session ID. Persists across bot restarts."""
+    os.makedirs(STATE_DIR, exist_ok=True)
+    if os.path.exists(GOBERNATOR_SESSION_FILE):
+        with open(GOBERNATOR_SESSION_FILE) as f:
+            lines = f.read().strip().splitlines()
+            if lines:
+                return lines[0], len(lines) > 1 and lines[1] == "started"
+    sid = str(uuid.uuid4())
+    with open(GOBERNATOR_SESSION_FILE, "w") as f:
+        f.write(f"{sid}\nnew\n")
+    return sid, False
 
 
-class SpecialistEmptyResponse(Exception):
-    """Raised when specialist returns empty or rate-limited response."""
-    pass
+def mark_session_started(sid):
+    with open(GOBERNATOR_SESSION_FILE, "w") as f:
+        f.write(f"{sid}\nstarted\n")
+
+
+def create_new_session():
+    sid = str(uuid.uuid4())
+    with open(GOBERNATOR_SESSION_FILE, "w") as f:
+        f.write(f"{sid}\nnew\n")
+    return sid
+
+
+def create_new_specialist_session():
+    sid = str(uuid.uuid4())
+    os.makedirs(STATE_DIR, exist_ok=True)
+    with open(SPECIALIST_SESSION_FILE, "w") as f:
+        f.write(f"{sid}\nno\n")
+    return sid
 
 
 # --- Config ---
@@ -72,63 +94,48 @@ def save_config(config):
 # --- Output cleaning ---
 
 def clean_claude_output(text):
-    """Strip thinking blocks and other artifacts from Claude output."""
     text = re.sub(r'<thinking>.*?</thinking>', '', text, flags=re.DOTALL)
     return text.strip()
 
 
-# --- Claude CLI: Gobernator ---
+# --- Rate limit detection ---
 
-async def run_claude(msg, use_continue=True):
-    global gobernator_session_started
+def is_rate_limited(text):
+    lower = text.lower()
+    return any(k in lower for k in ("out of extra usage", "rate limit", "overloaded"))
+
+
+# --- Gobernator invocation ---
+
+async def run_gobernator(prompt):
+    """Call gobernator claude -p. Returns (text, is_rate_limited)."""
+    sid, started = get_session_id()
     cmd = ["claude", "-p", "--permission-mode", "bypassPermissions"]
-    if use_continue and gobernator_session_started:
-        cmd.extend(["--resume", gobernator_session_id])
+    if started:
+        cmd.extend(["--resume", sid])
     else:
-        cmd.extend(["--session-id", gobernator_session_id])
-        gobernator_session_started = True
-    cmd.append(msg)
-    log.info(f"Gobernator Claude [{len(msg)} chars] continue={use_continue}")
+        cmd.extend(["--session-id", sid])
+        mark_session_started(sid)
+    cmd.append(prompt)
+    log.info(f"Gobernator [{len(prompt)} chars] resume={started}")
 
-    result = await asyncio.to_thread(
-        subprocess.run, cmd,
-        capture_output=True, text=True,
-        cwd=WORKDIR, timeout=3600
-    )
+    try:
+        result = await asyncio.to_thread(
+            subprocess.run, cmd,
+            capture_output=True, text=True,
+            cwd=WORKDIR, timeout=GOBERNATOR_TIMEOUT
+        )
+    except subprocess.TimeoutExpired:
+        return "Timeout del gobernator (10 min).", True
+
     output = clean_claude_output(result.stdout or result.stderr or "")
     if not output:
         log.warning("Gobernator returned empty response")
-        return "Sin respuesta del gobernator (posible rate limit)"
-    return output
-
-
-# --- Claude CLI: Especialista ---
-
-async def run_specialist_claude(msg, use_continue=True):
-    """Invoke the specialist's Claude instance locally."""
-    global specialist_new_session, specialist_session_started
-    cmd = ["claude", "-p", "--permission-mode", "bypassPermissions"]
-    if use_continue and not specialist_new_session and specialist_session_started:
-        cmd.extend(["--resume", specialist_session_id])
-    else:
-        cmd.extend(["--session-id", specialist_session_id])
-        specialist_session_started = True
-    specialist_new_session = False
-    cmd.append(msg)
-    log.info(f"Especialista Claude [{len(msg)} chars]")
-
-    result = await asyncio.to_thread(
-        subprocess.run, cmd,
-        capture_output=True, text=True,
-        cwd=SPECIALIST_WORKDIR, timeout=SPECIALIST_TIMEOUT
-    )
-    log.info(f"Specialist returncode={result.returncode} stdout=[{len(result.stdout or '')} chars] stderr=[{len(result.stderr or '')} chars]")
-    if result.stderr:
-        log.info(f"Specialist stderr: {result.stderr[:500]}")
-    output = clean_claude_output(result.stdout or result.stderr or "")
-    if not output or "out of extra usage" in output.lower():
-        raise SpecialistEmptyResponse(output or f"Sin respuesta del especialista (rc={result.returncode})")
-    return output
+        return "", True
+    if is_rate_limited(output):
+        log.warning(f"Gobernator rate limited: {output[:200]}")
+        return output, True
+    return output, False
 
 
 # --- Messaging ---
@@ -140,181 +147,110 @@ async def send_long_message(chat_id, text, bot):
         await bot.send_message(chat_id=chat_id, text=text[i:i + 4000])
 
 
-async def post_to_labestia(instruction, response, bot, turn=0):
-    """Post both sides of the conversation to LaBestia for Angel to observe."""
-    config = load_config()
-    specialist_chat = config.get("specialist_chat_id")
-    if not specialist_chat:
-        log.warning("No specialist_chat_id, can't post to LaBestia")
-        return
+# --- LabestiaWatcher ---
 
-    turn_label = f" [Turno {turn}]" if turn > 0 else ""
-    display = (
-        f"GOBERNATOR → ESPECIALISTA{turn_label}:\n{instruction}\n\n"
-        f"---\n\n"
-        f"ESPECIALISTA:\n{response}"
-    )
-    await send_long_message(specialist_chat, display, bot)
+class LabestiaWatcher:
+    """Watches labestia_queue.jsonl and posts new entries to LaBestia group."""
 
+    def __init__(self):
+        self.offset = 0
+        # Start from current end of file if it exists
+        if os.path.exists(QUEUE_FILE):
+            self.offset = os.path.getsize(QUEUE_FILE)
 
-async def trace_to_labestia(label, text, bot):
-    """Post activity trace to LaBestia so Angel always has visibility."""
-    config = load_config()
-    specialist_chat = config.get("specialist_chat_id")
-    if not specialist_chat:
-        return
-    await send_long_message(specialist_chat, f"[{label}]\n{text}", bot)
-
-
-# --- Routing ---
-
-ROUTING_INSTRUCTIONS = (
-    "\n\nINSTRUCCIONES DE ENRUTAMIENTO:\n"
-    "- Para responder a Angel: [PARA_ANGEL]texto[/PARA_ANGEL]\n"
-    "- Para enviar al especialista: [PARA_ESPECIALISTA]texto[/PARA_ESPECIALISTA]\n"
-    "- Puedes usar ambos tags en la misma respuesta.\n"
-    "- Al especialista SIEMPRE hablas como Angel (humano), NUNCA revelas que eres IA.\n"
-    "- El especialista se invoca localmente (claude -p), no por Telegram.\n"
-    "- La conversacion se postea en LaBestia para que Angel observe.\n"
-    "- Si no usas tags, el mensaje se envia solo al chat de origen."
-)
-
-
-async def route_response(response, source_chat_id, context, turn=0, scheduled=False):
-    """Parse routing tags and act. Recursive for multi-turn specialist conversations."""
-    global specialist_turn, stop_requested
-    config = load_config()
-    angel_chat = config.get("angel_chat_id")
-
-    para_angel = re.findall(
-        r'\[PARA_ANGEL\](.*?)\[/PARA_ANGEL\]', response, re.DOTALL
-    )
-    para_especialista = re.findall(
-        r'\[PARA_ESPECIALISTA\](.*?)\[/PARA_ESPECIALISTA\]', response, re.DOTALL
-    )
-
-    # No tags: trace everything to LaBestia for visibility
-    if not para_angel and not para_especialista:
-        if scheduled:
-            # Check-in without tags - gobernator didn't route. Retry once.
-            log.warning(f"Check-in sin tags, reintentando: {response[:200]}")
-            await trace_to_labestia("CHECK-IN (sin tags, reintentando)", response[:2000], context.bot)
-            retry = await run_claude(
-                "Tu respuesta anterior no incluyo tags de enrutamiento.\n"
-                "DEBES hablar con el especialista en cada check-in.\n"
-                "Usa [PARA_ESPECIALISTA]tu mensaje[/PARA_ESPECIALISTA] para enviarle una instruccion.\n"
-                "Si tambien quieres informar a Angel: [PARA_ANGEL]texto[/PARA_ANGEL]",
-                use_continue=True
-            )
-            log.info(f"Check-in retry [{len(retry)} chars]: {retry[:300]}")
-            # Re-parse the retry (but don't recurse again to avoid loops)
-            retry_angel = re.findall(r'\[PARA_ANGEL\](.*?)\[/PARA_ANGEL\]', retry, re.DOTALL)
-            retry_esp = re.findall(r'\[PARA_ESPECIALISTA\](.*?)\[/PARA_ESPECIALISTA\]', retry, re.DOTALL)
-            if retry_angel or retry_esp:
-                # Got tags on retry - route normally (not scheduled, to avoid another retry)
-                await route_response(retry, source_chat_id, context, turn, scheduled=False)
-            else:
-                await trace_to_labestia("CHECK-IN (sin tags tras retry)", retry[:2000], context.bot)
-        else:
-            log.info(f"Response sin tags: {response[:200]}")
-            await trace_to_labestia("GOBERNATOR → ANGEL (sin tags)", response[:2000], context.bot)
-            await send_long_message(source_chat_id, response, context.bot)
-        return
-
-    # Send messages to Angel
-    for msg in para_angel:
-        if angel_chat:
-            await send_long_message(angel_chat, msg.strip(), context.bot)
-
-    # Trace Angel-bound messages to LaBestia (only when no specialist interaction)
-    if para_angel and not para_especialista:
-        combined = "\n---\n".join(m.strip() for m in para_angel)
-        await trace_to_labestia("GOBERNATOR→ANGEL", combined, context.bot)
-
-    # Invoke specialist and recurse for multi-turn
-    for msg in para_especialista:
-        instruction = msg.strip()
-        current_turn = turn + 1
-
-        # Check stop request from Angel
-        if stop_requested:
-            stop_requested = False
-            stop_msg = f"Conversacion detenida en turno {turn} por orden de Angel."
-            log.info(stop_msg)
-            if angel_chat:
-                await send_long_message(angel_chat, stop_msg, context.bot)
-            await trace_to_labestia("PARADA", stop_msg, context.bot)
+    async def poll(self, bot):
+        if not os.path.exists(QUEUE_FILE):
+            return
+        size = os.path.getsize(QUEUE_FILE)
+        if size <= self.offset:
             return
 
-        # Safety: max turns limit
-        if current_turn > MAX_SPECIALIST_TURNS:
-            limit_msg = (
-                f"Limite de {MAX_SPECIALIST_TURNS} turnos alcanzado. "
-                f"Conversacion detenida."
-            )
-            log.warning(limit_msg)
-            if angel_chat:
-                await send_long_message(angel_chat, limit_msg, context.bot)
-            await trace_to_labestia("LIMITE TURNOS", limit_msg, context.bot)
+        config = load_config()
+        specialist_chat = config.get("specialist_chat_id")
+        if not specialist_chat:
+            self.offset = size
             return
-
-        specialist_turn = current_turn
-        log.info(f"Specialist turn {current_turn}: [{len(instruction)} chars]")
 
         try:
-            specialist_response = await run_specialist_claude(instruction)
-            await post_to_labestia(
-                instruction, specialist_response, context.bot, current_turn
-            )
+            with open(QUEUE_FILE, "r") as f:
+                f.seek(self.offset)
+                new_data = f.read()
+            self.offset = size
 
-            # Feed response back to gobernator for processing
-            followup = (
-                f"[RESPUESTA DEL ESPECIALISTA - Turno {current_turn}]\n"
-                f"Le dijiste: {instruction[:300]}\n"
-                f"Respondio: {specialist_response}\n\n"
-                f"Procesa esta respuesta.\n"
-                f"- Si hay algo relevante para Angel: [PARA_ANGEL]texto[/PARA_ANGEL]\n"
-                f"- Si necesitas seguir hablando: [PARA_ESPECIALISTA]texto[/PARA_ESPECIALISTA]\n"
-                f"- Puedes usar ambos tags.\n"
-                f"- Si la conversacion termino, solo [PARA_ANGEL] con resumen."
-            )
-            gobernator_response = await run_claude(followup, use_continue=True)
-            log.info(f"Gobernator followup response [{len(gobernator_response)} chars]: {gobernator_response[:300]}")
-            await route_response(
-                gobernator_response, source_chat_id, context, current_turn, scheduled
-            )
-
-        except SpecialistEmptyResponse as e:
-            error_msg = (
-                f"Especialista sin respuesta en turno {current_turn}. "
-                f"Posible rate limit o error. Detalle: {e}"
-            )
-            log.warning(f"Specialist empty/rate-limited at turn {current_turn}: {e}")
-            await trace_to_labestia("ERROR ESPECIALISTA", f"Instruccion: {instruction[:300]}\n\n{error_msg}", context.bot)
-            if angel_chat:
-                await send_long_message(angel_chat, error_msg, context.bot)
-        except subprocess.TimeoutExpired:
-            error_msg = (
-                f"Especialista timeout en turno {current_turn} ({SPECIALIST_TIMEOUT//60}min). "
-                f"Posible rate limit."
-            )
-            log.error(f"Specialist timeout at turn {current_turn}")
-            await trace_to_labestia("TIMEOUT ESPECIALISTA", f"Instruccion: {instruction[:300]}\n\n{error_msg}", context.bot)
-            if angel_chat:
-                await send_long_message(angel_chat, error_msg, context.bot)
+            for line in new_data.strip().splitlines():
+                if not line.strip():
+                    continue
+                try:
+                    entry = json.loads(line)
+                    sender = entry.get("from", "?").upper()
+                    text = entry.get("text", "")
+                    if sender == "SYSTEM":
+                        label = "SISTEMA"
+                    elif sender == "GOBERNATOR":
+                        label = "GOBERNATOR → ESPECIALISTA"
+                    else:
+                        label = "ESPECIALISTA"
+                    display = f"[{label}]\n{text}"
+                    await send_long_message(specialist_chat, display, bot)
+                except json.JSONDecodeError:
+                    log.warning(f"Bad JSON in queue: {line[:100]}")
         except Exception as e:
-            error_msg = f"Error con especialista: {e}"
-            log.error(error_msg)
-            await trace_to_labestia("ERROR ESPECIALISTA", f"Instruccion: {instruction[:300]}\n\n{error_msg}", context.bot)
-            if angel_chat:
-                await send_long_message(angel_chat, error_msg, context.bot)
+            log.error(f"LabestiaWatcher error: {e}")
+
+
+labestia_watcher = LabestiaWatcher()
+
+
+# --- Backoff ---
+
+def handle_backoff(app):
+    """Double checkin interval on rate limit."""
+    global checkin_interval
+    old = checkin_interval
+    checkin_interval = min(checkin_interval * 2, MAX_CHECKIN_INTERVAL)
+    if checkin_interval != old:
+        log.info(f"Backoff: checkin interval {old}s -> {checkin_interval}s")
+        reschedule_checkin(app)
+
+
+def reset_backoff(app):
+    """Reset checkin interval after successful response."""
+    global checkin_interval
+    if checkin_interval != BASE_CHECKIN_INTERVAL:
+        log.info(f"Backoff reset: {checkin_interval}s -> {BASE_CHECKIN_INTERVAL}s")
+        checkin_interval = BASE_CHECKIN_INTERVAL
+        reschedule_checkin(app)
+
+
+def reschedule_checkin(app):
+    """Remove and re-add the checkin job with current interval."""
+    jobs = app.job_queue.get_jobs_by_name("checkin")
+    for j in jobs:
+        j.schedule_removal()
+    app.job_queue.run_repeating(
+        scheduled_checkin,
+        interval=timedelta(seconds=checkin_interval),
+        first=timedelta(seconds=checkin_interval),
+        name="checkin"
+    )
+
+
+# --- Stop file ---
+
+def request_stop():
+    os.makedirs(STATE_DIR, exist_ok=True)
+    Path(STOP_FILE).touch()
+
+
+def clear_stop():
+    if os.path.exists(STOP_FILE):
+        os.remove(STOP_FILE)
 
 
 # --- Message handler ---
 
 async def on_message(update, context):
-    """Handle incoming text messages from Angel."""
-    global busy, specialist_turn, new_session, stop_requested
+    global busy
 
     if not update.message or not update.message.text:
         return
@@ -336,85 +272,67 @@ async def on_message(update, context):
     if not text:
         return
 
-    # Stop keywords - interrupt specialist conversation immediately
+    # Stop keywords
     if busy and text.lower().strip() in STOP_KEYWORDS:
-        stop_requested = True
-        await update.message.reply_text(
-            "Parada solicitada. Termino el turno actual y paro."
-        )
+        request_stop()
+        await update.message.reply_text("Parada solicitada. Termino lo actual y paro.")
         return
 
-    # If busy, queue Angel's message
+    # Queue if busy
     if busy:
         pending_angel_messages.append(text)
-        turn_info = (
-            f" (turno {specialist_turn} con el especialista)"
-            if specialist_turn > 0 else ""
-        )
-        await update.message.reply_text(
-            f"Ocupado{turn_info}. Mensaje en cola, te atiendo al terminar.\n"
-            f"Sigue la conversacion en LaBestia.\n"
-            f"Escribe 'para' para detener la conversacion."
-        )
+        await update.message.reply_text("Ocupado. Mensaje en cola, te atiendo al terminar.")
         return
 
     busy = True
-    use_continue = not new_session
-    new_session = False
     waiting = await update.message.reply_text("Procesando...")
 
     try:
-        # Trace Angel's message to LaBestia
-        await trace_to_labestia("ANGEL", text, context.bot)
-
-        prompt = (
-            f"[TELEGRAM - Mensaje de Angel]\n"
-            f"{text}"
-            f"{ROUTING_INSTRUCTIONS}"
-        )
-        response = await run_claude(prompt, use_continue)
-        log.info(f"Gobernator raw response [{len(response)} chars]: {response[:300]}")
+        response, rate_limited = await run_gobernator(f"[Angel] {text}")
+        log.info(f"Gobernator response [{len(response)} chars]: {response[:300]}")
         await waiting.delete()
-        await route_response(response, chat_id, context)
 
-        # Process any messages Angel sent while we were busy
+        if rate_limited and not response:
+            log.warning("Rate limited, no response to send")
+            handle_backoff(context.application)
+        elif rate_limited:
+            handle_backoff(context.application)
+            await send_long_message(chat_id, response, context.bot)
+        else:
+            reset_backoff(context.application)
+            await send_long_message(chat_id, response, context.bot)
+
+        # Process queued messages
         while pending_angel_messages:
             queued = pending_angel_messages.copy()
             pending_angel_messages.clear()
             combined = "\n".join(f"- {m}" for m in queued)
-            qprompt = (
-                f"[TELEGRAM - Mensajes pendientes de Angel]\n"
-                f"{combined}"
-                f"{ROUTING_INSTRUCTIONS}"
-            )
-            qresponse = await run_claude(qprompt, use_continue=True)
-            await route_response(qresponse, chat_id, context)
+            resp, rl = await run_gobernator(f"[Angel - mensajes pendientes]\n{combined}")
+            if resp:
+                await send_long_message(chat_id, resp, context.bot)
+            if rl:
+                handle_backoff(context.application)
 
-    except subprocess.TimeoutExpired:
-        await waiting.edit_text("Timeout (10 min).")
-        await trace_to_labestia("TIMEOUT GOBERNATOR", "Timeout procesando mensaje de Angel (10min)", context.bot)
     except Exception as e:
-        await waiting.edit_text(f"Error: {e}")
+        try:
+            await waiting.edit_text(f"Error: {e}")
+        except Exception:
+            pass
         log.error(f"Error procesando mensaje: {e}")
-        await trace_to_labestia("ERROR GOBERNATOR", str(e), context.bot)
     finally:
         busy = False
-        specialist_turn = 0
 
 
-# --- Photo handler ---
+# --- Photo/Document handlers ---
 
 async def handle_image(update, context, file_obj, file_unique_id, file_ext="jpg"):
-    """Common handler for images (photo or document). Downloads, saves, and passes to gobernator."""
-    global busy, specialist_turn, new_session
+    global busy
 
     if update.effective_user.id != ANGEL_USER_ID:
         return
 
     chat_id = str(update.effective_chat.id)
     config = load_config()
-
-    # Auto-save Angel's chat ID
     if config.get("angel_chat_id") != chat_id:
         config["angel_chat_id"] = chat_id
         save_config(config)
@@ -422,78 +340,58 @@ async def handle_image(update, context, file_obj, file_unique_id, file_ext="jpg"
     caption = update.message.caption or ""
 
     if busy:
-        pending_angel_messages.append(f"[Imagen enviada con caption: {caption or 'sin caption'}]")
-        await update.message.reply_text(
-            "Ocupado. Imagen en cola, te atiendo al terminar."
-        )
+        pending_angel_messages.append(f"[Imagen con caption: {caption or 'sin caption'}]")
+        await update.message.reply_text("Ocupado. Imagen en cola.")
         return
 
     busy = True
-    use_continue = not new_session
-    new_session = False
     waiting = await update.message.reply_text("Procesando imagen...")
 
     try:
-        # Download the file
         file = await context.bot.get_file(file_obj.file_id)
-
-        # Save to a temp file in our workdir
         img_dir = os.path.join(WORKDIR, "telegram", "incoming_images")
         os.makedirs(img_dir, exist_ok=True)
         img_path = os.path.join(img_dir, f"{file_unique_id}.{file_ext}")
         await file.download_to_drive(img_path)
         log.info(f"Image saved: {img_path}")
 
-        # Trace to LaBestia
-        caption_info = f" (caption: {caption})" if caption else ""
-        await trace_to_labestia("ANGEL", f"[Imagen enviada{caption_info}]", context.bot)
-
-        # Tell gobernator to read the image
-        prompt = (
-            f"[TELEGRAM - Imagen de Angel]\n"
-            f"Angel ha enviado una imagen. Esta guardada en: {img_path}\n"
-            f"Usa la herramienta Read para ver la imagen.\n"
-            f"Caption: {caption or '(sin caption)'}\n"
-            f"{ROUTING_INSTRUCTIONS}"
-        )
-        response = await run_claude(prompt, use_continue)
-        log.info(f"Gobernator photo response [{len(response)} chars]: {response[:300]}")
+        prompt = f"[Angel - Imagen] Guardada en: {img_path}. Caption: {caption or '(sin caption)'}"
+        response, rate_limited = await run_gobernator(prompt)
         await waiting.delete()
-        await route_response(response, chat_id, context)
+        if response:
+            await send_long_message(chat_id, response, context.bot)
+        if rate_limited:
+            handle_backoff(context.application)
+        else:
+            reset_backoff(context.application)
 
     except Exception as e:
-        await waiting.edit_text(f"Error procesando imagen: {e}")
+        try:
+            await waiting.edit_text(f"Error: {e}")
+        except Exception:
+            pass
         log.error(f"Error procesando imagen: {e}")
-        await trace_to_labestia("ERROR IMAGEN", str(e), context.bot)
     finally:
         busy = False
-        specialist_turn = 0
 
 
 async def on_photo(update, context):
-    """Handle compressed photos sent by Angel."""
     if not update.message or not update.message.photo:
         return
-    log.info("on_photo triggered")
-    photo = update.message.photo[-1]  # Last = highest res
+    photo = update.message.photo[-1]
     await handle_image(update, context, photo, photo.file_unique_id, "jpg")
 
 
 async def on_document(update, context):
-    """Handle documents sent by Angel - catches images sent as files (PNG screenshots etc)."""
     if not update.message or not update.message.document:
         return
     doc = update.message.document
     mime = doc.mime_type or ""
-    log.info(f"on_document triggered: {doc.file_name} ({mime})")
-    # Only handle image documents
     if not mime.startswith("image/"):
-        log.info(f"Document is not an image ({mime}), ignoring")
         return
-    # Extract extension from filename or mime
     ext = "jpg"
-    if doc.file_name:
-        ext = doc.file_name.rsplit(".", 1)[-1].lower() if "." in doc.file_name else "jpg"
+    if doc.file_name and "." in doc.file_name:
+        ext = doc.file_name.rsplit(".", 1)[-1].lower()
     elif "png" in mime:
         ext = "png"
     await handle_image(update, context, doc, doc.file_unique_id, ext)
@@ -504,47 +402,41 @@ async def on_document(update, context):
 async def on_nueva(update, context):
     if update.effective_user.id != ANGEL_USER_ID:
         return
-    global new_session, gobernator_session_id, gobernator_session_started
-    new_session = True
-    gobernator_session_id = str(uuid.uuid4())
-    gobernator_session_started = False
-    await update.message.reply_text("Nueva sesion gobernator. El proximo mensaje arranca de cero.")
+    sid = create_new_session()
+    await update.message.reply_text(f"Nueva sesion gobernator ({sid[:8]}...).")
 
 
 async def on_nueva_especialista(update, context):
-    """Start a fresh session with the specialist."""
     if update.effective_user.id != ANGEL_USER_ID:
         return
-    global specialist_new_session, specialist_session_id, specialist_session_started
-    specialist_new_session = True
-    specialist_session_id = str(uuid.uuid4())
-    specialist_session_started = False
-    await update.message.reply_text("Nueva sesion para el especialista.")
+    sid = create_new_specialist_session()
+    await update.message.reply_text(f"Nueva sesion especialista ({sid[:8]}...).")
 
 
 async def on_status(update, context):
     if update.effective_user.id != ANGEL_USER_ID:
         return
     config = load_config()
-    status = (
-        f"EN CONVERSACION (turno {specialist_turn})" if busy else "Libre"
-    )
-    pending = len(pending_angel_messages)
+    sid, started = get_session_id()
+    sp_sid = "?"
+    if os.path.exists(SPECIALIST_SESSION_FILE):
+        with open(SPECIALIST_SESSION_FILE) as f:
+            sp_sid = f.readline().strip()[:8]
+    stop = os.path.exists(STOP_FILE)
     await update.message.reply_text(
         f"Bot Gobernator activo\n"
-        f"Estado: {status}\n"
-        f"Mensajes en cola: {pending}\n"
-        f"Max turnos: {MAX_SPECIALIST_TURNS}\n"
+        f"Estado: {'OCUPADO' if busy else 'Libre'}\n"
+        f"Mensajes en cola: {len(pending_angel_messages)}\n"
+        f"Check-in interval: {checkin_interval // 60}min\n"
+        f"Stop solicitado: {'SI' if stop else 'no'}\n"
         f"Angel chat: {config.get('angel_chat_id', 'no')}\n"
         f"LaBestia: {config.get('specialist_chat_id', 'no')}\n"
-        f"Gobernator session: {gobernator_session_id[:8]}...\n"
-        f"Specialist session: {specialist_session_id[:8]}...\n"
-        f"Modo: PRUEBA (check-in 15min, resumen 1h)"
+        f"Gobernator session: {sid[:8]}...\n"
+        f"Specialist session: {sp_sid}..."
     )
 
 
 async def on_conectar(update, context):
-    """Register current group as the LaBestia display group."""
     if update.effective_user.id != ANGEL_USER_ID:
         return
     config = load_config()
@@ -556,35 +448,34 @@ async def on_conectar(update, context):
 
 
 async def on_resumen(update, context):
+    global busy
     if update.effective_user.id != ANGEL_USER_ID:
         return
     if busy:
-        await update.message.reply_text(
-            "Ocupado con el especialista. Intenta en unos minutos."
-        )
+        await update.message.reply_text("Ocupado. Intenta en unos minutos.")
         return
+    busy = True
     waiting = await update.message.reply_text("Generando resumen...")
     try:
-        response = await run_claude(
-            "[TAREA - Resumen bajo demanda]\n"
-            "Angel pide un resumen. Sin tags de enrutamiento.",
-            use_continue=True
-        )
+        response, _ = await run_gobernator("[Resumen para Angel]")
         await waiting.delete()
-        await send_long_message(
-            str(update.effective_chat.id), response, context.bot
-        )
+        if response:
+            await send_long_message(str(update.effective_chat.id), response, context.bot)
     except Exception as e:
-        await waiting.edit_text(f"Error: {e}")
+        try:
+            await waiting.edit_text(f"Error: {e}")
+        except Exception:
+            pass
+    finally:
+        busy = False
 
 
-# --- Scheduled tasks (TEST MODE) ---
+# --- Scheduled tasks ---
 
-async def specialist_checkin(context):
-    """Every 15 min - Wake up and talk to the specialist (test mode)."""
-    global busy, specialist_turn
+async def scheduled_checkin(context):
+    global busy
     if busy:
-        log.info("Busy, skipping 15-min check-in")
+        log.info("Busy, skipping check-in")
         return
     config = load_config()
     angel_chat = config.get("angel_chat_id")
@@ -593,32 +484,29 @@ async def specialist_checkin(context):
         return
 
     busy = True
-    log.info("Check-in periodico con especialista...")
+    log.info("Check-in periodico...")
     try:
-        response = await run_claude(
-            "[TAREA PROGRAMADA - Check-in periodico]\n"
-            "Es tu check-in periodico. Tu trabajo es gobernar al especialista.\n"
-            "DEBES hablar con el especialista - decide que preguntarle, verificar o delegar.\n"
-            "OBLIGATORIO usar [PARA_ESPECIALISTA]instruccion[/PARA_ESPECIALISTA] para hablarle.\n"
-            "Si ademas quieres informar a Angel, usa tambien [PARA_ANGEL]texto[/PARA_ANGEL].\n"
-            f"{ROUTING_INSTRUCTIONS}",
-            use_continue=True
-        )
-        log.info(f"Check-in raw response [{len(response)} chars]: {response[:300]}")
-        await route_response(response, angel_chat, context, scheduled=True)
+        response, rate_limited = await run_gobernator("[Check-in]")
+        log.info(f"Check-in response [{len(response)} chars]: {response[:300]}")
+        if rate_limited:
+            handle_backoff(context.application)
+            if not response:
+                return
+        else:
+            reset_backoff(context.application)
+        # Gobernator stdout = message for Angel
+        if response:
+            await send_long_message(angel_chat, response, context.bot)
     except Exception as e:
         log.error(f"Check-in error: {e}")
-        await trace_to_labestia("ERROR CHECK-IN", str(e), context.bot)
     finally:
         busy = False
-        specialist_turn = 0
 
 
-async def test_summary(context):
-    """Every 1 hour - Summary for Angel (test mode, simulating daily summary)."""
-    global busy, specialist_turn
+async def scheduled_summary(context):
+    global busy
     if busy:
-        log.info("Busy, deferring test summary")
+        log.info("Busy, deferring summary")
         return
     config = load_config()
     chat_id = config.get("angel_chat_id")
@@ -628,19 +516,22 @@ async def test_summary(context):
     busy = True
     log.info("Resumen periodico...")
     try:
-        response = await run_claude(
-            "[TAREA PROGRAMADA - Resumen periodico para Angel]\n"
-            "Genera un resumen para Angel. Sin tags de enrutamiento.",
-            use_continue=True
-        )
-        await send_long_message(chat_id, response, context.bot)
-        await trace_to_labestia("RESUMEN → ANGEL", response[:2000], context.bot)
+        response, rate_limited = await run_gobernator("[Resumen para Angel]")
+        if rate_limited:
+            handle_backoff(context.application)
+        else:
+            reset_backoff(context.application)
+        if response:
+            await send_long_message(chat_id, response, context.bot)
     except Exception as e:
-        log.error(f"Test summary error: {e}")
-        await trace_to_labestia("ERROR RESUMEN", str(e), context.bot)
+        log.error(f"Summary error: {e}")
     finally:
         busy = False
-        specialist_turn = 0
+
+
+async def poll_labestia_queue(context):
+    """Poll labestia_queue.jsonl every 5s and post new entries to LaBestia."""
+    await labestia_watcher.poll(context.bot)
 
 
 # --- Init ---
@@ -668,26 +559,31 @@ def main():
     app.add_handler(MessageHandler(filters.PHOTO, on_photo))
     app.add_handler(MessageHandler(filters.Document.ALL, on_document))
 
-    # Scheduled tasks - TEST MODE
-    # Check-in with specialist every 15 minutes (first after 1 min)
+    # Scheduled tasks
     app.job_queue.run_repeating(
-        specialist_checkin,
-        interval=timedelta(minutes=15),
+        scheduled_checkin,
+        interval=timedelta(seconds=BASE_CHECKIN_INTERVAL),
         first=timedelta(minutes=1),
-        name="specialist_checkin"
+        name="checkin"
     )
-    # Summary every hour (simulating daily summary)
     app.job_queue.run_repeating(
-        test_summary,
+        scheduled_summary,
         interval=timedelta(hours=1),
         first=timedelta(hours=1),
-        name="test_summary"
+        name="summary"
+    )
+    # Poll labestia queue every 5s
+    app.job_queue.run_repeating(
+        poll_labestia_queue,
+        interval=timedelta(seconds=5),
+        first=timedelta(seconds=10),
+        name="labestia_poll"
     )
 
-    log.info("Bot Gobernator iniciado - MODO PRUEBA")
-    log.info(f"Gobernator session: {gobernator_session_id}")
-    log.info(f"Specialist session: {specialist_session_id}")
-    log.info("Check-in: cada 15 min | Resumen: cada 1 hora")
+    sid, _ = get_session_id()
+    log.info("Bot Gobernator iniciado")
+    log.info(f"Gobernator session: {sid[:8]}...")
+    log.info(f"Check-in: cada {BASE_CHECKIN_INTERVAL // 60} min | Resumen: cada 1 hora")
     app.run_polling()
 
 

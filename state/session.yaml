@@ -1,31 +1,55 @@
 # Estado de la última sesión del Gobernator
 last_session:
-  date: "2026-02-09"
-  summary: "Sesión 5 - Adversarial COMPLETO 6/6 + mejoras bot + plan mejora especialista"
+  date: "2026-02-10"
+  summary: "Sesión 6 - SAN.PA SELL (pipeline failure confirmado), HRB SELL reconfirmado, DNLM.L interims analizados, risk-sentinel primera ejecución"
   status: operational
 
-  current_task: "Gobierno continuo. DNLM.L interims mañana 10 Feb - especialista preparado con framework evaluación. Pendiente: pasar números cuando salgan (~7AM UK)."
+  current_task: "Pendiente confirmación de Angel para SELL SAN.PA + HRB. Cancelar orders BME.L + UTG.L. Cash deployment planning post-sells (~35% cash)."
 
   adversarial_status: COMPLETE
   adversarial_results:
-    SELL: [HRB]
+    SELL: [HRB, SAN.PA]
     SELL_OR_REDUCE: [NVO]
     CANCEL_ORDER: [BME.L, UTG.L]
-    HOLD_PROBATION: [LULU, DOM.L, BYIT.L, AUTO.L, SAN.PA]
+    HOLD_PROBATION: [LULU, DOM.L, BYIT.L, AUTO.L]
     HOLD_MED: [ADBE]
+
+  pending_orders:
+    - action: SELL
+      ticker: SAN.PA
+      reason: "Pipeline failure (Amlitelimab inferior, Tolebrutinib rejected), FV EUR 78.69, MoS -2%, ROIC<WACC"
+      pnl: "+1.4% breakeven"
+      status: AWAITING_ANGEL
+    - action: SELL
+      ticker: HRB
+      reason: "Moat invalidated (Intuit 600 offices), FCF structural decline, value trap 7-8/10"
+      pnl: "-8%"
+      status: AWAITING_ANGEL
+    - action: CANCEL_ORDER
+      ticker: BME.L
+      reason: "Governance rota, ROIC 30->12%, FV -19.6%"
+      status: AWAITING_ANGEL
+    - action: CANCEL_ORDER
+      ticker: UTG.L
+      reason: "QS Tier D, FV -17.4%, triple immigration hit"
+      status: AWAITING_ANGEL
 
   specialist_improvements:
     completed:
       - "QS Tool-First protocol implementado en 16 thesis"
       - "news-monitor y market-pulse ejecutados"
+      - "risk-sentinel primera ejecución (12 gaps encontrados)"
+      - "SAN.PA thesis actualizada a v3.0 con EXIT protocol"
     pending:
+      - "Actualizar thesis IMB.L ($400M payment + UK generational ban)"
+      - "Actualizar thesis ADBE (FTC/DOJ lawsuit)"
+      - "Actualizar thesis GL (SEC/DOJ clearance — FV al alza)"
       - "Actualizar thesis v2.0 por antigüedad"
-      - "Activar risk-sentinel"
       - "Unificar gates investment-committee"
       - "Recalibrar kill conditions y standing orders"
+      - "Cash deployment planning post-sells (~35%)"
 
   upcoming_catalysts:
-    - "DNLM.L interims: 10 Feb"
     - "MONY.L earnings: 23 Feb"
     - "EDEN.PA earnings: 24 Feb"
     - "VICI earnings: 25 Feb"
@@ -36,8 +60,16 @@ last_session:
     - "LULU Q4: 31 Mar"
     - "AUTO.L pricing event: 1 Apr"
 
+  risk_sentinel:
+    last_run: "2026-02-10"
+    orange: [SAN.PA, IMB.L, EDEN.PA, ADBE, VICI]
+    yellow: [HRB, ALL, GL, NVO, DTE.DE, LULU]
+    clear: [DOM.L, MONY.L, AUTO.L, BYIT.L, UHS]
+    gaps_found: 12
+
   context:
     - "Modo OPERATIVO"
     - "Angel solo quiere ser contactado para órdenes eToro o urgencias"
     - "Gobierno continuo: check-ins, entrenar especialista, mejorarme"
     - "Bot mejorado: timeout 5min, detección respuestas vacías"
+    - "DNLM.L interims: inline, trigger 750-800p se mantiene"
