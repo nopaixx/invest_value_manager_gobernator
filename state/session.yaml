@@ -1,42 +1,43 @@
 # Estado de la última sesión del Gobernator
 last_session:
   date: "2026-02-09"
-  summary: "Sesión 4 - Operativo. Adversarial COMPLETADO + auto-mejora COMPLETADA"
-  status: waiting_for_angel
+  summary: "Sesión 5 - Adversarial COMPLETO 6/6 + mejoras bot + plan mejora especialista"
+  status: operational
 
-  # Adversarial completado 2026-02-09 madrugada. Esperando consolidación con Angel.
-  current_task: "Esperando confirmación de Angel para consolidación de portfolio"
+  current_task: "Gobierno continuo. DNLM.L interims mañana 10 Feb - especialista preparado con framework evaluación. Pendiente: pasar números cuando salgan (~7AM UK)."
 
-  # Plan aprobado por Angel
-  plan:
-    parte_1_adversarial:
-      - "Fase 3: BME.L, UTG.L (standing orders)"
-      - "Fase 4: HRB, DOM.L, SAN.PA (Tier B, EDEN.PA ya revisada)"
-      - "Fase 5: ADBE, NVO, LULU, AUTO.L, BYIT.L (Tier A quick check, MONY.L ya revisada)"
-    parte_2_auto_mejora:
-      - "Documentar recomendaciones de mejora del especialista"
-      - "Mejorar session handoff protocol"
-      - "Preparar resumen consolidación para Angel mañana"
+  adversarial_status: COMPLETE
+  adversarial_results:
+    SELL: [HRB]
+    SELL_OR_REDUCE: [NVO]
+    CANCEL_ORDER: [BME.L, UTG.L]
+    HOLD_PROBATION: [LULU, DOM.L, BYIT.L, AUTO.L, SAN.PA]
+    HOLD_MED: [ADBE]
 
-  # Progreso del adversarial (actualizar conforme avance)
-  adversarial_progress:
-    fase_3:
-      BME.L: "CANCELAR ORDER - FV 321→258p (-19.6%), STRONG COUNTER 14/24, governance rota, ROIC 30→12%, thesis incompleta"
-      UTG.L: "CANCELAR ORDER - FV 745→615p (-17.4%), STRONG COUNTER 13/24, QS Tier D(27)/C(REIT-adj) vs thesis Tier B, triple-hit inmigracion, bond maturity error factual, MoS solo 12.2% a 540p"
-    fase_4:
-      HRB: "SELL - FV 59.58→33.94 (-43% MAYOR DISCREPANCIA), STRONG COUNTER 18/24, moat invalidado (Intuit 600 oficinas), buybacks destruyeron $413M, MoS real 3% vs 54% thesis. NOTA: net debt estacional ($2.59B dic vs ~$1.7B normalizada) - si normalizada FV ~$41 (MoS ~20%). Angel debe confirmar."
-      DOM.L: "HOLD PROBATION - FV 294→235p (-20%), STRONG COUNTER 18/24, conviction LOW. Condiciones: SELL si FY25 EBITDA<125M o no CEO Sep 2026. Suspender ADD triggers. FY25 results 5 Mar. Hecho por especialista via bot."
-      SAN.PA: "INVALIDADA - evaluación propia del gobernador. PENDIENTE adversarial por especialista via bot."
-    fase_5:
-      ADBE: "INVALIDADA - quick check propio del gobernador. PENDIENTE evaluación por especialista via bot."
-      NVO: "INVALIDADA - quick check propio del gobernador. PENDIENTE evaluación por especialista via bot."
-      LULU: "INVALIDADA - quick check propio del gobernador. PENDIENTE evaluación por especialista via bot."
-      AUTO.L: "INVALIDADA - quick check propio del gobernador. PENDIENTE evaluación por especialista via bot."
-      BYIT.L: "INVALIDADA - quick check propio del gobernador. PENDIENTE evaluación por especialista via bot."
+  specialist_improvements:
+    completed:
+      - "QS Tool-First protocol implementado en 16 thesis"
+      - "news-monitor y market-pulse ejecutados"
+    pending:
+      - "Actualizar thesis v2.0 por antigüedad"
+      - "Activar risk-sentinel"
+      - "Unificar gates investment-committee"
+      - "Recalibrar kill conditions y standing orders"
+
+  upcoming_catalysts:
+    - "DNLM.L interims: 10 Feb"
+    - "MONY.L earnings: 23 Feb"
+    - "EDEN.PA earnings: 24 Feb"
+    - "VICI earnings: 25 Feb"
+    - "DTE.DE earnings: 26 Feb (TRIM si >EUR 33)"
+    - "UHS earnings: 26 Feb"
+    - "DOM.L FY25 results: 5 Mar (SELL trigger si EBITDA<125M)"
+    - "NVO CagriSema: Mar 2026"
+    - "LULU Q4: 31 Mar"
+    - "AUTO.L pricing event: 1 Apr"
 
   context:
-    - "Modo OPERATIVO - Angel duerme, gobernator ejecuta"
-    - "Especialista usa tools y agentes completos"
-    - "Una posición a la vez (rate limits)"
-    - "Verificar principios después de cada resultado"
-    - "Documentar SELL/HOLD para consolidación mañana"
+    - "Modo OPERATIVO"
+    - "Angel solo quiere ser contactado para órdenes eToro o urgencias"
+    - "Gobierno continuo: check-ins, entrenar especialista, mejorarme"
+    - "Bot mejorado: timeout 5min, detección respuestas vacías"
