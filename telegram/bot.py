@@ -18,6 +18,7 @@ BOT_USER_ID = int(TOKEN.split(":")[0])
 WORKDIR = "/home/angel/invest_value_manager_gobernator"
 SPECIALIST_WORKDIR = os.path.join(WORKDIR, "invest_value_manager")
 CONFIG_FILE = os.path.join(WORKDIR, "telegram", "config.json")
+SPECIALIST_TIMEOUT = 300  # 5 min - if no response, likely rate limited
 
 CET = timezone(timedelta(hours=1))
 
@@ -102,7 +103,7 @@ async def run_specialist_claude(msg, use_continue=True):
     result = await asyncio.to_thread(
         subprocess.run, cmd,
         capture_output=True, text=True,
-        cwd=SPECIALIST_WORKDIR, timeout=3600
+        cwd=SPECIALIST_WORKDIR, timeout=SPECIALIST_TIMEOUT
     )
     output = clean_claude_output(result.stdout or result.stderr or "")
     if not output or "out of extra usage" in output.lower():
@@ -241,7 +242,8 @@ async def route_response(response, source_chat_id, context, turn=0):
             if angel_chat:
                 await send_long_message(
                     angel_chat,
-                    f"Specialist timeout en turno {current_turn} (1h).",
+                    f"Especialista timeout en turno {current_turn} ({SPECIALIST_TIMEOUT//60}min). "
+                    f"Posible rate limit.",
                     context.bot
                 )
         except Exception as e:
