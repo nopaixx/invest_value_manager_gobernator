@@ -39,6 +39,11 @@ pending_angel_messages = []
 STOP_KEYWORDS = {"para", "stop", "parada"}
 
 
+class SpecialistEmptyResponse(Exception):
+    """Raised when specialist returns empty or rate-limited response."""
+    pass
+
+
 # --- Config ---
 
 def load_config():
@@ -75,7 +80,11 @@ async def run_claude(msg, use_continue=True):
         capture_output=True, text=True,
         cwd=WORKDIR, timeout=3600
     )
-    return clean_claude_output(result.stdout or result.stderr or "Sin respuesta")
+    output = clean_claude_output(result.stdout or result.stderr or "")
+    if not output:
+        log.warning("Gobernator returned empty response")
+        return "Sin respuesta del gobernator (posible rate limit)"
+    return output
 
 
 # --- Claude CLI: Especialista ---
@@ -95,7 +104,10 @@ async def run_specialist_claude(msg, use_continue=True):
         capture_output=True, text=True,
         cwd=SPECIALIST_WORKDIR, timeout=3600
     )
-    return clean_claude_output(result.stdout or result.stderr or "Sin respuesta")
+    output = clean_claude_output(result.stdout or result.stderr or "")
+    if not output or "out of extra usage" in output.lower():
+        raise SpecialistEmptyResponse(output or "Sin respuesta del especialista")
+    return output
 
 
 # --- Messaging ---
@@ -215,11 +227,22 @@ async def route_response(response, source_chat_id, context, turn=0):
                 gobernator_response, source_chat_id, context, current_turn
             )
 
-        except subprocess.TimeoutExpired:
-            log.error("Specialist timeout (10 min)")
+        except SpecialistEmptyResponse as e:
+            log.warning(f"Specialist empty/rate-limited at turn {current_turn}: {e}")
             if angel_chat:
                 await send_long_message(
-                    angel_chat, "Specialist timeout (10 min).", context.bot
+                    angel_chat,
+                    f"Especialista sin respuesta en turno {current_turn}. "
+                    f"Posible rate limit o error. Detalle: {e}",
+                    context.bot
+                )
+        except subprocess.TimeoutExpired:
+            log.error(f"Specialist timeout at turn {current_turn}")
+            if angel_chat:
+                await send_long_message(
+                    angel_chat,
+                    f"Specialist timeout en turno {current_turn} (1h).",
+                    context.bot
                 )
         except Exception as e:
             log.error(f"Specialist error: {e}")
