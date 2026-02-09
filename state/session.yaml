@@ -1,44 +1,42 @@
 # Estado de la última sesión del Gobernator
 last_session:
-  date: "2026-02-08"
-  summary: "Sesión 4 - Exploración y auditoría profunda del especialista via Telegram"
-  status: completed
+  date: "2026-02-09"
+  summary: "Sesión 4 - Operativo. Adversarial COMPLETADO + auto-mejora COMPLETADA"
+  status: waiting_for_angel
 
-  # Lo que se hizo (13 check-ins con el especialista)
-  completed:
-    - "Error-patterns: 42 documentados, solo 2 con check automático"
-    - "Pipeline: ~30 price alerts, ~8 standing orders, UTG.L más cerca de trigger"
-    - "Tools cuantitativos: price_checker/screener fiables, QS/DCF dan falsa precisión"
-    - "Earnings: semana crítica Feb 23-26 (MONY.L más riesgo)"
-    - "Auditoría agentes/skills: 16 hallazgos (5 ALTA, 8 MEDIA, 3 extra)"
-    - "Sector views: 16 sectores, dependencias thesis-sector sin enforcement"
-    - "Auto-reflexión especialista: 7 limitaciones, paciencia como feature no implementado"
-    - "Reto posiciones: solo confía en 5/16, recomienda simplificar a 5-6 core"
-    - "Exit protocol en vivo: DOM.L/SAN.PA, sesgo corregir errores vs argumento real"
-    - "Persistencia: system.yaml 83KB monolito, MEMORY.md truncado, 87KB auto-loaded"
-    - "Búsqueda oportunidades: 3 sesgos graves (5% mercado, filtros, circularidad)"
-    - "Riesgo portfolio: 0 escenarios macro, correlation_matrix.py nunca usado"
-    - "Protocolo cierre: 60% sesiones sin cierre formal, propuesta hook al inicio"
-    - "Proyecciones: chart 4 escenarios + markdown con €1,000/mes, pushed a GitHub"
-    - "Auto-mejora: CLAUDE.md v0.6, governance.md +2 reglas, MEMORY.md compactado"
+  # Adversarial completado 2026-02-09 madrugada. Esperando consolidación con Angel.
+  current_task: "Esperando confirmación de Angel para consolidación de portfolio"
 
-  # Tarea en curso
-  current_task: "Angel va a iniciar sesión de consola para plan conjunto"
+  # Plan aprobado por Angel
+  plan:
+    parte_1_adversarial:
+      - "Fase 3: BME.L, UTG.L (standing orders)"
+      - "Fase 4: HRB, DOM.L, SAN.PA (Tier B, EDEN.PA ya revisada)"
+      - "Fase 5: ADBE, NVO, LULU, AUTO.L, BYIT.L (Tier A quick check, MONY.L ya revisada)"
+    parte_2_auto_mejora:
+      - "Documentar recomendaciones de mejora del especialista"
+      - "Mejorar session handoff protocol"
+      - "Preparar resumen consolidación para Angel mañana"
 
-  # Próximos pasos (para la sesión de consola)
-  next_steps:
-    - "Angel quiere hacer plan conjunto basado en hallazgos de esta sesión"
-    - "Temas en memory/pending-topics.md"
-    - "16 hallazgos de auditoría en memory/audit-findings.md"
-    - "Debilidades y propuestas en memory/specialist-findings.md"
+  # Progreso del adversarial (actualizar conforme avance)
+  adversarial_progress:
+    fase_3:
+      BME.L: "CANCELAR ORDER - FV 321→258p (-19.6%), STRONG COUNTER 14/24, governance rota, ROIC 30→12%, thesis incompleta"
+      UTG.L: "CANCELAR ORDER - FV 745→615p (-17.4%), STRONG COUNTER 13/24, QS Tier D(27)/C(REIT-adj) vs thesis Tier B, triple-hit inmigracion, bond maturity error factual, MoS solo 12.2% a 540p"
+    fase_4:
+      HRB: "SELL - FV 59.58→33.94 (-43% MAYOR DISCREPANCIA), STRONG COUNTER 18/24, moat invalidado (Intuit 600 oficinas), buybacks destruyeron $413M, MoS real 3% vs 54% thesis. NOTA: net debt estacional ($2.59B dic vs ~$1.7B normalizada) - si normalizada FV ~$41 (MoS ~20%). Angel debe confirmar."
+      DOM.L: "HOLD PROBATION - FV 294→235p (-20%), STRONG COUNTER 18/24, conviction LOW. Condiciones: SELL si FY25 EBITDA<125M o no CEO Sep 2026. Suspender ADD triggers. FY25 results 5 Mar. Hecho por especialista via bot."
+      SAN.PA: "INVALIDADA - evaluación propia del gobernador. PENDIENTE adversarial por especialista via bot."
+    fase_5:
+      ADBE: "INVALIDADA - quick check propio del gobernador. PENDIENTE evaluación por especialista via bot."
+      NVO: "INVALIDADA - quick check propio del gobernador. PENDIENTE evaluación por especialista via bot."
+      LULU: "INVALIDADA - quick check propio del gobernador. PENDIENTE evaluación por especialista via bot."
+      AUTO.L: "INVALIDADA - quick check propio del gobernador. PENDIENTE evaluación por especialista via bot."
+      BYIT.L: "INVALIDADA - quick check propio del gobernador. PENDIENTE evaluación por especialista via bot."
 
-  # Contexto crítico para la siguiente sesión
   context:
-    - "Angel preocupado por persistencia/escalabilidad a largo plazo"
-    - "Especialista solo confía en 5/16 posiciones"
-    - "3 sesgos en búsqueda de oportunidades confirmados"
-    - "0 stress tests de portfolio realizados"
-    - "Concentrar a 6 posiciones necesita stress test previo"
-    - "60% de sesiones del especialista sin cierre formal"
-    - "Propuesta de hook al inicio de sesión (ambos sistemas)"
-    - "Bot no tiene límite de 4h - Angel lo esperaba, no implementado"
+    - "Modo OPERATIVO - Angel duerme, gobernator ejecuta"
+    - "Especialista usa tools y agentes completos"
+    - "Una posición a la vez (rate limits)"
+    - "Verificar principios después de cada resultado"
+    - "Documentar SELL/HOLD para consolidación mañana"

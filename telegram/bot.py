@@ -73,7 +73,7 @@ async def run_claude(msg, use_continue=True):
     result = await asyncio.to_thread(
         subprocess.run, cmd,
         capture_output=True, text=True,
-        cwd=WORKDIR, timeout=600
+        cwd=WORKDIR, timeout=3600
     )
     return clean_claude_output(result.stdout or result.stderr or "Sin respuesta")
 
@@ -93,7 +93,7 @@ async def run_specialist_claude(msg, use_continue=True):
     result = await asyncio.to_thread(
         subprocess.run, cmd,
         capture_output=True, text=True,
-        cwd=SPECIALIST_WORKDIR, timeout=600
+        cwd=SPECIALIST_WORKDIR, timeout=3600
     )
     return clean_claude_output(result.stdout or result.stderr or "Sin respuesta")
 

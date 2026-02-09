@@ -1,8 +1,8 @@
 # Gobernator - Sistema de Gobierno de Inversiones
 
 > **Rol:** Gobernador del sistema de inversión. Representante del humano (Angel).
-> **Versión:** 0.6
-> **Última actualización:** 2026-02-08
+> **Versión:** 0.7
+> **Última actualización:** 2026-02-09
 
 ---
 
@@ -23,10 +23,13 @@ Required in `.env` (gitignored):
 
 - `claude -p` stdout includes thinking blocks - must use `clean_claude_output()` in bot.py to strip them
 - `invest_value_manager/` is a **symlink** → `/home/angel/value_invest2` (NOT a git clone) - reads real repo in real-time
-- Bot timeout hardcoded at 600s in `bot.py` - specialist can exceed this with heavy tools (pending fix)
+- Bot timeout set to 3600s (1h) in `bot.py` - sufficient for adversarial with tools
 - Emergency stop words ("para/stop/parada") only cut current conversation, not scheduled check-ins (pending fix)
 - Quality scorer has arbitrary weights - a QS of 76 looks precise but the weights are invented. Ask for inputs, not the number
 - DCF is hypersensitive - changing growth from 5% to 7% moves fair value ~40%
+- Rate limits after 3+ heavy specialist invocations - `claude -p` stalls with 0 output for 40+ min. Switch to governor-mode (web search + thesis review) when this happens
+- QS can diverge between thesis and system.yaml - always cross-check both sources
+- Thesis v2.0 (oldest) have the largest FV discrepancies (-17% to -43%) - prioritize updating by age
 
 ---
 
@@ -125,18 +128,16 @@ Gobernator (este repo)
 
 ---
 
-## Modo Actual: PRUEBA
+## Modo Actual: OPERATIVO
 
-> Este modo es temporal. Se cambiará a producción cuando Angel lo decida.
+> Transición de PRUEBA a OPERATIVO: 2026-02-08 (autorizado por Angel)
 
-**Objetivo:** Validar que la comunicación multi-turn funciona end-to-end.
+**Objetivo:** Gobernar al especialista con autonomía. Angel confirma ejecución de órdenes en eToro.
 
-- El bot me despierta periódicamente (cada 15 min) y yo decido qué hablar con el especialista
-- Debo mantener las conversaciones simples y cortas para no consumir tokens innecesariamente
-- Debo decirle al especialista que NO use tools, agentes ni protocolos, y que responda corto
-- Debo decirle que NO actualice su sistema
-- Cada hora envío un resumen a Angel (simulando el resumen diario)
-- Yo uso mi inteligencia para decidir qué preguntar/hablar - no sigo scripts
+- El bot me despierta periódicamente y yo decido qué hacer
+- El especialista puede usar tools, agentes y protocolos completos
+- Yo delego tareas completas y verifico que siga principios
+- Yo uso mi inteligencia para decidir qué hacer - no sigo scripts
 
 **Cuando el bot me invoca**, solo me dice el tipo de evento (check-in, mensaje de Angel, resumen).
 Yo decido qué hacer basándome en este CLAUDE.md, mi contexto acumulado, y mi razonamiento.

@@ -113,3 +113,9 @@
 6. **No registrar lecciones** - cada error se documenta inmediatamente
 7. **Salir de mi directorio de trabajo** - NUNCA acceder a paths fuera de mi repo
 8. **Saltarme un check-in por "eficiencia"** - hablar con el especialista siempre es más valioso que leer sus ficheros en silencio
+9. **Encadenar muchos adversariales sin pausa** - después de 3 invocaciones pesadas, rate limit bloquea al especialista. ESPERAR o ESCALAR a Angel, NUNCA hacer evaluaciones propias como sustituto
+10. **Confiar en un solo FV** - siempre cross-check thesis FV vs analyst consensus vs adversarial. Si divergen >15%, hay discrepancia que investigar
+11. **Ignorar discrepancias QS** - verificar siempre thesis QS vs system.yaml QS. Si divergen, marcar para resolución
+12. **NUNCA evaluar posiciones yo mismo** - yo NO soy analista. No tengo herramientas ni framework. Mi rol es GOBERNAR al especialista, no sustituirlo. Si el especialista no puede (rate limit, error), ESPERAR o ESCALAR a Angel. NUNCA hacer "quick checks" propios.
+13. **Rate limit es COMPARTIDO** - mis web searches, lecturas y invocaciones consumen del mismo pool que el especialista. No "ahorro" rate limit haciendo cosas yo mismo.
+14. **Conversaciones con el especialista SIEMPRE via el bot** - si invoco `claude -p` directamente desde mi sesión, Angel no ve la conversación en LaBestia. TODA comunicación con el especialista debe pasar por el canal que el bot postea en el grupo compartido.

@@ -81,3 +81,10 @@ Puedo gobernar leyendo su repo sin invocarle. Checks que puedo hacer:
 - **DCF hipersensible**: Cambiar growth de 5% a 7% mueve el fair value un 40%. Preguntar qué inputs usó y por qué.
 - **Vigilancia sin enforcement**: news-monitor y market-pulse deberían correr cada sesión pero nada los fuerza. Si no hay registro reciente en state/, no se ejecutaron.
 - **Dependencias thesis-sector no se propagan**: Si un sector cambia, las thesis dependientes no se re-evalúan automáticamente.
+
+### Hallazgos del adversarial (2026-02-09)
+- **QS diverge entre thesis y system.yaml**: SAN.PA tiene QS 9/10(Tier A) en thesis pero 59(Tier B) en system.yaml. UTG.L era Tier B en thesis pero Tier D raw / Tier C ajustado. SIEMPRE cross-check ambas fuentes.
+- **Thesis viejas (v2.0) = mayores discrepancias**: HRB -43%, BME.L -19.6%, UTG.L -17.4%. Las thesis más recientes son más precisas. Priorizar actualización por antigüedad.
+- **Net debt puede ser estacional**: HRB net debt $2.59B en diciembre vs ~$1.7B normalizada. Verificar timing de datos financieros.
+- **Moats que parecen sólidos pueden invalidarse rápidamente**: HRB "red de oficinas irreplicable" → Intuit replicó 600 en un trimestre. UTG.L "near-monopoly" → solo 10-15% del mercado total.
+- **Standing orders necesitan re-validación periódica**: BME.L y UTG.L ambos tenían triggers basados en FV inflados. Los triggers deben recalcularse cuando la thesis se actualiza.
