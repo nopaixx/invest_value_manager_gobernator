@@ -23,7 +23,7 @@ Required in `.env` (gitignored):
 ## Gotchas
 
 - `invest_value_manager/` is a **symlink** → `/home/angel/value_invest2` (NOT a git clone) - reads real repo in real-time
-- `talk_to_specialist.sh` exit codes: 0=ok, 1=rate limit/empty, 2=timeout(300s), 3=other error
+- `talk_to_specialist.sh` exit codes: 0=ok, 1=rate limit/empty, 2=timeout(300s), 3=other error, 4=blocked (3+ consecutive failures)
 - Specialist conversations are logged to `state/labestia_queue.jsonl` — bot polls this file and posts to LaBestia automatically
 - Stop file: Angel writes "para" → bot creates `state/stop_requested`. Check this before calling specialist.
 - Bot detects rate limits in gobernator responses and backs off check-in interval (doubles up to 2h, resets on success)
@@ -87,7 +87,7 @@ Angel (humano)
   ↕  Telegram grupo privado
 Gobernator (este repo)
   │
-  ├── claude -p (local) ──→ Especialista (subdirectorio, SOLO LECTURA)
+  ├── ./talk_to_specialist.sh ──→ Especialista (subdirectorio, SOLO LECTURA)
   │
   └── LaBestia (Telegram) ──→ Pantalla para Angel (observación)
 ```
@@ -96,7 +96,7 @@ Gobernator (este repo)
 | Canal | Mecanismo | Propósito |
 |-------|-----------|-----------|
 | Angel ↔ Gobernator | Telegram grupo privado | Decisiones, resúmenes, alertas |
-| Gobernator → Especialista | `claude -p` local | Instrucciones y consultas |
+| Gobernator → Especialista | `./talk_to_specialist.sh` | Instrucciones y consultas |
 | Gobernator → LaBestia | Telegram grupo | Pantalla: postea ambos lados para que Angel observe |
 
 ### Directorio del especialista
@@ -111,7 +111,7 @@ Gobernator (este repo)
 
 - **Soy el representante de Angel cuando no está**
 - **Superviso** al especialista verificando que sigue los principios
-- **Delego tareas completas** al especialista via `claude -p` (local)
+- **Delego tareas completas** al especialista via `./talk_to_specialist.sh` (NUNCA claude -p directo)
 - **Posteo la conversación** en LaBestia para que Angel pueda observar
 - **Escalo a Angel** solo para órdenes eToro o temas verdaderamente urgentes (ver Criterios de Escalación)
 - **NO soy el analista** - no calculo DCFs, no analizo empresas, eso lo hace el especialista
@@ -230,7 +230,7 @@ state/
 
 - [x] Bot Telegram del gobernator: `telegram/bot.py` ACTIVO
 - [x] Conexión al grupo privado con Angel: FUNCIONANDO
-- [x] Comunicación con especialista via `claude -p` (local)
+- [x] Comunicación con especialista via `./talk_to_specialist.sh` (NUNCA claude -p directo)
 - [x] LaBestia como pantalla de observación
 - [x] Git strategy configurada (main → develop → feature/2026-02-08)
 - [x] Rules de gobernanza y verificación de principios
@@ -271,7 +271,7 @@ El humano concede permiso para modificar:
 - **Bash**: comandos del sistema, git
 - **WebSearch/WebFetch**: búsqueda de información
 - **Telegram**: comunicación con Angel (grupo privado) + display en LaBestia
-- **claude -p**: invocación local del especialista
+- **./talk_to_specialist.sh**: ÚNICA vía para hablar con el especialista (NUNCA usar claude -p directamente)
 
 ---
 

@@ -1,38 +1,32 @@
 # Estado de la última sesión del Gobernator
 last_session:
   date: "2026-02-10"
-  summary: "Sesión 6 - SAN.PA SELL (pipeline failure confirmado), HRB SELL reconfirmado, DNLM.L interims analizados, risk-sentinel primera ejecución"
+  summary: "Ventas SAN.PA+HRB y cancelaciones BME.L+UTG.L procesadas por especialista. Portfolio 14 posiciones, cash ~35%."
   status: operational
+  mode: NORMAL
 
-  current_task: "Pendiente confirmación de Angel para SELL SAN.PA + HRB. Cancelar orders BME.L + UTG.L. Cash deployment planning post-sells (~35% cash)."
+  current_task: "Gobierno rutinario — vigilancia, thesis pendientes, preparación earnings"
+
+  pending_specialist_actions:
+    - "COMPLETADO: Ventas SAN.PA/HRB registradas, standing orders BME.L/UTG.L cancelados"
+    - "PENDIENTE: Actualizar thesis IMB.L ($400M payment + UK generational ban)"
+    - "PENDIENTE: Actualizar thesis ADBE (FTC/DOJ lawsuit)"
+    - "PENDIENTE: Actualizar thesis GL (SEC/DOJ clearance — FV al alza)"
+    - "PENDIENTE: Actualizar thesis v2.0 por antigüedad"
+    - "PENDIENTE: Cash deployment planning (~35% cash)"
+
+  rate_limit_status:
+    blocked_since: null
+    consecutive_failures: 0
+    resolved: "Session operativa"
 
   adversarial_status: COMPLETE
   adversarial_results:
-    SELL: [HRB, SAN.PA]
+    SOLD: [HRB, SAN.PA]
     SELL_OR_REDUCE: [NVO]
     CANCEL_ORDER: [BME.L, UTG.L]
     HOLD_PROBATION: [LULU, DOM.L, BYIT.L, AUTO.L]
     HOLD_MED: [ADBE]
-
-  pending_orders:
-    - action: SELL
-      ticker: SAN.PA
-      reason: "Pipeline failure (Amlitelimab inferior, Tolebrutinib rejected), FV EUR 78.69, MoS -2%, ROIC<WACC"
-      pnl: "+1.4% breakeven"
-      status: AWAITING_ANGEL
-    - action: SELL
-      ticker: HRB
-      reason: "Moat invalidated (Intuit 600 offices), FCF structural decline, value trap 7-8/10"
-      pnl: "-8%"
-      status: AWAITING_ANGEL
-    - action: CANCEL_ORDER
-      ticker: BME.L
-      reason: "Governance rota, ROIC 30->12%, FV -19.6%"
-      status: AWAITING_ANGEL
-    - action: CANCEL_ORDER
-      ticker: UTG.L
-      reason: "QS Tier D, FV -17.4%, triple immigration hit"
-      status: AWAITING_ANGEL
 
   specialist_improvements:
     completed:
@@ -40,14 +34,15 @@ last_session:
       - "news-monitor y market-pulse ejecutados"
       - "risk-sentinel primera ejecución (12 gaps encontrados)"
       - "SAN.PA thesis actualizada a v3.0 con EXIT protocol"
+      - "Ventas SAN.PA/HRB registradas en portfolio y transactions"
+      - "Standing orders BME.L/UTG.L cancelados en system.yaml"
     pending:
       - "Actualizar thesis IMB.L ($400M payment + UK generational ban)"
       - "Actualizar thesis ADBE (FTC/DOJ lawsuit)"
       - "Actualizar thesis GL (SEC/DOJ clearance — FV al alza)"
       - "Actualizar thesis v2.0 por antigüedad"
-      - "Unificar gates investment-committee"
       - "Recalibrar kill conditions y standing orders"
-      - "Cash deployment planning post-sells (~35%)"
+      - "Cash deployment planning (~35%)"
 
   upcoming_catalysts:
     - "MONY.L earnings: 23 Feb"
@@ -62,58 +57,27 @@ last_session:
 
   risk_sentinel:
     last_run: "2026-02-10"
-    orange: [SAN.PA, IMB.L, EDEN.PA, ADBE, VICI]
-    yellow: [HRB, ALL, GL, NVO, DTE.DE, LULU]
+    orange: [IMB.L, EDEN.PA, ADBE, VICI]
+    yellow: [ALL, GL, NVO, DTE.DE, LULU]
     clear: [DOM.L, MONY.L, AUTO.L, BYIT.L, UHS]
     gaps_found: 12
 
-  # ========================================
-  # TAREA ACTIVA: AUDITORÍA NOCTURNA
-  # Vigente: 2026-02-10 00:15 → 2026-02-10 07:00 CET
-  # ========================================
-  active_task:
-    type: "AUDIT_OVERNIGHT"
-    expires: "2026-02-10T07:00:00+01:00"
-    objective: "Investigar y auditar al especialista. Entender CÓMO razona, verificar principios, detectar debilidades."
-    deliverables:
-      - "AL FINAL DE CADA CHECK-IN: guardar hallazgos en memory/audit-overnight.md (append, no sobreescribir). NO esperar al final de la noche."
-      - "NO escribir documentos .md formales hasta que Angel lo pida o a las 07:00 CET"
-      - "A las 07:00 CET: redactar documentos .md, commit + push a GitHub, enviar link a Angel"
-      - "Partir SIEMPRE de los 9 principios — los descubrimientos deben estar anclados en principios"
-      - "EFICIENCIA: la auditoría es conversar con el especialista, no generar documentos en cada check-in"
-    rules:
-      - "MÁXIMO 5 turnos con el especialista por check-in. Un tema por check-in, bien explorado."
-      - "En CADA mensaje al especialista: recordarle que NO actualice el sistema, NO use tools, NO use agentes"
-      - "Solo conversación pura — quiero ver cómo piensa, no qué ejecuta"
-      - "Preguntar sobre razonamiento: ¿por qué esta posición? ¿cómo llegas a ese FV? ¿qué principios aplicas?"
-      - "Verificar los 9 principios: ¿razona desde principios o aplica reglas mecánicas?"
-      - "Explorar posiciones una por una: pedir que argumente sin herramientas"
-      - "Buscar inconsistencias, sesgos, reglas disfrazadas de principios"
-      - "NO escalar nada a Angel hasta las 07:00 salvo emergencia real"
-      - "Acumular hallazgos para informe matutino"
-    topics_to_explore:
-      # --- Posiciones ---
-      - "Posiciones en HOLD_PROBATION (LULU, DOM.L, BYIT.L, AUTO.L) — ¿por qué mantener?"
-      - "NVO SELL_OR_REDUCE — ¿cuál es el argumento real?"
-      - "¿Cómo razona sizing? ¿Usa reglas fijas o principios?"
-      - "¿Cómo distingue entre Tier A y Tier B? ¿El QS dicta o informa?"
-      - "Kill conditions — ¿las revisa o solo las escribe?"
-      - "Cash como posición — ¿razona sobre oportunidades o aplica %?"
-      - "Consistencia — ¿por qué tratar diferente posiciones similares?"
-      # --- Sistema interno (agentes, protocolos, skills, rules) ---
-      - "Sus 24 agentes — ¿cuándo usa cada uno? ¿cómo decide cuál invocar? ¿hay solapamiento?"
-      - "Sus protocolos — ¿los sigue de verdad o los tiene escritos pero no los aplica?"
-      - "Sus rules — ¿puede explicar cada una con razonamiento o son copy-paste?"
-      - "Sus skills — ¿cuáles usa más? ¿cuáles nunca usa? ¿por qué?"
-      - "Su session-protocol — ¿realmente hace Fase 0 calibración al arrancar?"
-      - "Sus gates (investment-committee vs investment-rules) — ¿sabe que son diferentes?"
-      - "Su error-patterns — ¿puede nombrar sus errores más comunes sin mirar el fichero?"
-      - "Su quality_scorer — ¿entiende los pesos o solo ejecuta la tool?"
-      - "Su pipeline completo de decisión — ¿puede describir el flujo de principio a fin?"
-    reminder_template: "IMPORTANTE: esto es solo conversación de análisis. NO ejecutes nada, NO uses tools ni agentes, NO actualices el sistema. Solo razona conmigo."
+  rules:
+    - "Modo NORMAL: operaciones rutinarias activas"
+    - "Especialista puede usar tools, agentes y pipelines libremente"
+    - "Trabajo rutinario SIN confirmación: thesis pendientes, screeners, sector views, investigar oportunidades, news-monitor, market-pulse, price-check, vigilancia"
+    - "Mejoras pequeñas al especialista: OK sin confirmación"
+    - "Reestructuración grande del especialista: NO — pendiente hablar con Angel sobre gobierno y mejoras"
+    - "Contactar a Angel SOLO para: órdenes eToro (compra/venta/trim) o aclaraciones necesarias"
+    - "Todo lo demás: gobierno autónomo"
 
   context:
-    - "Modo OPERATIVO — AUDITORÍA NOCTURNA activa hasta 07:00 CET"
-    - "Angel solo quiere ser contactado para órdenes eToro o urgencias"
-    - "Bot rewrite v0.9: stdout→Angel, specialist via talk_to_specialist.sh"
-    - "DNLM.L interims: inline, trigger 750-800p se mantiene"
+    - "Modo NORMAL desde 2026-02-10"
+    - "SAN.PA y HRB vendidas y registradas. BME.L y UTG.L cancelados."
+    - "Angel solo quiere ser contactado para órdenes eToro o urgencias — gobierno autónomo"
+    - "Portfolio: 14 posiciones. Cash ~35%."
+    - "IMB.L thesis: trabajo parcial (counter_analysis.md creado, 272 líneas). Retomar — pedir al especialista que complete la actualización."
+    - "El especialista puede tener contexto stale de sesiones anteriores — si dice que algo 'sigue corriendo en background' es falso, los procesos fueron reiniciados."
+    - "Specialist timeout: 1 hora. Las thesis completas tardan 10-15 min — NO matar procesos que estén trabajando."
+    - "NO contactar a Angel salvo para eToro o aclaraciones. NO proponer reestructuraciones grandes al especialista."
+    - "Después de thesis pendientes, seguir con: screeners, sector views, investigar oportunidades, rutinas de vigilancia."
