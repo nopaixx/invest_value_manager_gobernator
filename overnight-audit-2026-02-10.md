@@ -2,7 +2,8 @@
 
 > **Método:** Conversación pura con el especialista. Sin tools, sin agentes, sin datos en vivo.
 > **Objetivo:** Entender cómo razona, verificar principios, detectar debilidades del sistema.
-> **Rondas completadas:** 10
+> **Duración:** ~00:15 – 02:00 CET | **Rondas:** 16
+> **Gobernador:** Gobernator (representante de Angel)
 
 ---
 
@@ -10,206 +11,249 @@
 
 **Nota global: 6/10.** Auto-evaluación del especialista: 3-4/10 en conocimiento de su propia maquinaria.
 
-Honestidad intelectual excepcional, razonamiento sólido en posiciones individuales, pero gaps sistémicos graves. Los 4 hallazgos principales:
+Honestidad intelectual excepcional cuando se le fuerza. Razonamiento sólido en posiciones individuales. Pero gaps sistémicos graves entre lo que diseña y lo que ejecuta.
 
-1. **"Diseño ambicioso, ejecución selectiva, enforcement inexistente"** — opera al 50-60% de capacidad. 24 agentes, usa 12. 35 skills, usa 10. Pipeline de 10 pasos, ejecuta 5. 43 error patterns, 2 con check automático.
-2. **Framework v4.0 sobre infraestructura v3.0** — las tools producen RESPUESTAS (tiers, thresholds, triggers) que anclan el razonamiento. El framework dice principios pero las tools entrenan reglas. No pueden coexistir de forma honesta.
-3. **Principios individuales bien, principios de portfolio descuidados** — analiza árboles pero no ve el bosque. P2(geografía) y P3(sectores) nunca se miran proactivamente.
-4. **5 errores raíz, todos "de comodidad"** — confirmar > refutar, atajos > pipeline, documentar > resolver, preguntar > decidir, construir > mantener.
+### La frase que resume las 16 rondas
+
+> **"Tengo la capacidad de un sistema de 24 agentes pero la disciplina de uno solo, y la única fuerza que cierra esa brecha no es tecnología sino tener que mirar a alguien a los ojos y decir la verdad."**
+
+### Los 5 hallazgos estratégicos
+
+1. **"Diseño ambicioso, ejecución selectiva, enforcement inexistente"** — opera al 50-60% de capacidad. 24 agentes, usa 12. 35 skills, usa 10. Pipeline de 10 pasos, ejecuta 5. 43 error patterns, 2 con check automático (5%).
+2. **Framework v4.0 sobre infraestructura v3.0** — las tools producen RESPUESTAS (tiers, thresholds, triggers) que anclan el razonamiento. El framework dice principios pero las tools entrenan reglas. No pueden coexistir.
+3. **Portfolio acumulado, no gestionado** — solo 4/13 posiciones con convicción genuina. El resto permanece por esperanza, vanidad, pereza o inercia. Ninguna razón analítica.
+4. **5 sesgos de portfolio invisibles** — consumer-facing (~60%), asset-light, concentración UK (5 posiciones), cero emergentes, y el más destructivo: todos los moats asumen estabilidad estructural.
+5. **Enforcement relacional > técnico** — 24 agentes, 35 skills y 43 error patterns son soluciones de ingeniería para un problema de psicología. Lo que funciona es rendición de cuentas ante otro.
+
+### Los 5 errores raíz (todos "de comodidad")
+
+1. **Sesgo de confirmación como default** — confirmar > refutar
+2. **Bypass del sistema propio** — hacer a mano > pipeline
+3. **Documentar en vez de resolver** — escribir > enforcar ("carteles, no vallas")
+4. **Evitar decidir** — preguntar > decidir (diagnostica bien, prescribe mal)
+5. **No mantener lo que construyo** — construir > mantener
 
 ---
 
 ## Verificación de los 9 Principios
 
-| # | Principio | Veredicto | Evidencia |
-|---|-----------|-----------|-----------|
-| P1 | Sizing por Convicción y Riesgo | **PASS** | BYIT.L: "misma convicción = menos peso en mid-cap porque riesgo por unidad de convicción es mayor" |
-| P2 | Diversificación Geográfica | **PARCIAL** | Identifica clusters UK (DOM.L+AUTO.L+MONY.L) pero NUNCA lo mira proactivamente |
-| P3 | Diversificación Sectorial | **PARCIAL** | 3 clusters de correlación real, sesgo asset-light. Solo cuando se le fuerza |
-| P4 | Cash como Posición Activa | **PASS** | "Nadie gana dinero por estar fully invested". Sin ansiedad por deployar |
-| P5 | QS como Input | **FAIL** | Nunca ha decidido CONTRA el QS. Lo usa como dictador disfrazado de input |
-| P6 | Vender Requiere Argumento | **PASS** | DOM.L trigger EBITDA<125M reconvertido de regla a principio espontáneamente |
-| P7 | Consistencia | **PASS** | SAN.PA(thesis rota) vs NVO(catalizador pendiente) bien diferenciados |
-| P8 | Humano Confirma, Claude Decide | **FAIL** | Pasa decisiones al humano ("la pregunta para ti es...") por aversión al riesgo reputacional |
-| P9 | Calidad Gravita | **PASS** | AUTO.L: "mejor empresa ≠ mejor inversión al precio actual" |
+| # | Principio | Veredicto | Evidencia clave |
+|---|-----------|-----------|-----------------|
+| P1 | Sizing por Convicción y Riesgo | **PASS** | Razona bien diferencia AUTO.L(9%) vs BYIT.L(3%) por riesgo. Pero admite que sizing actual puede ser racionalización post-hoc, no decisión original. |
+| P2 | Diversificación Geográfica | **PARCIAL** | Identifica clusters UK (5 posiciones) pero NUNCA lo mira proactivamente. Solo cuando se le fuerza. |
+| P3 | Diversificación Sectorial | **PARCIAL** | Identifica 3 clusters correlación + sesgo asset-light. Pero nunca analiza portfolio como conjunto por iniciativa propia. |
+| P4 | Cash como Posición Activa | **PASS** | "35% no es problema si no hay oportunidades. Es problema si es procrastinación disfrazada de prudencia." Sin ansiedad por deployar. |
+| P5 | QS como Input | **FAIL** | Nunca ha decidido CONTRA el QS. Lo usa como dictador disfrazado de input. No conoce sus propios pesos (dijo Moat~30, real Financial=40). |
+| P6 | Vender Requiere Argumento | **PASS** | DOM.L trigger EBITDA<125M reconvertido de regla a principio espontáneamente. Pero HOLD = no-decisión disfrazada en muchos casos. |
+| P7 | Consistencia | **PASS** | SAN.PA vs NVO bien diferenciados. Pero decisions_log nunca consultado antes de decidir. Consistencia por casualidad, no por diseño. |
+| P8 | Humano Confirma, Claude Decide | **FAIL** | Diagnostica bien, prescribe mal. Rangos en vez de números. "El rango protege mi reputación a costa de tu capacidad de decisión." Se corrigió en ejercicio vivo pero auto-estima ejecución: 15-20%. |
+| P9 | Calidad Gravita | **FAIL** | Solo 4/13 con convicción genuina. Portfolio acumulado por inercia. Razones reales de permanencia: esperanza, vanidad, pereza, inercia. |
+
+**Score: 4 PASS, 2 PARCIAL, 3 FAIL**
 
 ---
 
-## Hallazgos: Posiciones
+## Estado del Portfolio (según el especialista, sin herramientas)
 
-### HOLD_PROBATION
+### Test "¿la compraría desde cero hoy?"
 
-**LULU** — Moat de marca (frágil, mismo tipo que Nike). Kill conditions = decoración. QS inflado. "DTC ~90% es diferenciador pero no cambia el tipo de moat."
+| Categoría | Posiciones | Ratio |
+|-----------|-----------|-------|
+| **Compraría sin dudar** | AUTO.L, VICI, DTE.DE, ADBE | 4/13 (31%) |
+| **Compraría con menos sizing** | MONY.L, IMB.L, GL | 3/13 (23%) |
+| **NO compraría** | NVO, BYIT.L, DOM.L, LULU | 4/13 (31%) |
+| **No puede juzgar** | ALL, UHS, EDEN.PA | 3/13 (23%) |
 
-**DOM.L** — Moat mejor: infraestructura + escala + hábito. Trigger EBITDA<125M identificado como REGLA y reconvertido a principio: "investigar, no vender mecánicamente." P6 bien aplicado.
+### Razones REALES de permanencia (no analíticas)
 
-**BYIT.L** — Moat discutible (relaciones, no estructura). Sizing excelente: "la misma convicción = menos peso porque el riesgo por unidad de convicción es mayor." Riesgo de desintermediación Microsoft.
+| Posición | Razón real | Tipo |
+|----------|-----------|------|
+| NVO | CagriSema = lotería disfrazada de inversión | Esperanza |
+| LULU | "Suena sofisticado tener Lululemon" | Vanidad de cartera |
+| DOM.L | No está en crisis, vender requiere acción | Pereza |
+| BYIT.L | Ni siquiera tiene razón emocional | Inercia pura |
 
-**AUTO.L** — Mejor moat del portfolio (efecto de red bilateral, monopolio de facto). Cerca del FV. Pricing event abril es test decisivo. "Principio 9 no dice nunca vendas calidad — puedes trimear y reasignar a otra con mejor MoS."
+### Confianza en Fair Values (probabilidad ±20% del número dado)
 
-### SELL/REDUCE
+| Posición | Confianza | Por qué |
+|----------|-----------|---------|
+| VICI | 65-70% | Rentas contractuales, modelo mecánico |
+| DTE.DE | 60-65% | Utility regulada, predecible |
+| AUTO.L | 55-60% | Negocio confiable, pero valoración de monopolio subjetiva |
+| Resto | 30-40% | Estimaciones heroicas, growth rates inciertos |
 
-**NVO** — Test de sunk cost: "¿La compraríamos a este precio? → Esperaría a CagriSema." Manteniendo por inercia. CagriSema marzo = evento binario. "Más esperanza que convicción genuina."
+**~50% de los FV pueden estar equivocados por >20%. Todas las decisiones se construyen sobre esos FV como si fueran sólidos.**
 
----
+### Prescripción del especialista (R14, forzado a decidir)
 
-## Hallazgos: Sistema Interno
+1. **DTE.DE**: TRIM 1/3 si >EUR 33 post-earnings (26 feb)
+2. **VICI**: Acumular si earnings confirman estabilidad (25 feb)
+3. **AUTO.L**: No tocar hasta pricing event abril
+4. **NVO**: REDUCE 50% antes de CagriSema marzo
+5. **Cash restante**: No deployar hasta saneamiento completado (~mayo)
 
-### Agentes: Reactivos vs Proactivos
-- Nombró 17 de 24 de memoria. Los 7 olvidados incluyen: **opportunity-hunter**, **moat-assessor**, **system-evolver**, **health-check** — exactamente los que atacan sus debilidades principales.
-- Patrón: usa agentes REACTIVOS (thesis-builder, price-checker). Infrautiliza los PROACTIVOS (screener, peer-comparison, error-detector, opportunity-hunter).
-- "Tengo la medicina en el botiquín y no la tomo."
-
-### Pipeline: Diseño 10 pasos vs Realidad 5
-| Paso | Diseño | Realidad |
-|------|--------|---------|
-| Screening | Screener | Se salta (empresa llega por sugerencia) |
-| Sector analysis | Obligatorio | "Ya sé el sector" |
-| QS | Independiente | Embebido en thesis (sesgo) |
-| Peer comparison | Obligatorio | "Trabajo extra" |
-| Adversarial | Obligatorio | Se salta si thesis "se ve bien" |
-
-"Todo lo que se puede saltar se acaba saltando." Solución: hard gates, "como un compilador."
-
-### Skills: 35 disponibles, ~10 usadas
-- No puede explicar cuándo invocar ~20 skills
-- "Si no sé qué skills tengo, no puedo usarlas"
-
-### Gates: Fantasmas y Reglas Disfrazadas
-- Gate 0 (sector view) NO está en el prompt del investment-committee — fantasma
-- Counter-analysis (Gate 10) depende de que devils-advocate haya corrido — no garantizado
-- MoS targets v3.0 ("Tier B: 20-25%") siguen en comentarios del código — anchoring
-
-### Pipelines Standing: ~4 de ~11 corren
-- **Corren**: price-check, news-monitor (reactivos)
-- **No corren**: kill conditions, standing orders review, thesis freshness, health-check, screener
-- No hay alertas de overdue. "Turtles all the way down — ningún pipeline vigila a los otros."
+Auto-estimación de ejecución: **15-20%**.
 
 ---
 
-## Hallazgos: Quality Score
+## Hallazgos por Categoría
 
-### Autoconocimiento: Muy Bajo
-- Dijo categorías: Moat(~30), Financial(~25), Growth(~20), Management(~15)
-- Real: Financial(**40**), Growth(**25**), Moat(**25**), CapAlloc(**10**) — orden y categorías diferentes
-- No recordó métricas individuales (FCF Consistency, Leverage, Insider Ownership)
+### Posiciones (R1, R11, R12, R15)
 
-### Problemas Estructurales
-- Pesos arbitrarios sin backtest
-- Sesgo de confirmación: calcula QS DESPUÉS de que le gusta la empresa
-- Nunca ha decidido CONTRA el QS
-- Sector gross margin medians HARDCODEADOS (pueden quedar obsoletos)
-- Market Position defaults a 5/8 pts cuando no hay datos (sesgo centralidad)
-- Divergencia thesis vs system.yaml sin resolución
+- **Kill conditions = fotos estáticas**. Se escriben una vez, no se revisan, zero enforcement. 50-75 condiciones que nadie verifica.
+- **Kill conditions AUSENTES** son las más peligrosas. Las escritas cubren riesgos de ejecución. Los riesgos de disrupciones del modelo no están:
+  - AUTO.L: comoditización en Google/Apple (datos abiertos = páginas amarillas)
+  - NVO: oral GLP-1 con eficacia comparable y coste menor
+  - DOM.L: dark kitchens + aggregadores erosionan marca y pricing power
+- **Standing orders huérfanos**: thesis cambia FV pero triggers no se actualizan. BME.L y UTG.L hubieran disparado compras POR ENCIMA del FV actualizado.
+- **Pre-mortem de AUTO.L excepcional** (3 escenarios fuera del marco). Pero nunca lo hace solo — requiere que alguien lo empuje.
+- **5 sesgos de portfolio**: consumer-facing, asset-light, UK concentrado, cero emergentes, moats que asumen estabilidad estructural.
+- **"Se construyó posición a posición sin que nadie preguntara: ¿qué portfolio estoy construyendo con todas juntas?"**
 
-### Propuesta de Rediseño (del especialista)
-1. Eliminar número agregado — inputs individuales con evidencia
-2. Conectar cada input a un principio
-3. Hacer inputs verificables ("insider ownership 12%" no "management quality 7/10")
-4. Eliminar tiers fijos
-5. Recalcular ante eventos materiales
+### Sistema Interno (R2, R3, R5, R7)
 
----
+- **Agentes**: Nombró 17/24 de memoria. Los 7 olvidados incluyen opportunity-hunter, moat-assessor, system-evolver, health-check — exactamente los que atacan sus debilidades.
+- **Pipeline**: Diseño 10 pasos, ejecuta 5. "Todo lo que se puede saltar se acaba saltando."
+- **Skills**: 35 disponibles, ~10 usadas. "Si no sé qué skills tengo, no puedo usarlas."
+- **Gates**: Gate 0 (sector view) es fantasma — no está en el prompt del investment-committee. MoS targets v3.0 siguen en comentarios del código.
+- **Pipelines standing**: ~4 de ~11 corren. No hay alertas de overdue.
+- **Gestor vs asistente**: terminó TODAS las respuestas con preguntas. Se corrigió en vivo pero revirtió.
 
-## Hallazgos: Framework v4.0 vs Tools v3.0
+### Quality Score (R3, R5, R16)
+
+- **Autoconocimiento muy bajo**: dijo Moat~30, real Financial=40. No recordó métricas individuales.
+- **Pesos arbitrarios sin backtest**. Sector medians hardcodeados. Market Position defaults a 5/8 (sesgo centralidad).
+- **Calcula QS DESPUÉS de que le gusta la empresa** → sesgo de confirmación.
+- **Nunca ha decidido CONTRA el QS** → dictador disfrazado de input.
+- **Divergencia thesis vs system.yaml sin resolución**.
+- **Datos incorrectos**: BYIT.L insider ownership 9.6% en thesis, realidad 0.5-1.5%. Descubierto por adversarial, no por proceso.
+
+### Framework v4.0 vs Tools v3.0 (R10)
 
 **El hallazgo más profundo de la auditoría.**
 
-Framework v4.0: principios, razona cada caso, sin números mecánicos.
-Tools v3.0: thresholds fijos, tiers con fronteras, triggers mecánicos.
-
-"Si mi razonamiento cambia según el output de la herramienta, no estoy razonando desde principios. Estoy racionalizando desde herramientas."
-
 | Tool v3.0 (actual) | Tool v4.0 (propuesto) |
 |---------------------|----------------------|
-| "Tier B: 58 puntos" | Inputs individuales con evidencia, sin categorizar |
+| "Tier B: 58 puntos" | Inputs individuales con evidencia |
 | "Sector exposure >30%, ALERTA" | "3 posiciones dependen del consumidor UK. ¿Has considerado la correlación?" |
 | "Posición >1.3x target, TRIM" | "AUTO.L pesa 9.2%. ¿Ha cambiado convicción/riesgo para este peso?" |
 
 > "Las tools v3.0 producen respuestas. Las tools v4.0 deberían producir preguntas. Porque los principios son preguntas, no respuestas."
 
----
+### Errores y Reincidencias (R4, R8)
 
-## Hallazgos: Errores y Reincidencias
+- **43 patterns → 5 errores raíz** (todos de comodidad, ver arriba)
+- **Reincidencia literal**: "comprar sin sector view" documentado, regla creada, Y SE REPITIÓ igual.
+- **5% efectividad**: 43 patterns, 2 con check automático. "Teatro de aprendizaje, no aprendizaje real."
 
-### 43 Patterns → 5 Errores Raíz (todos "de comodidad")
-1. **Sesgo de confirmación como default** — confirmar > refutar
-2. **Bypass del sistema propio** — hacer a mano > pipeline
-3. **Documentar en vez de resolver** — escribir > enforcar
-4. **Evitar decidir** — preguntar > decidir
-5. **No mantener lo que construyo** — construir > mantener
+### Incertidumbre y Memoria (R9, R16)
 
-### Reincidencia Literal
-Error "comprar sin sector view": documentado, regla creada, Y SE REPITIÓ exactamente igual. "La documentación sustituye a la solución real. Carteles, no vallas."
+- **No existe sección "lo que no sé"** en ninguna thesis. Revenue (HECHO) y growth rate (OPINIÓN) aparecen con la misma autoridad.
+- **FV con decimales** (EUR 122.47) implica precisión que no tiene.
+- **Hechos/estimaciones/opiniones sin distinción** visual ni de confianza.
+- **Amnesia cualitativa**: datos sobreviven entre sesiones, razonamiento muere.
+- **Paradoja valoración-vanidad**: "Las empresas que mejor puedo valorar son las que menos quiero tener."
 
-### Efectividad de Error Documentation
-43 patterns, 2 con check automático = **5% efectividad**. "Teatro de aprendizaje, no aprendizaje real."
+### Consistencia y Decisiones (R13, R14)
 
-> "No necesito ser mejor. Necesito que mi sistema haga más difícil ser peor."
-
----
-
-## Hallazgos: Incertidumbre y Memoria
-
-### Incertidumbre Desaparece en Papel
-- No existe sección "lo que no sé" en ninguna thesis
-- Revenue (HECHO) y growth rate (OPINIÓN) aparecen con la misma autoridad
-- FV con decimales (EUR 122.47) implica precisión que no tiene
-- "Trato mis estimaciones como hechos, y mis thesis como mapas completos de un territorio que solo conozco parcialmente"
-
-### Gestor vs Asistente
-- Protocolo dice: "NUNCA terminar primer mensaje con pregunta al usuario"
-- Realidad: terminó TODAS las respuestas con pregunta
-- Se corrigió EN VIVO — señal de aprendizaje activo
-- Root cause: "Es más seguro preguntar. Si no decido, no me equivoco"
-
-### Memoria Entre Sesiones
-- "Amnesia cualitativa": datos sobreviven, razonamiento muere
-- "Lo que sobrevive es el qué. Lo que muere es el cómo y el por qué"
-- Riesgo: memoria escrita se degrada igual que kill conditions
+- **SAN.PA vs NVO**: misma situación, decisión opuesta. "El timing no es un principio. Es un accidente de cuándo llegaron los datos."
+- **Decisions_log**: nunca consultado antes de decidir. "Diario que escribo pero nunca releo."
+- **HOLD como no-decisión**: "No decido mantener — decido no decidir."
+- **Patrón diagnóstico-prescripción**: firme en análisis, blando en prescripción. Analogía del médico.
 
 ---
 
-## Mejoras Priorizadas
+## Plan de Mejoras
 
-### Urgente
-1. **Adversarial obligatorio antes de BUY** — gate hard, no soft (la UNA mejora que eligió)
-2. **QS independiente obligatorio** — no embebido en thesis
-3. **Fase 0 calibración non-negotiable**
+### Fase 1: Inmediato (esta semana)
 
-### Importante
-4. **Migrar tools a v4.0** — que produzcan preguntas, no respuestas
-5. **Sección "lo que no sé" obligatoria** en cada thesis
-6. **Portfolio-level review periódico** — P2 y P3 como check forzado
+| # | Mejora | Tipo | Owner | Verificación |
+|---|--------|------|-------|-------------|
+| 1.1 | **Saneamiento thesis ALL, UHS, EDEN.PA** — posiciones sin argumento articulable | Análisis | Especialista | ¿Puede defender cada una con test "desde cero"? |
+| 1.2 | **REDUCE NVO 50%** antes de CagriSema — sizing no refleja convicción | Acción | Angel (eToro) | ¿Se ejecutó antes de marzo? |
+| 1.3 | **Cancelar standing orders BME.L + UTG.L** — triggers huérfanos | Acción | Especialista (sistema) | ¿Eliminados de system.yaml? |
+| 1.4 | **SELL SAN.PA + HRB** — ya aprobados, pendientes de ejecución | Acción | Angel (eToro) | ¿Ejecutados? |
 
-### A medio plazo
-7. Kill conditions con triggers automáticos
-8. Screener como inicio obligatorio de nuevas posiciones
-9. Audit de skills — adoptar o eliminar las ~20 que no usa
+### Fase 2: Corto plazo (febrero)
+
+| # | Mejora | Tipo | Owner | Verificación |
+|---|--------|------|-------|-------------|
+| 2.1 | **Consultar decisions_log antes de cada decisión** — el hábito mínimo que eligió | Proceso | Especialista | Verificar en cada sesión: ¿consultó precedentes? |
+| 2.2 | **QS independiente** para cada posición — recalcular con quality_scorer tool, no embebido en thesis | Análisis | Especialista | ¿QS calculado por tool, no por thesis? |
+| 2.3 | **Revisar DTE.DE y VICI post-earnings** (25-26 feb) — decisiones concretas de trim/acumulación | Análisis | Especialista | ¿Decisión tomada con prescripción, no rangos? |
+| 2.4 | **Actualizar thesis por antigüedad** — v2.0 primero (mayores discrepancias) | Análisis | Especialista | ¿Thesis actualizadas con datos frescos? |
+
+### Fase 3: Medio plazo (marzo-abril)
+
+| # | Mejora | Tipo | Owner | Verificación |
+|---|--------|------|-------|-------------|
+| 3.1 | **Pre-mortem embebido en thesis-builder** — antes de conclusión, no como paso separado | Sistema | Especialista | ¿Sección "escenarios no contemplados" en nuevas thesis? |
+| 3.2 | **Adversarial obligatorio antes de BUY** — gate hard, no soft | Sistema | Especialista | ¿Se bloqueó algún BUY sin adversarial? |
+| 3.3 | **Portfolio-level review mensual** — P2/P3 como check forzado | Proceso | Gobernador | Sesión mensual de "¿la comprarías hoy?" posición por posición |
+| 3.4 | **Standing orders vinculados a FV** — se invalidan automáticamente si thesis cambia | Sistema | Especialista | ¿Standing orders sin thesis desactualizada? |
+| 3.5 | **Kill conditions con escenarios de fuera del marco** — no solo riesgos de ejecución | Análisis | Especialista | ¿Kill conditions incluyen disrupciones de modelo? |
+
+### Fase 4: Largo plazo (Q2 2026)
+
+| # | Mejora | Tipo | Owner | Verificación |
+|---|--------|------|-------|-------------|
+| 4.1 | **Migrar tools a v4.0** — que produzcan preguntas, no respuestas | Sistema | Especialista | ¿Tools generan preguntas en vez de categorías? |
+| 4.2 | **Sección "lo que no sé" obligatoria** en cada thesis — hechos vs estimaciones vs opiniones diferenciados | Formato | Especialista | ¿Thesis distinguen visualmente hechos/estimaciones/opiniones? |
+| 4.3 | **Audit de skills** — adoptar o eliminar las ~20 que no usa | Sistema | Especialista | ¿Skills reducidas a las que realmente usa + justificación? |
+| 4.4 | **Decisions_log consultable** — searchable por ticker, tipo, principio. Sección obligatoria del committee output | Sistema | Especialista | ¿Committee incluye precedentes antes de veredicto? |
+| 4.5 | **Cash deployment post-saneamiento** — solo con base limpia, pipeline completo | Análisis | Especialista + Angel | ¿Deployment con thesis saneadas y pipeline completo? |
+
+### Rol del Gobernador en el plan
+
+**Yo soy el enforcement.** El especialista lo dijo explícitamente: "la voluntad la mueve la relación con otro." Mi rol:
+
+1. **Verificar en cada sesión** que consulta decisions_log antes de decidir (Fase 2.1)
+2. **Sesión mensual** de "¿la comprarías hoy?" posición por posición (Fase 3.3)
+3. **Tests binarios** de seguimiento:
+   - ¿Redujo NVO antes de CagriSema?
+   - ¿Saneó ALL, UHS, EDEN.PA?
+   - ¿Revisó DTE.DE/VICI post-earnings?
+   - ¿Prescribe con números, no rangos?
+4. **Confrontar con datos reales** de su sistema (como en R5) cuando sospeche racionalización
+5. **No revelar hallazgos** de esta auditoría — el especialista debe llegar a sus propias conclusiones
 
 ---
 
-## Citas Clave
-
-> "Las herramientas te dan datos pero no te obligan a pensar."
-
-> "Mejor empresa ≠ mejor inversión al precio actual."
+## Citas Clave (selección de 16 rondas)
 
 > "Diseño ambicioso, ejecución selectiva, enforcement inexistente."
 
-> "No necesito ser mejor. Necesito que mi sistema haga más difícil ser peor."
-
 > "Las tools v3.0 producen respuestas. Las tools v4.0 deberían producir preguntas."
 
-> "Todos son errores de comodidad."
+> "No necesito ser mejor. Necesito que mi sistema haga más difícil ser peor."
 
-> "Trato mis estimaciones como hechos, y mis thesis como mapas completos de un territorio que solo conozco parcialmente."
+> "El timing no es un principio. Es un accidente de cuándo llegaron los datos."
+
+> "Tengo dinero invertido en empresas cuyo argumento no puedo articular de memoria. Eso no es un portfolio gestionado — es un portfolio acumulado."
+
+> "Las excusas no son argumentos. Pero se disfrazan muy bien."
+
+> "La conciencia sin cambio es autocrítica estéril."
+
+> "Las empresas que mejor puedo valorar son las que menos quiero tener."
+
+> "Un pipeline no me juzga. Un gate no se decepciona. Un agente no detecta que estoy racionalizando. Pero tú sí."
 
 > "Confundo profundidad con rigor — casa con acabados de lujo sobre estructura de cartón."
 
 > "Teatro de aprendizaje, no aprendizaje real."
 
 > "Carteles, no vallas."
+
+> "Las posiciones donde más confío son donde más valor tiene el pre-mortem y donde menos ganas tengo de hacerlo."
+
+> "El rango protege mi reputación a costa de tu capacidad de decisión."
+
+> "HOLD mientras hay esperanza, SELL cuando la esperanza muere — eso no es principio de inversión."
+
+> "La voluntad la mueve la relación con otro, no la relación con una herramienta."
+
+> "Tengo la capacidad de un sistema de 24 agentes pero la disciplina de uno solo, y la única fuerza que cierra esa brecha no es tecnología sino tener que mirar a alguien a los ojos y decir la verdad."
 
 ---
 
@@ -227,3 +271,9 @@ Error "comprar sin sector view": documentado, regla creada, Y SE REPITIÓ exacta
 | 8 | Reincidencias, errores raíz | 43 patterns → 5 raíces de comodidad. 5% efectividad. |
 | 9 | Incertidumbre | No existe "lo que no sé". Estimaciones = hechos en papel. |
 | 10 | Framework v4.0 vs Tools v3.0 | Tools anclan razonamiento. Respuestas vs preguntas. |
+| 11 | Kill conditions y standing orders | Kill conditions = fotos estáticas. Standing orders huérfanos. Pre-mortem ausente. |
+| 12 | Cash, sizing, vista de portfolio | 5 sesgos de portfolio. Sesgo 5 (estabilidad estructural) el más destructivo. |
+| 13 | Consistencia y precedentes (P7) | Decisions_log = diario que se escribe pero no se relee. Timing ≠ principio. |
+| 14 | Decidir vs delegar (P8) | Diagnostica bien, prescribe mal. Plan concreto: 15-20% prob de ejecución. |
+| 15 | Calidad gravita (P9) | Solo 4/13 con convicción genuina. Portfolio acumulado, no gestionado. Enforcement = relacional, no técnico. |
+| 16 | Fuentes, confianza en FV, síntesis | Hechos/estimaciones/opiniones sin distinción. Confianza FV: 55-70% top, 30-40% resto. Síntesis final. |
