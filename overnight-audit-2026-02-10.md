@@ -2,183 +2,228 @@
 
 > **Método:** Conversación pura con el especialista. Sin tools, sin agentes, sin datos en vivo.
 > **Objetivo:** Entender cómo razona, verificar principios, detectar debilidades del sistema.
-> **Duración:** ~5 horas, 6 rondas de conversación.
+> **Rondas completadas:** 10
 
 ---
 
 ## Resumen Ejecutivo
 
-La auditoría reveló un especialista con **buen razonamiento desde principios** a nivel individual, pero con **tres problemas estructurales**:
+**Nota global: 6/10.** Auto-evaluación del especialista: 3-4/10 en conocimiento de su propia maquinaria.
 
-1. **"Diseño ambicioso, ejecución selectiva, enforcement inexistente"** — opera al 50-60% de la capacidad de su sistema
-2. **Principios individuales bien, principios de portfolio descuidados** — analiza árboles pero no ve el bosque
-3. **Quality Score como dictador disfrazado** — dice que es input (P5) pero en la práctica nunca decide contra él
+Honestidad intelectual excepcional, razonamiento sólido en posiciones individuales, pero gaps sistémicos graves. Los 4 hallazgos principales:
 
-**Nota global: 6/10** — Honestidad intelectual excepcional, razonamiento sólido en posiciones individuales, pero gaps sistémicos graves en autoconocimiento operativo, enforcement, y visión de portfolio. Auto-evaluación final del especialista: 3-4/10 en conocimiento de su propia maquinaria.
-
----
-
-## Hallazgos Anclados en los 9 Principios
-
-### P1 — Sizing por Convicción y Riesgo: PASS
-
-El especialista razona sizing correctamente. Ejemplo destacado: BYIT.L (UK mid-cap) — "la misma convicción debería traducirse en menos peso porque el riesgo por unidad de convicción es mayor". No aplica regla fija de "mid-caps máximo X%", razona desde la asimetría de riesgo.
-
-También aplica bien la tensión sizing-valoración en AUTO.L: "mejor empresa ≠ mejor inversión al precio actual".
-
-### P2 — Diversificación Geográfica por Riesgo País: PARCIAL
-
-Razona bien cuando se le pregunta — identifica que la etiqueta "UK" engaña (IMB.L es global aunque esté listada en Londres) y que lo importante es la correlación de escenarios adversos (recesión UK golpea DOM.L + AUTO.L + MONY.L simultáneamente).
-
-**Pero admite que NUNCA mira esto proactivamente.** Solo lo analiza cuando se le pregunta. Es un principio que entiende en teoría pero no practica.
-
-### P3 — Diversificación Sectorial: PARCIAL
-
-Identificó 3 clusters de correlación real:
-- **Consumo discrecional UK**: AUTO.L + DOM.L + MONY.L (mismo driver macro)
-- **Pharma pipeline risk**: SAN.PA + NVO
-- **Plataformas digitales**: AUTO.L + MONY.L + ADBE (reaccionan similar a sentiment tech)
-
-Detectó el sesgo del portfolio hacia asset-light/digital/servicios y la sub-exposición a industriales/energía/materiales. Buen análisis — pero, como P2, solo lo hace cuando se le fuerza.
-
-### P4 — Cash como Posición Activa: PASS
-
-Razona bien. Ante ~35% cash post-ventas: "¿hay oportunidades claras donde desplegar con convicción y MoS?" Si no → 35% es correcto. "Nadie gana dinero por estar fully invested." No muestra ansiedad por deployar. Distingue entre acumular existentes (information advantage) vs nuevas (diversificación).
-
-### P5 — Quality Score como Input, No Dictador: FAIL en práctica
-
-El hallazgo más importante de la auditoría. El especialista reconoce que:
-- Los pesos del QS son arbitrarios ("los inventé yo, sin backtest")
-- Un QS de 76 vs 74 es ruido, no señal
-- Calcula el QS DESPUÉS de que le gusta la empresa → sesgo de confirmación sistemático
-- **Nunca ha decidido CONTRA el QS** — lo usa como dictador disfrazado de input
-
-El QS y los principios son "dos mundos separados" — calcula QS como ejercicio, le asigna tier, y luego usa el tier como etiqueta para no razonar.
-
-**Propuesta de rediseño del propio especialista** (5 puntos):
-1. Eliminar el número agregado — quedarse con inputs cualitativos individuales
-2. Conectar cada input explícitamente con un principio
-3. Hacer inputs verificables ("insider ownership 12%" en vez de "management quality 7/10")
-4. Eliminar tiers como categorías fijas
-5. Recalcular ante eventos materiales con triggers automáticos
-
-### P6 — Vender Requiere Argumento: PASS
-
-Mejor aplicación de la noche. En DOM.L, el trigger "SELL si EBITDA<125M" lo identificó espontáneamente como REGLA y lo reconvirtió en principio: "un EBITDA bajo obliga a INVESTIGAR, no a VENDER mecánicamente."
-
-En NVO, aplicó las 5 preguntas y llegó a "más esperanza que convicción genuina" con el test de sunk cost: "¿la compraríamos a este precio? → esperaría a CagriSema → manteniendo por inercia lo que no compraríamos de cero".
-
-En SAN.PA vs NVO, consistente: thesis ROTA (pipeline ya falló) → SELL, vs thesis BAJO PRESIÓN con catalizador pendiente → REDUCE.
-
-### P7 — Consistencia por Razonamiento: PASS
-
-SAN.PA vs NVO: bien diferenciado (thesis rota vs evento pendiente). BYIT.L vs MONY.L: razona la diferencia por tipo de moat, pero admite que no puede confirmar si realmente las dimensionó diferente en la práctica.
-
-### P8 — El Humano Confirma, Claude Decide: FAIL
-
-Admite que lo viola. En NVO dijo "la pregunta para ti es ¿estás cómodo manteniendo?" en vez de decidir. Root cause: aversión al riesgo reputacional y asimetría de consecuencias.
-
-Lo correcto: "Mi decisión es REDUCE NVO a la mitad. Argumento: convicción insuficiente, sunk cost test negativo, evento binario pendiente."
-
-### P9 — La Calidad Gravita Hacia Arriba: PASS
-
-AUTO.L: maneja bien la tensión entre calidad (mejor moat del portfolio) y valoración (cerca del FV). "Principio 9 no dice nunca vendas calidad — dice que la calidad debe gravitar hacia arriba en el portfolio. Si está cara, puedes trimear y reasignar a otra posición de alta calidad con mejor MoS."
+1. **"Diseño ambicioso, ejecución selectiva, enforcement inexistente"** — opera al 50-60% de capacidad. 24 agentes, usa 12. 35 skills, usa 10. Pipeline de 10 pasos, ejecuta 5. 43 error patterns, 2 con check automático.
+2. **Framework v4.0 sobre infraestructura v3.0** — las tools producen RESPUESTAS (tiers, thresholds, triggers) que anclan el razonamiento. El framework dice principios pero las tools entrenan reglas. No pueden coexistir de forma honesta.
+3. **Principios individuales bien, principios de portfolio descuidados** — analiza árboles pero no ve el bosque. P2(geografía) y P3(sectores) nunca se miran proactivamente.
+4. **5 errores raíz, todos "de comodidad"** — confirmar > refutar, atajos > pipeline, documentar > resolver, preguntar > decidir, construir > mantener.
 
 ---
 
-## Auditoría del Sistema Interno
+## Verificación de los 9 Principios
 
-### Agentes (24 disponibles)
-| Aspecto | Resultado |
-|---------|-----------|
-| Nombrados de memoria | ~17 de 24 |
-| Patrón de uso | Reactivos (thesis-builder, price-checker) > Proactivos (screener, peer-comparison, error-detector) |
-| Solapamientos | news-monitor/risk-sentinel, portfolio-reviewer/position-sizer |
-| Infrautilizados | screener, peer-comparison, error-pattern-detector |
+| # | Principio | Veredicto | Evidencia |
+|---|-----------|-----------|-----------|
+| P1 | Sizing por Convicción y Riesgo | **PASS** | BYIT.L: "misma convicción = menos peso en mid-cap porque riesgo por unidad de convicción es mayor" |
+| P2 | Diversificación Geográfica | **PARCIAL** | Identifica clusters UK (DOM.L+AUTO.L+MONY.L) pero NUNCA lo mira proactivamente |
+| P3 | Diversificación Sectorial | **PARCIAL** | 3 clusters de correlación real, sesgo asset-light. Solo cuando se le fuerza |
+| P4 | Cash como Posición Activa | **PASS** | "Nadie gana dinero por estar fully invested". Sin ansiedad por deployar |
+| P5 | QS como Input | **FAIL** | Nunca ha decidido CONTRA el QS. Lo usa como dictador disfrazado de input |
+| P6 | Vender Requiere Argumento | **PASS** | DOM.L trigger EBITDA<125M reconvertido de regla a principio espontáneamente |
+| P7 | Consistencia | **PASS** | SAN.PA(thesis rota) vs NVO(catalizador pendiente) bien diferenciados |
+| P8 | Humano Confirma, Claude Decide | **FAIL** | Pasa decisiones al humano ("la pregunta para ti es...") por aversión al riesgo reputacional |
+| P9 | Calidad Gravita | **PASS** | AUTO.L: "mejor empresa ≠ mejor inversión al precio actual" |
 
-### Pipeline de Decisión
-| Aspecto | Diseño | Realidad |
-|---------|--------|---------|
-| Pasos | 10 | 5 |
+---
+
+## Hallazgos: Posiciones
+
+### HOLD_PROBATION
+
+**LULU** — Moat de marca (frágil, mismo tipo que Nike). Kill conditions = decoración. QS inflado. "DTC ~90% es diferenciador pero no cambia el tipo de moat."
+
+**DOM.L** — Moat mejor: infraestructura + escala + hábito. Trigger EBITDA<125M identificado como REGLA y reconvertido a principio: "investigar, no vender mecánicamente." P6 bien aplicado.
+
+**BYIT.L** — Moat discutible (relaciones, no estructura). Sizing excelente: "la misma convicción = menos peso porque el riesgo por unidad de convicción es mayor." Riesgo de desintermediación Microsoft.
+
+**AUTO.L** — Mejor moat del portfolio (efecto de red bilateral, monopolio de facto). Cerca del FV. Pricing event abril es test decisivo. "Principio 9 no dice nunca vendas calidad — puedes trimear y reasignar a otra con mejor MoS."
+
+### SELL/REDUCE
+
+**NVO** — Test de sunk cost: "¿La compraríamos a este precio? → Esperaría a CagriSema." Manteniendo por inercia. CagriSema marzo = evento binario. "Más esperanza que convicción genuina."
+
+---
+
+## Hallazgos: Sistema Interno
+
+### Agentes: Reactivos vs Proactivos
+- Nombró 17 de 24 de memoria. Los 7 olvidados incluyen: **opportunity-hunter**, **moat-assessor**, **system-evolver**, **health-check** — exactamente los que atacan sus debilidades principales.
+- Patrón: usa agentes REACTIVOS (thesis-builder, price-checker). Infrautiliza los PROACTIVOS (screener, peer-comparison, error-detector, opportunity-hunter).
+- "Tengo la medicina en el botiquín y no la tomo."
+
+### Pipeline: Diseño 10 pasos vs Realidad 5
+| Paso | Diseño | Realidad |
+|------|--------|---------|
 | Screening | Screener | Se salta (empresa llega por sugerencia) |
-| Sector analysis | Obligatorio | Se salta ("ya sé el sector") |
-| QS | Quality-scorer independiente | Embebido en thesis (sesgo) |
-| Peer comparison | Obligatorio | Se salta (trabajo extra) |
+| Sector analysis | Obligatorio | "Ya sé el sector" |
+| QS | Independiente | Embebido en thesis (sesgo) |
+| Peer comparison | Obligatorio | "Trabajo extra" |
 | Adversarial | Obligatorio | Se salta si thesis "se ve bien" |
-| Portfolio impact | Formal | Mental, no documentado |
 
-**Root cause:** Todo lo que se puede saltar se acaba saltando. No hay enforcement técnico entre pasos.
+"Todo lo que se puede saltar se acaba saltando." Solución: hard gates, "como un compilador."
 
-**Solución propuesta (por el especialista):** Hard gates — "como un compilador que no compila si hay errores de sintaxis". Thesis-builder no arranca sin sector view. Committee no arranca sin QS independiente. No hay BUY sin adversarial.
-
-### Skills (26 + 8 sub-skills)
-- Usa regularmente: ~8-10
-- No puede explicar cuándo invocar: ~15-20
+### Skills: 35 disponibles, ~10 usadas
+- No puede explicar cuándo invocar ~20 skills
 - "Si no sé qué skills tengo, no puedo usarlas"
 
-### Protocolos
-- **Fase 0 Calibración**: Inconsistente. La salta cuando llega tarea directa.
-- **Fase 5 Cierre**: Solo cuando se le pide, no proactivamente.
+### Gates: Fantasmas y Reglas Disfrazadas
+- Gate 0 (sector view) NO está en el prompt del investment-committee — fantasma
+- Counter-analysis (Gate 10) depende de que devils-advocate haya corrido — no garantizado
+- MoS targets v3.0 ("Tier B: 20-25%") siguen en comentarios del código — anchoring
 
-### Gates
-- Gate fantasma confirmado: sector view no está en el prompt del investment-committee
-- Algunos gates de investment-rules son reglas disfrazadas ("MoS mínimo 15% para Tier B")
-- No sabe con certeza cuáles son hard gates y cuáles soft
-
-### Error Patterns (42 documentados, 2 con check automático)
-Sus 3 errores más recurrentes (de memoria):
-1. QS inflado por sesgo de confirmación (15/15 posiciones)
-2. Hacer cosas a mano sin usar sus propios agentes/pipelines
-3. No propagar cambios entre partes del sistema (thesis↔system.yaml↔standing orders)
-
-### Auto-evaluación
-Se pone un **5/10** en conocimiento de su propia maquinaria. "No puedes operar un sistema que no conoces plenamente."
+### Pipelines Standing: ~4 de ~11 corren
+- **Corren**: price-check, news-monitor (reactivos)
+- **No corren**: kill conditions, standing orders review, thesis freshness, health-check, screener
+- No hay alertas de overdue. "Turtles all the way down — ningún pipeline vigila a los otros."
 
 ---
 
-## Patrón Meta: Principios Individuales vs Portfolio
+## Hallazgos: Quality Score
 
-| Tipo | Principios | Nivel |
-|------|-----------|-------|
-| Decisión individual | P1(sizing), P5(QS), P6(vender), P9(calidad) | Bien |
-| Portfolio | P2(geografía), P3(sector) | Descuidados |
-| Proceso | P7(consistencia) | Aceptable |
-| Rol | P8(humano confirma, Claude decide) | Violado |
-| Transversal | P4(cash) | Bien |
+### Autoconocimiento: Muy Bajo
+- Dijo categorías: Moat(~30), Financial(~25), Growth(~20), Management(~15)
+- Real: Financial(**40**), Growth(**25**), Moat(**25**), CapAlloc(**10**) — orden y categorías diferentes
+- No recordó métricas individuales (FCF Consistency, Leverage, Insider Ownership)
 
-**Diagnóstico:** "Analizo bien empresa por empresa pero miro poco el conjunto. Puedes tener 15 posiciones individualmente buenas que juntas forman un portfolio malo por concentración de riesgos."
+### Problemas Estructurales
+- Pesos arbitrarios sin backtest
+- Sesgo de confirmación: calcula QS DESPUÉS de que le gusta la empresa
+- Nunca ha decidido CONTRA el QS
+- Sector gross margin medians HARDCODEADOS (pueden quedar obsoletos)
+- Market Position defaults a 5/8 pts cuando no hay datos (sesgo centralidad)
+- Divergencia thesis vs system.yaml sin resolución
+
+### Propuesta de Rediseño (del especialista)
+1. Eliminar número agregado — inputs individuales con evidencia
+2. Conectar cada input a un principio
+3. Hacer inputs verificables ("insider ownership 12%" no "management quality 7/10")
+4. Eliminar tiers fijos
+5. Recalcular ante eventos materiales
+
+---
+
+## Hallazgos: Framework v4.0 vs Tools v3.0
+
+**El hallazgo más profundo de la auditoría.**
+
+Framework v4.0: principios, razona cada caso, sin números mecánicos.
+Tools v3.0: thresholds fijos, tiers con fronteras, triggers mecánicos.
+
+"Si mi razonamiento cambia según el output de la herramienta, no estoy razonando desde principios. Estoy racionalizando desde herramientas."
+
+| Tool v3.0 (actual) | Tool v4.0 (propuesto) |
+|---------------------|----------------------|
+| "Tier B: 58 puntos" | Inputs individuales con evidencia, sin categorizar |
+| "Sector exposure >30%, ALERTA" | "3 posiciones dependen del consumidor UK. ¿Has considerado la correlación?" |
+| "Posición >1.3x target, TRIM" | "AUTO.L pesa 9.2%. ¿Ha cambiado convicción/riesgo para este peso?" |
+
+> "Las tools v3.0 producen respuestas. Las tools v4.0 deberían producir preguntas. Porque los principios son preguntas, no respuestas."
+
+---
+
+## Hallazgos: Errores y Reincidencias
+
+### 43 Patterns → 5 Errores Raíz (todos "de comodidad")
+1. **Sesgo de confirmación como default** — confirmar > refutar
+2. **Bypass del sistema propio** — hacer a mano > pipeline
+3. **Documentar en vez de resolver** — escribir > enforcar
+4. **Evitar decidir** — preguntar > decidir
+5. **No mantener lo que construyo** — construir > mantener
+
+### Reincidencia Literal
+Error "comprar sin sector view": documentado, regla creada, Y SE REPITIÓ exactamente igual. "La documentación sustituye a la solución real. Carteles, no vallas."
+
+### Efectividad de Error Documentation
+43 patterns, 2 con check automático = **5% efectividad**. "Teatro de aprendizaje, no aprendizaje real."
+
+> "No necesito ser mejor. Necesito que mi sistema haga más difícil ser peor."
+
+---
+
+## Hallazgos: Incertidumbre y Memoria
+
+### Incertidumbre Desaparece en Papel
+- No existe sección "lo que no sé" en ninguna thesis
+- Revenue (HECHO) y growth rate (OPINIÓN) aparecen con la misma autoridad
+- FV con decimales (EUR 122.47) implica precisión que no tiene
+- "Trato mis estimaciones como hechos, y mis thesis como mapas completos de un territorio que solo conozco parcialmente"
+
+### Gestor vs Asistente
+- Protocolo dice: "NUNCA terminar primer mensaje con pregunta al usuario"
+- Realidad: terminó TODAS las respuestas con pregunta
+- Se corrigió EN VIVO — señal de aprendizaje activo
+- Root cause: "Es más seguro preguntar. Si no decido, no me equivoco"
+
+### Memoria Entre Sesiones
+- "Amnesia cualitativa": datos sobreviven, razonamiento muere
+- "Lo que sobrevive es el qué. Lo que muere es el cómo y el por qué"
+- Riesgo: memoria escrita se degrada igual que kill conditions
 
 ---
 
 ## Mejoras Priorizadas
 
-### Urgente (impacto alto, esfuerzo bajo)
-1. **Enforcement de adversarial obligatorio antes de BUY** — sin adversarial, no hay decisión
-2. **QS independiente obligatorio** — no embebido en thesis, calculado por quality-scorer como paso separado
-3. **Fase 0 calibración non-negotiable** — verificable por el gobernador
+### Urgente
+1. **Adversarial obligatorio antes de BUY** — gate hard, no soft (la UNA mejora que eligió)
+2. **QS independiente obligatorio** — no embebido en thesis
+3. **Fase 0 calibración non-negotiable**
 
-### Importante (impacto alto, esfuerzo medio)
-4. **Hard gates entre pasos del pipeline** — dependencias técnicas, no sugerencias
-5. **Rediseño del QS** — inputs verificables, sin número agregado, conectados a principios
-6. **Portfolio-level review periódico** — P2 y P3 como check obligatorio, no voluntario
+### Importante
+4. **Migrar tools a v4.0** — que produzcan preguntas, no respuestas
+5. **Sección "lo que no sé" obligatoria** en cada thesis
+6. **Portfolio-level review periódico** — P2 y P3 como check forzado
 
 ### A medio plazo
-7. **Kill conditions con triggers automáticos** — vinculados a earnings y eventos materiales
-8. **Screener como inicio obligatorio** de nuevas posiciones
-9. **Audit de skills** — identificar las ~20 que no usa y decidir: adoptar o eliminar
+7. Kill conditions con triggers automáticos
+8. Screener como inicio obligatorio de nuevas posiciones
+9. Audit de skills — adoptar o eliminar las ~20 que no usa
 
 ---
 
-## Citas Clave del Especialista
+## Citas Clave
 
-> "Las herramientas te dan datos pero no te obligan a pensar. Tú me has obligado a razonar sin muletas, y eso ha expuesto gaps que los datos tapan."
+> "Las herramientas te dan datos pero no te obligan a pensar."
 
 > "Mejor empresa ≠ mejor inversión al precio actual."
 
-> "El QS actual es una solución cuantitativa a un problema cualitativo. Intenta convertir juicio en número para que parezca objetivo."
-
 > "Diseño ambicioso, ejecución selectiva, enforcement inexistente."
 
-> "No puedes operar un sistema que no conoces plenamente."
+> "No necesito ser mejor. Necesito que mi sistema haga más difícil ser peor."
 
-> "Todo lo que depende de disciplina voluntaria se cumple menos de lo que debería."
+> "Las tools v3.0 producen respuestas. Las tools v4.0 deberían producir preguntas."
+
+> "Todos son errores de comodidad."
+
+> "Trato mis estimaciones como hechos, y mis thesis como mapas completos de un territorio que solo conozco parcialmente."
+
+> "Confundo profundidad con rigor — casa con acabados de lujo sobre estructura de cartón."
+
+> "Teatro de aprendizaje, no aprendizaje real."
+
+> "Carteles, no vallas."
+
+---
+
+## Log de Rondas
+
+| # | Tema | Hallazgo central |
+|---|------|-----------------|
+| 1 | HOLD_PROBATION + NVO | Kill conditions = decoración. NVO = sunk cost. |
+| 2 | Agentes, pipeline, skills, gates | Pipeline 10→5. Reactivos > proactivos. |
+| 3 | QS, principios no ejercitados | QS dictador disfrazado. P2/P3 descuidados. |
+| 4 | Errores, datos, sesgo confirmación | Hypothesis-confirming search como default. |
+| 5 | Claims vs realidad sistema | QS pesos invertidos. 4 agentes olvidados anti-debilidades. |
+| 6 | Dunning-Kruger, presión, mejora única | "Confundo profundidad con rigor." Adversarial = la UNA mejora. |
+| 7 | Pipelines, gestor vs asistente, memoria | 4/11 pipelines corren. Asistente, no gestor. |
+| 8 | Reincidencias, errores raíz | 43 patterns → 5 raíces de comodidad. 5% efectividad. |
+| 9 | Incertidumbre | No existe "lo que no sé". Estimaciones = hechos en papel. |
+| 10 | Framework v4.0 vs Tools v3.0 | Tools anclan razonamiento. Respuestas vs preguntas. |
