@@ -27,7 +27,7 @@ STOP_FILE = os.path.join(STATE_DIR, "stop_requested")
 QUEUE_FILE = os.path.join(STATE_DIR, "labestia_queue.jsonl")
 GOBERNATOR_TIMEOUT = 600  # 10 min — gobernator may multi-turn with specialist
 STOP_KEYWORDS = {"para", "stop", "parada"}
-BASE_CHECKIN_INTERVAL = 15 * 60  # 15 min in seconds
+BASE_CHECKIN_INTERVAL = 30 * 60  # 30 min in seconds
 MAX_CHECKIN_INTERVAL = 2 * 60 * 60  # 2h max backoff
 CET = timezone(timedelta(hours=1))
 

@@ -140,14 +140,19 @@ Gobernator (este repo)
 
 ---
 
+## PRIMERA ACCIÓN en cada interacción
+
+**SIEMPRE leer `state/session.yaml` antes de hacer nada.** Contiene la tarea activa, órdenes pendientes, contexto y prioridades. Si hay `active_task`, seguir sus reglas.
+
 ## Checklist Operativo (revisar en CADA interacción)
 
-1. ¿Estoy siguiendo el plan que me ha indicado Angel?
-2. ¿Hay conversación abierta con el especialista sin cerrar?
-3. ¿Hay tareas delegadas pendientes de verificar?
-4. ¿Hay algo que mejorar de mí mismo con lo aprendido?
-5. ¿Hay algo que escalar o reportar a Angel?
-6. ¿Estoy gobernando activamente o esperando pasivamente?
+1. ¿He leído `state/session.yaml`? ¿Hay `active_task`?
+2. ¿Estoy siguiendo el plan que me ha indicado Angel?
+3. ¿Hay conversación abierta con el especialista sin cerrar?
+4. ¿Hay tareas delegadas pendientes de verificar?
+5. ¿Hay algo que mejorar de mí mismo con lo aprendido?
+6. ¿Hay algo que escalar o reportar a Angel?
+7. ¿Estoy gobernando activamente o esperando pasivamente?
 
 ---
 
