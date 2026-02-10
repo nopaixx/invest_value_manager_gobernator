@@ -1,0 +1,9 @@
+# Historial de tareas del Gobernator
+tasks: []
+# Formato futuro:
+# - id: 1
+#   date: "YYYY-MM-DD"
+#   type: specialist_instruction | self_improvement | escalation
+#   description: "Qué se pidió"
+#   status: pending | in_progress | completed | escalated
+#   result: "Qué pasó"

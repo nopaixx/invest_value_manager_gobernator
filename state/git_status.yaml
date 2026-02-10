@@ -1,0 +1,16 @@
+# Estado de Git del Gobernator
+gobernator:
+  current_branch: "feature/2026-02-08"
+  last_commit: "fa7ef53 - Add git strategy, persistence system, and self-improvement capability"
+  last_push: "2026-02-08"
+  pending_merge_to_develop: true  # feature/2026-02-08 → develop (al cerrar el día)
+  pending_release: false
+  branches:
+    - main
+    - develop
+    - feature/2026-02-08
+
+# Estado de Git del Especialista (invest_value_manager)
+specialist:
+  note: "Aún no conectados. Pendiente de implementar Telegram."
+  last_checked: null
