@@ -1,19 +1,22 @@
 # Estado de la última sesión del Gobernator
 last_session:
   date: "2026-02-10"
-  summary: "Ventas SAN.PA+HRB y cancelaciones BME.L+UTG.L procesadas por especialista. Portfolio 14 posiciones, cash ~35%."
+  summary: "6 thesis actualizadas hoy. IMB.L SELL escalado. VICI y UHS en probation (MoS~0%). DTE.DE HOLD."
   status: operational
   mode: NORMAL
 
-  current_task: "Gobierno rutinario — vigilancia, thesis pendientes, preparación earnings"
+  current_task: "Gobierno rutinario — DOM.L thesis pendiente, cash deployment, vigilancia earnings"
 
   pending_specialist_actions:
-    - "COMPLETADO: Ventas SAN.PA/HRB registradas, standing orders BME.L/UTG.L cancelados"
-    - "PENDIENTE: Actualizar thesis IMB.L ($400M payment + UK generational ban)"
-    - "PENDIENTE: Actualizar thesis ADBE (FTC/DOJ lawsuit)"
-    - "PENDIENTE: Actualizar thesis GL (SEC/DOJ clearance — FV al alza)"
-    - "PENDIENTE: Actualizar thesis v2.0 por antigüedad"
+    - "COMPLETADO: IMB.L thesis v3.0 — SELL (FV 2,796p, MoS -14.6%)"
+    - "COMPLETADO: ADBE thesis v2.0 — HOLD (FV $390, MoS 31.6%)"
+    - "COMPLETADO: GL thesis v3.0 — HOLD (FV $191, MoS 25.9%)"
+    - "COMPLETADO: VICI thesis v3.0 — HOLD PROBATION (FV $29, MoS ~0%)"
+    - "COMPLETADO: DTE.DE thesis v3.0 — HOLD (FV EUR 34, MoS 10.5%)"
+    - "COMPLETADO: UHS thesis v3.0 — HOLD PROBATION (FV $213, MoS ~0%)"
+    - "PENDIENTE: Actualizar thesis DOM.L (v2.0, FY25 results 5 Mar)"
     - "PENDIENTE: Cash deployment planning (~35% cash)"
+    - "ESCALADO: SELL IMB.L — esperando Angel"
 
   rate_limit_status:
     blocked_since: null
@@ -23,33 +26,34 @@ last_session:
   adversarial_status: COMPLETE
   adversarial_results:
     SOLD: [HRB, SAN.PA]
-    SELL_OR_REDUCE: [NVO]
+    SELL_OR_REDUCE: [NVO, IMB.L]
     CANCEL_ORDER: [BME.L, UTG.L]
-    HOLD_PROBATION: [LULU, DOM.L, BYIT.L, AUTO.L]
-    HOLD_MED: [ADBE]
+    HOLD_PROBATION: [LULU, DOM.L, BYIT.L, AUTO.L, VICI, UHS]
+    HOLD_MED: [ADBE, DTE.DE]
 
   specialist_improvements:
     completed:
       - "QS Tool-First protocol implementado en 16 thesis"
       - "news-monitor y market-pulse ejecutados"
       - "risk-sentinel primera ejecución (12 gaps encontrados)"
-      - "SAN.PA thesis actualizada a v3.0 con EXIT protocol"
-      - "Ventas SAN.PA/HRB registradas en portfolio y transactions"
-      - "Standing orders BME.L/UTG.L cancelados en system.yaml"
+      - "IMB.L thesis v3.0 — SELL"
+      - "ADBE thesis v2.0 — HOLD (FTC/DOJ)"
+      - "GL thesis v3.0 — HOLD (SEC/DOJ clearance)"
+      - "VICI thesis v3.0 — HOLD PROBATION (FV $29)"
+      - "DTE.DE thesis v3.0 — HOLD (FV EUR 34)"
+      - "UHS thesis v3.0 — HOLD PROBATION (FV $213)"
     pending:
-      - "Actualizar thesis IMB.L ($400M payment + UK generational ban)"
-      - "Actualizar thesis ADBE (FTC/DOJ lawsuit)"
-      - "Actualizar thesis GL (SEC/DOJ clearance — FV al alza)"
-      - "Actualizar thesis v2.0 por antigüedad"
-      - "Recalibrar kill conditions y standing orders"
+      - "Actualizar thesis DOM.L (v2.0, FY25 results 5 Mar)"
+      - "Recalibrar kill conditions y standing orders portfolio-wide"
       - "Cash deployment planning (~35%)"
 
   upcoming_catalysts:
+    - "TMUS Capital Markets Day: 11 Feb (impacts DTE.DE)"
     - "MONY.L earnings: 23 Feb"
     - "EDEN.PA earnings: 24 Feb"
-    - "VICI earnings: 25 Feb"
-    - "DTE.DE earnings: 26 Feb (TRIM si >EUR 33)"
-    - "UHS earnings: 26 Feb"
+    - "VICI earnings: 25 Feb (PROBATION decision)"
+    - "DTE.DE earnings: 26 Feb"
+    - "UHS earnings: 26 Feb (PROBATION decision)"
     - "DOM.L FY25 results: 5 Mar (SELL trigger si EBITDA<125M)"
     - "NVO CagriSema: Mar 2026"
     - "LULU Q4: 31 Mar"
@@ -57,27 +61,21 @@ last_session:
 
   risk_sentinel:
     last_run: "2026-02-10"
-    orange: [IMB.L, EDEN.PA, ADBE, VICI]
-    yellow: [ALL, GL, NVO, DTE.DE, LULU]
-    clear: [DOM.L, MONY.L, AUTO.L, BYIT.L, UHS]
-    gaps_found: 12
+    orange: [IMB.L, EDEN.PA]
+    yellow: [ALL, NVO, LULU]
+    clear: [DOM.L, MONY.L, AUTO.L, BYIT.L, UHS, GL, ADBE, VICI, DTE.DE]
+    note: "VICI, DTE.DE, UHS resueltos esta sesión"
 
   rules:
     - "Modo NORMAL: operaciones rutinarias activas"
-    - "Especialista puede usar tools, agentes y pipelines libremente"
-    - "Trabajo rutinario SIN confirmación: thesis pendientes, screeners, sector views, investigar oportunidades, news-monitor, market-pulse, price-check, vigilancia"
-    - "Mejoras pequeñas al especialista: OK sin confirmación"
-    - "Reestructuración grande del especialista: NO — pendiente hablar con Angel sobre gobierno y mejoras"
     - "Contactar a Angel SOLO para: órdenes eToro (compra/venta/trim) o aclaraciones necesarias"
     - "Todo lo demás: gobierno autónomo"
 
   context:
     - "Modo NORMAL desde 2026-02-10"
-    - "SAN.PA y HRB vendidas y registradas. BME.L y UTG.L cancelados."
-    - "Angel solo quiere ser contactado para órdenes eToro o urgencias — gobierno autónomo"
+    - "6 thesis actualizadas hoy: IMB.L (SELL), ADBE (HOLD), GL (HOLD), VICI (PROBATION), DTE.DE (HOLD), UHS (PROBATION)"
+    - "IMB.L → SELL escalado a Angel — esperando"
+    - "VICI y UHS: MoS ~0%, decisión post-earnings (25-26 Feb)"
     - "Portfolio: 14 posiciones. Cash ~35%."
-    - "IMB.L thesis: trabajo parcial (counter_analysis.md creado, 272 líneas). Retomar — pedir al especialista que complete la actualización."
-    - "El especialista puede tener contexto stale de sesiones anteriores — si dice que algo 'sigue corriendo en background' es falso, los procesos fueron reiniciados."
-    - "Specialist timeout: 1 hora. Las thesis completas tardan 10-15 min — NO matar procesos que estén trabajando."
-    - "NO contactar a Angel salvo para eToro o aclaraciones. NO proponer reestructuraciones grandes al especialista."
-    - "Después de thesis pendientes, seguir con: screeners, sector views, investigar oportunidades, rutinas de vigilancia."
+    - "DOM.L es la única thesis v2.0 sin actualizar"
+    - "Próxima prioridad: DOM.L thesis, luego cash deployment planning"
