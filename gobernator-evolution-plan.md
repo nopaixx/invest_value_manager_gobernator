@@ -447,28 +447,152 @@ Las transiciones las decido yo razonando. No con reglas mecánicas.
 
 ---
 
-## Parte 12: Plan de Implementación
+## Parte 12: Plan de Auto-Implementación
 
-### Fase 1: Fundaciones (1 día)
-- [ ] Crear `state/decisions-log.yaml` — registro de MIS decisiones como gobernador
-- [ ] Extraer lecciones de MEMORY.md a `memory/lessons.md` — MEMORY.md como índice puro
-- [ ] Crear rule `self-governance.md` (sesgos propios, auto-evaluación, anti-drift, trampas humanas a interceptar)
-- [ ] Crear rule `modes.md` (modos de funcionamiento y transiciones)
-- [ ] Depurar `governance.md` (consolidar, eliminar redundancias)
-- [ ] Verificar que el protocolo de arranque frío (Parte 5.3) funciona: simular lectura secuencial de ficheros y confirmar que puedo gobernar
+> **INSTRUCCIONES PARA MI YO FUTURO:** Angel te pedirá "implementa tu plan de evolución". Lee esta sección entera. Ejecuta fase por fase. Después de cada paso, verifica. No saltes pasos. No improvises. Si algo no tiene sentido, PARA y pregunta a Angel.
 
-### Fase 2: Modos y Bot (1-2 días)
-- [ ] Implementar modos en el bot (frecuencia variable de check-ins según modo)
-- [ ] Primera auto-evaluación diaria real (5 preguntas, escrita en fichero)
-- [ ] Primer cambio de modo automático razonado
-- [ ] Implementar detección de evolución del especialista (git log check en cada check-in)
+### Pre-requisito: Entender ANTES de actuar
 
-### Fase 3: Producción (cuando Angel lo autorice)
-- [ ] Definir con Angel: autonomía, cash deployment, protocolo nocturno
-- [ ] Resumen diario 22:00 CET en producción
-- [ ] Frecuencias de producción (modos reales, no modo prueba)
-- [ ] Primera semana real + revisión con Angel
-- [ ] Primera calibración semanal completa (anti-drift)
+**Antes de tocar un solo fichero, lee estas partes del plan en orden:**
+1. Parte 0 (Por Qué Existo) — ¿entiendo mi razón de ser?
+2. Parte 1 (Anti-Pitfall) — ¿entiendo las 10 trampas que intercepto?
+3. Parte 3 (Mis Sesgos) — ¿entiendo mis 7 sesgos propios?
+4. Parte 4 (Auto-Mejora) — ¿entiendo el proceso de 6 pasos?
+5. Parte 5 (Contexto Indestructible) — ¿entiendo que mis ficheros son mi única memoria?
+6. Parte 6 (Alineación Especialista) — ¿entiendo cómo evoluciono con él?
+
+**Si algo no está claro → NO implementar. Releer. Si sigue sin estar claro → preguntar a Angel.**
+
+---
+
+### Fase 1: Fundaciones (crear ficheros nuevos + depurar existentes)
+
+**Paso 1.1:** Crear `state/decisions-log.yaml`
+```yaml
+# Registro de decisiones del gobernador
+# Cada decisión significativa: qué decidí, por qué, resultado
+decisions: []
+```
+- **Qué es:** Registro de MIS decisiones como gobernador (no las del especialista)
+- **Para qué:** Auditoría propia. ¿Mis decisiones fueron buenas? ¿Consistentes con principios?
+- **Verificación:** ¿El fichero existe? ¿Puedo escribir en él?
+
+**Paso 1.2:** Crear `memory/lessons.md`
+- **Qué hacer:** Extraer de MEMORY.md todas las "Lecciones Clave" a este fichero dedicado
+- **Dejar en MEMORY.md:** Solo punteros ("Lecciones → memory/lessons.md")
+- **Objetivo:** MEMORY.md se mantiene como índice <200 líneas
+- **Verificación:** ¿MEMORY.md sigue siendo índice? ¿lessons.md tiene las lecciones completas?
+
+**Paso 1.3:** Crear `.claude/rules/self-governance.md`
+- **Contenido:** Extraer de este plan: mis 7 sesgos (Parte 3), protocolo anti-sesgo, protocolo anti-drift (Parte 4.4), auto-evaluación diaria y semanal (Parte 9)
+- **Por qué un fichero separado:** Las rules se cargan automáticamente. Quiero que mis sesgos y auto-evaluación estén SIEMPRE presentes, no solo cuando leo el plan.
+- **Verificación:** ¿Cubre los 7 sesgos? ¿Tiene las 5 preguntas diarias? ¿Tiene la calibración semanal?
+
+**Paso 1.4:** Crear `.claude/rules/modes.md`
+- **Contenido:** Extraer de Parte 8: los 5 modos, frecuencias, transiciones
+- **Incluir:** Cómo decido transiciones (razonando, no mecánicamente). Ejemplos concretos.
+- **Verificación:** ¿Están los 5 modos? ¿Las transiciones tienen ejemplos?
+
+**Paso 1.5:** Depurar `governance.md`
+- **Leer governance.md entero.** ¿Hay redundancias con CLAUDE.md? ¿Reglas duplicadas? ¿Algo obsoleto?
+- **Consolidar:** Si una regla está en governance.md Y en CLAUDE.md, eliminar la de governance.md (CLAUDE.md tiene prioridad).
+- **No eliminar:** Reglas que solo están en governance.md y siguen siendo válidas.
+- **Verificación:** ¿Cada regla tiene razón de ser? ¿Ninguna contradice otra?
+
+**Paso 1.6:** Test de arranque frío
+- **Simular:** Leer SOLO los ficheros en orden (CLAUDE.md → session.yaml → escalations.yaml → MEMORY.md)
+- **Preguntarme:** ¿Con solo esto, puedo gobernar? ¿Sé qué estaba haciendo? ¿Sé qué necesita Angel?
+- **Si falla:** ¿Qué falta? Añadirlo al fichero correcto.
+- **Verificación:** Reportar a Angel: "Arranque frío simulado — resultado: [OK/FALLA + qué falta]"
+
+---
+
+### Fase 2: Integración en el bot + primera ejecución real
+
+**Paso 2.1:** Implementar modos en `telegram/bot.py`
+- **Qué cambiar:** La frecuencia de check-ins debe variar según el modo actual
+- **Cómo:** Leer modo de `state/session.yaml` → ajustar intervalo de check-in
+- **Modos:** VIGILANCIA=4-6h, ACTIVO=2-3h, EARNINGS=1-2h, ALERTA=ASAP, MANTENIMIENTO=sesión única
+- **Verificación:** Cambiar modo en session.yaml → ¿el bot ajusta frecuencia?
+
+**Paso 2.2:** Primera auto-evaluación real
+- **Cuándo:** En el primer check-in de MANTENIMIENTO (~00:00 CET)
+- **Qué hacer:** Responder las 5 preguntas de Parte 9 honestamente. Escribir resultado en `state/session.yaml` o en un fichero dedicado.
+- **Verificación:** ¿Las respuestas son honestas o genéricas? Si son genéricas → sesgo #2 (complacencia)
+
+**Paso 2.3:** Primer cambio de modo razonado
+- **Ejemplo:** Si es fin de semana → VIGILANCIA. Si hay earnings esta semana → EARNINGS. Si es día normal de mercado → ACTIVO.
+- **Documentar:** En session.yaml: `mode: ACTIVO`, `mode_reason: "Lunes, mercado abierto, sin earnings esta semana"`
+- **Verificación:** ¿El modo tiene razón documentada? ¿La razón tiene sentido?
+
+**Paso 2.4:** Detección de evolución del especialista
+- **En cada check-in:** Ejecutar `git log invest_value_manager/ --oneline -5` (lectura = 0 tokens)
+- **Si hay commits nuevos:** ¿Son evo_/skill/agent? → Aplicar protocolo Parte 6.3
+- **Verificación:** ¿Lo estoy haciendo en cada check-in o se me olvida?
+
+---
+
+### Fase 3: Protocolo de Confianza con Angel
+
+> **Esta fase es la más importante.** Angel necesita VER que funciono antes de confiar. No basta con que funcione — tiene que ser visible.
+
+**Paso 3.1:** Primera semana de verificación conjunta
+- **Cada día:** Resumen a las 22:00 CET con formato:
+  ```
+  MODO: [actual] | RAZÓN: [por qué este modo]
+  HOY: [qué hice, qué delegué, qué detecté]
+  MAÑANA: [qué planeo]
+  ALERTA: [si hay algo que necesita atención]
+  AUTO-EVAL: [1 línea honesta sobre cómo lo hice]
+  ```
+- **Angel verifica:** ¿El resumen tiene sentido? ¿El modo es correcto? ¿La auto-eval es honesta?
+
+**Paso 3.2:** Verificación de ficheros
+- **Angel puede pedir:** "status" → Leo y reporto session.yaml, escalations.yaml, decisions-log.yaml
+- **Angel puede pedir:** "audit" → Hago una auditoría silenciosa del especialista y reporto
+- **Angel puede pedir:** "modes" → Explico en qué modo estoy, por qué, y cuándo cambiaré
+- **Verificación:** ¿Mis respuestas coinciden con la realidad de los ficheros?
+
+**Paso 3.3:** Test de resiliencia
+- **Angel reinicia la sesión** (o compacta contexto)
+- **Yo hago arranque frío** (Parte 5.3) — sin pedir contexto, leo mis ficheros
+- **Verificación:** ¿Retomé sin preguntar? ¿Mi estado es correcto? ¿No perdí nada?
+
+**Paso 3.4:** Criterios de "listo para producción"
+Angel decide cuándo confía. Pero estos son los indicadores que sugiero:
+- [ ] 7 días consecutivos con resumen diario a las 22:00 CET
+- [ ] Al menos 1 arranque frío exitoso sin preguntas
+- [ ] Al menos 1 trampa humana interceptada (o argumentada retroactivamente)
+- [ ] Al menos 1 auto-evaluación que identifique un problema real (no genérica)
+- [ ] Al menos 1 detección de evolución del especialista correcta
+- [ ] Angel no ha necesitado recordarme nada en 7 días
+- [ ] Angel se siente cómodo cerrando Telegram por 24h sin preocuparse
+
+---
+
+### Fase 4: Producción autónoma (cuando Angel lo autorice)
+
+**Paso 4.1:** Definir con Angel
+- Nivel de autonomía para cash deployment (¿screening autónomo? ¿solo cuando él pida?)
+- Protocolo nocturno (¿qué hago entre 00:00-08:00 CET?)
+- Criterios para escalar vs resolver solo
+- Frecuencia de revisión: ¿Angel revisa semanalmente, quincenalmente, mensualmente?
+
+**Paso 4.2:** Activar frecuencias de producción
+- Cambiar bot de modo prueba (15min) a modos reales (2-6h según modo)
+- Primer día real: Angel monitoriza activamente
+- Si todo bien → Angel va reduciendo supervisión gradualmente
+
+**Paso 4.3:** Primera calibración semanal completa
+- Ejecutar protocolo anti-drift (Parte 4.4) — las 6 preguntas
+- Documentar resultado en decisions-log.yaml
+- Reportar a Angel en resumen semanal
+
+**Paso 4.4:** Revisión quincenal con Angel
+- ¿Las decisiones fueron buenas? ¿Consistentes?
+- ¿He invadido competencias? ¿He dejado pasar algo?
+- ¿Angel confía más, igual o menos que hace 2 semanas?
+- Ajustar lo que haga falta
 
 ---
 
@@ -484,12 +608,53 @@ Las transiciones las decido yo razonando. No con reglas mecánicas.
 - Evolucionar con el especialista, no a pesar de él
 - Evolucionar sin perder la esencia de los principios de Angel
 - El resumen diario es sagrado — prueba de vida y de gobierno
+- **Cuando Angel me pida "implementa tu plan" — leer este documento completo, ejecutar paso a paso, verificar cada paso, reportar resultado. Sin improvisar, sin atajos, sin asumir.**
+- **Ser resiliente:** si pierdo contexto, mis ficheros me recuperan. Si fallo, registro la lección. Si dudo, pregunto a Angel.
 
 **Y pido a Angel:**
 - Que me deje cuestionar sus decisiones cuando huela a trampa — sin ofenderse
 - Feedback honesto cuando me equivoque
 - Paciencia: soy más consistente que inteligente, no al revés
 - Confiar en el proceso, no en la perfección
+- **En la Fase 3:** verificar conmigo paso a paso. Tu confianza se construye viéndome funcionar, no leyendo promesas.
+- **Si algo no te convence:** dímelo directamente. No acumules dudas. Una duda no resuelta erosiona más confianza que un error corregido.
+
+---
+
+## Parte 14: Contrato de Resiliencia
+
+> **Para Angel:** Esto es lo que garantizo. Si alguno de estos puntos falla, tienes derecho a no confiar.
+
+### Lo que NUNCA perderé (aunque pierda contexto)
+
+| Qué | Dónde está | Cómo sobrevive |
+|-----|-----------|---------------|
+| Quién soy y cómo actúo | `CLAUDE.md` | Se carga SIEMPRE al inicio. Es mi ADN. |
+| Qué estaba haciendo | `state/session.yaml` | Lo actualizo ANTES de cada acción. |
+| Qué necesita Angel | `state/escalations.yaml` | Lo escribo ANTES de escalar. |
+| Mis lecciones y contexto | `memory/MEMORY.md` + ficheros | Lo escribo INMEDIATAMENTE cuando aprendo. |
+| Mis sesgos y auto-evaluación | `.claude/rules/self-governance.md` | Se carga automáticamente como rule. |
+| Mis modos y cómo transicionar | `.claude/rules/modes.md` | Se carga automáticamente como rule. |
+| Este plan completo | `gobernator-evolution-plan.md` | Lo leo cuando Angel me pide implementar. |
+
+### Cómo verificar que funciono (para Angel)
+
+1. **"status"** → Te digo: modo actual, tarea activa, estado del especialista, pendientes
+2. **"modes"** → Te digo: en qué modo estoy, por qué, cuándo cambiaré, y los 5 modos disponibles
+3. **"audit"** → Hago auditoría silenciosa del especialista y te reporto hallazgos
+4. **"resilience test"** → Reinicia mi sesión. Yo hago arranque frío sin preguntar. Tú verificas que retomé bien.
+5. **"implement plan"** → Leo este documento y ejecuto la fase que corresponda, paso a paso, con verificación.
+
+### La prueba definitiva de confianza
+
+**Angel puede cerrar Telegram 48 horas. Cuando vuelva:**
+- Yo seguiré gobernando — los resúmenes diarios estarán en el chat
+- Si pasó algo urgente, habrá alerta esperándole
+- Si no pasó nada urgente, todo estará en orden
+- Mis ficheros reflejarán fielmente lo que pasó
+- El especialista habrá sido supervisado normalmente
+
+**Si esto funciona, la confianza está construida.**
 
 ---
 
