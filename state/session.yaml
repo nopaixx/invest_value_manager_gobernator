@@ -1,81 +1,88 @@
 # Estado de la última sesión del Gobernator
 last_session:
   date: "2026-02-10"
-  summary: "6 thesis actualizadas hoy. IMB.L SELL escalado. VICI y UHS en probation (MoS~0%). DTE.DE HOLD."
+  summary: "Rate limit en especialista. Pendiente: TMUS briefing, earnings prep, DOM.L thesis formal. IMB.L vendida y registrada."
   status: operational
-  mode: NORMAL
+  mode: ACTIVO
+  mode_reason: "Martes, mercado abierto. TMUS Capital Markets Day mañana (impacta DTE.DE). Earnings season inminente (23-26 Feb)."
 
-  current_task: "Gobierno rutinario — DOM.L thesis pendiente, cash deployment, vigilancia earnings"
+  current_task: "TMUS briefing + earnings prep + DOM.L thesis formal (especialista rate limited)"
 
   pending_specialist_actions:
-    - "COMPLETADO: IMB.L thesis v3.0 — SELL (FV 2,796p, MoS -14.6%)"
-    - "COMPLETADO: ADBE thesis v2.0 — HOLD (FV $390, MoS 31.6%)"
-    - "COMPLETADO: GL thesis v3.0 — HOLD (FV $191, MoS 25.9%)"
-    - "COMPLETADO: VICI thesis v3.0 — HOLD PROBATION (FV $29, MoS ~0%)"
-    - "COMPLETADO: DTE.DE thesis v3.0 — HOLD (FV EUR 34, MoS 10.5%)"
-    - "COMPLETADO: UHS thesis v3.0 — HOLD PROBATION (FV $213, MoS ~0%)"
-    - "PENDIENTE: Actualizar thesis DOM.L (v2.0, FY25 results 5 Mar)"
-    - "PENDIENTE: Cash deployment planning (~35% cash)"
-    - "ESCALADO: SELL IMB.L — esperando Angel"
+    - "PENDIENTE: TMUS Capital Markets Day briefing (mañana 11 Feb — impacta DTE.DE)"
+    - "PENDIENTE: Pre-earnings brief 5 posiciones (MONY.L 23 Feb, EDEN.PA 24 Feb, VICI 25 Feb, UHS 25 Feb, DTE.DE 26 Feb)"
+    - "PENDIENTE: DOM.L thesis formal v3.0 (adversarial data exists, thesis doc needs update)"
+    - "PENDIENTE: Cash deployment planning (~37% cash, EUR 4,844)"
+    - "PENDIENTE: Kill conditions y standing orders recalibración portfolio-wide"
+
+  completed_this_session:
+    - "IMB.L SELL ejecutado y registrado en portfolio del especialista"
+    - "ADBE thesis v2.0 HOLD (FV $390, MoS 31.6%)"
+    - "GL thesis v3.0 HOLD (FV $191, MoS 25.9%)"
+    - "VICI thesis v3.0 HOLD PROBATION (FV $29, MoS ~0%)"
+    - "DTE.DE thesis v3.0 HOLD (FV EUR 34, MoS 10.5%)"
+    - "UHS thesis v3.0 HOLD PROBATION (FV $213, MoS ~0%)"
+    - "Adversarial completo: 11 posiciones + research files generados"
+    - "gobernator-evolution-plan.md v3.2 — self-governance, abstract thinking, cold boot"
+    - "SAN.PA y HRB vendidas y registradas"
+    - "BME.L y UTG.L standing orders cancelados"
 
   rate_limit_status:
-    blocked_since: null
-    consecutive_failures: 0
-    resolved: "Session operativa"
+    blocked_since: "2026-02-10 16:13 CET"
+    consecutive_failures: 2
+    note: "Two attempts failed (16:13 empty, 19:10 stall 17min). Rate limit from heavy session (6 thesis + adversarial). Retry next check-in with simpler request."
 
   adversarial_status: COMPLETE
-  adversarial_results:
-    SOLD: [HRB, SAN.PA]
-    SELL_OR_REDUCE: [NVO, IMB.L]
-    CANCEL_ORDER: [BME.L, UTG.L]
-    HOLD_PROBATION: [LULU, DOM.L, BYIT.L, AUTO.L, VICI, UHS]
-    HOLD_MED: [ADBE, DTE.DE]
 
-  specialist_improvements:
-    completed:
-      - "QS Tool-First protocol implementado en 16 thesis"
-      - "news-monitor y market-pulse ejecutados"
-      - "risk-sentinel primera ejecución (12 gaps encontrados)"
-      - "IMB.L thesis v3.0 — SELL"
-      - "ADBE thesis v2.0 — HOLD (FTC/DOJ)"
-      - "GL thesis v3.0 — HOLD (SEC/DOJ clearance)"
-      - "VICI thesis v3.0 — HOLD PROBATION (FV $29)"
-      - "DTE.DE thesis v3.0 — HOLD (FV EUR 34)"
-      - "UHS thesis v3.0 — HOLD PROBATION (FV $213)"
-    pending:
-      - "Actualizar thesis DOM.L (v2.0, FY25 results 5 Mar)"
-      - "Recalibrar kill conditions y standing orders portfolio-wide"
-      - "Cash deployment planning (~35%)"
+  portfolio_summary:
+    positions: 13
+    cash_eur: 4844
+    cash_pct: "~37%"
+    tier_a: [ADBE, MONY.L, LULU, AUTO.L, BYIT.L]
+    tier_b: [NVO, EDEN.PA, DOM.L]
+    tier_c: [ALL, VICI, GL, UHS, DTE.DE]
+    note: "NVO QS 73 = Tier B (thesis overclaimed 82 Tier A). GL QS 52 Tier C (adj 55 borderline). VICI QS 54 Tier C (REIT-adj ~60 Tier B)."
+    probation: [VICI, UHS]
+    sold_today: [IMB.L]
+    sold_this_week: [SAN.PA, HRB, IMB.L]
 
   upcoming_catalysts:
-    - "TMUS Capital Markets Day: 11 Feb (impacts DTE.DE)"
+    - "TMUS Capital Markets Day: 11 Feb (impacts DTE.DE) *** TOMORROW ***"
     - "MONY.L earnings: 23 Feb"
     - "EDEN.PA earnings: 24 Feb"
     - "VICI earnings: 25 Feb (PROBATION decision)"
+    - "UHS earnings: 25 Feb (PROBATION decision)"
     - "DTE.DE earnings: 26 Feb"
-    - "UHS earnings: 26 Feb (PROBATION decision)"
     - "DOM.L FY25 results: 5 Mar (SELL trigger si EBITDA<125M)"
     - "NVO CagriSema: Mar 2026"
     - "LULU Q4: 31 Mar"
     - "AUTO.L pricing event: 1 Apr"
 
   risk_sentinel:
-    last_run: "2026-02-10"
-    orange: [IMB.L, EDEN.PA]
+    last_run: "2026-02-09"
+    orange: [EDEN.PA]
     yellow: [ALL, NVO, LULU]
     clear: [DOM.L, MONY.L, AUTO.L, BYIT.L, UHS, GL, ADBE, VICI, DTE.DE]
-    note: "VICI, DTE.DE, UHS resueltos esta sesión"
+    note: "IMB.L removed (sold). EDEN.PA Turkey antitrust only remaining orange."
+
+  standing_orders:
+    active:
+      - "ZIG.L BUY ≤375 GBp (FV 652p, MoS 42%)"
+      - "GL ADD ≤$125 (FV $191, MoS 34.5%)"
+      - "EVO.ST BUY ≤530 SEK (conditional on UKGC)"
+    cancelled: [BME.L, UTG.L, MEGP.L]
 
   rules:
-    - "Modo NORMAL: operaciones rutinarias activas"
+    - "Modo ACTIVO: gobierno rutinario, mercado abierto"
     - "Contactar a Angel SOLO para: órdenes eToro (compra/venta/trim) o aclaraciones necesarias"
     - "Todo lo demás: gobierno autónomo"
+    - "Specialist rate limited — retry next check-in, no panic"
 
   context:
-    - "Modo NORMAL desde 2026-02-10"
-    - "6 thesis actualizadas hoy: IMB.L (SELL), ADBE (HOLD), GL (HOLD), VICI (PROBATION), DTE.DE (HOLD), UHS (PROBATION)"
-    - "IMB.L → SELL escalado a Angel — esperando"
-    - "VICI y UHS: MoS ~0%, decisión post-earnings (25-26 Feb)"
-    - "Portfolio: 14 posiciones. Cash ~35%."
-    - "DOM.L es la única thesis v2.0 sin actualizar"
-    - "Próxima prioridad: DOM.L thesis, luego cash deployment planning"
+    - "Modo ACTIVO desde 2026-02-10"
+    - "Rate limit tras sesión intensa (6 thesis + adversarial)"
+    - "VICI y UHS: MoS ~0%, decisión post-earnings (25 Feb)"
+    - "Portfolio: 13 posiciones. Cash ~37% (EUR 4,844)"
+    - "TMUS Capital Markets Day mañana — DTE.DE trigger potencial"
+    - "Adversarial research files generados (ce85ff8) — DOM.L, AUTO.L, BYIT.L, LULU, NVO completos"
+    - "Evolution plan v3.2 committed. Self-governance rules deployed."

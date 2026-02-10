@@ -280,18 +280,22 @@ El humano concede permiso para modificar:
 ```
 invest_value_manager_gobernator/
 ├── CLAUDE.md                    # Este fichero - prompt de inicio
+├── gobernator-evolution-plan.md # Plan de evolución completo (leer cuando "implementa tu plan")
 ├── .claude/
 │   ├── settings.json            # Permisos (protegido)
 │   ├── settings.local.json      # Config local (git-ignored)
-│   └── rules/                   # Reglas de comportamiento
-│       ├── governance.md        # Identidad, delegación, auto-mejora, errores
+│   └── rules/                   # Reglas de comportamiento (se cargan automáticamente)
+│       ├── governance.md        # Identidad, delegación, errores, protocolos operativos
+│       ├── self-governance.md   # Sesgos, auto-evaluación, herramientas abstractas
+│       ├── modes.md             # 5 modos de operación, transiciones razonadas
 │       ├── principles-verification.md  # Verificación de los 9 principios
 │       └── git-strategy.md      # Estrategia git
 ├── talk_to_specialist.sh        # Wrapper: hablar con especialista (logs + cleanup)
 ├── telegram/                    # Bot Telegram + charts de proyección
 ├── state/                       # Persistencia entre sesiones
-│   ├── session.yaml             # Tarea en curso, último estado
+│   ├── session.yaml             # Tarea en curso, último estado, modo actual
 │   ├── task_log.yaml            # Historial de tareas delegadas
+│   ├── decisions-log.yaml       # Registro de MIS decisiones como gobernador
 │   ├── git_status.yaml          # Estado de branches y merges
 │   ├── escalations.yaml         # Decisiones pendientes de Angel
 │   ├── gobernator_session.txt   # Session ID del gobernator (persiste reinicios)
