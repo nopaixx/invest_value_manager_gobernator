@@ -6,7 +6,7 @@ Angel mode:  Angel writes to angel_inbox.txt → daemon routes to gob
              gob response → angel_outbox.jsonl → bot sends to Telegram
              Until Angel says "sigue" → back to normal mode.
 
-Between each turn: 5-minute interruptible sleep.
+Between each turn: 10s quick check (angel/stop).
 """
 
 import subprocess
@@ -28,11 +28,20 @@ QUEUE_FILE = os.path.join(STATE_DIR, "labestia_queue.jsonl")
 ANGEL_INBOX = os.path.join(STATE_DIR, "angel_inbox.txt")
 ANGEL_OUTBOX = os.path.join(STATE_DIR, "angel_outbox.jsonl")
 STOP_FILE = os.path.join(STATE_DIR, "stop_requested")
-TURN_SLEEP = 300       # 5 minutes between turns
+TURN_SLEEP = 10        # quick check between turns (angel/stop)
 POLL_INTERVAL = 5      # check angel/stop every 5s
-RETRY_WAIT = 300       # retry on error/rate limit
+RETRY_WAIT = 60        # retry on error/rate limit
 TIMEOUT = 1800         # 30 min max per claude call
+ANGEL_MODE_TIMEOUT = 300  # 5 min max for gobernator in angel mode
+ANGEL_IDLE_TIMEOUT = 60   # 60s without angel messages → auto-resume
+HEARTBEAT_INTERVAL = 300  # status heartbeat during specialist wait (5 min, was 60s)
 RESUME_KEYWORDS = {"sigue", "continue", "resume", "seguir", "adelante"}
+
+# Context injected into initial gobernator message (especially after session reset)
+DAEMON_MODE_DISCLAIMER = (
+    " IMPORTANTE: Estás en DAEMON MODE. Tu stdout va DIRECTO al especialista. "
+    "NO uses talk_to_specialist.sh ni claude -p directamente — el daemon lo gestiona."
+)
 
 RATE_LIMIT_PATTERNS = [
     "out of extra usage", "rate_limit_error", "overloaded_error",
@@ -45,6 +54,10 @@ def log(msg):
 
 
 def log_to_queue(sender, text):
+    # Never log rate-limit or crash noise to LaBestia
+    if is_rate_limited(text) or is_crash_output(text):
+        log(f"Skipping queue log ({sender}): rate-limit/crash noise")
+        return
     entry = {"from": sender, "text": text, "ts": datetime.now(timezone.utc).isoformat()}
     with open(QUEUE_FILE, "a") as f:
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
@@ -66,9 +79,25 @@ def clean(text):
     return re.sub(r'<thinking>.*?</thinking>', '', text, flags=re.DOTALL).strip()
 
 
+def sanitize_for_cli(text):
+    """Strip null bytes and other control chars that crash Bun when passed as CLI args."""
+    return text.replace('\x00', '').replace('\u0000', '')
+
+
 def is_rate_limited(text):
     lower = text.lower()
     return any(p in lower for p in RATE_LIMIT_PATTERNS)
+
+
+CRASH_PATTERNS = [
+    "Bun has crashed", "Segmentation fault", "panic(main thread)",
+    "bun.report", "oh no: Bun has crashed"
+]
+
+
+def is_crash_output(text):
+    """Detect if output is a Bun/runtime crash dump instead of a real response."""
+    return any(p in text for p in CRASH_PATTERNS)
 
 
 def get_session(path):
@@ -89,12 +118,15 @@ def mark_started(path, sid):
         f.write(f"{sid}\nstarted\n")
 
 
-def run_claude(session_path, workdir, message, handle_angel_during_wait=False):
+def run_claude(session_path, workdir, message, handle_angel_during_wait=False,
+               timeout_override=None):
     """Run claude -p, polling every POLL_INTERVAL for stop/angel.
 
     handle_angel_during_wait: if True, checks angel_inbox while waiting
     and handles Angel mode without killing the subprocess.
+    timeout_override: custom timeout (default: TIMEOUT).
     """
+    effective_timeout = timeout_override or TIMEOUT
     sid, started = get_session(session_path)
     cmd = ["claude", "-p", "--permission-mode", "bypassPermissions"]
     if started:
@@ -102,7 +134,8 @@ def run_claude(session_path, workdir, message, handle_angel_during_wait=False):
     else:
         cmd.extend(["--session-id", sid])
         mark_started(session_path, sid)
-    cmd.append(message)
+    cmd.append("--")  # end of options — prevents message starting with -- being parsed as flag
+    cmd.append(sanitize_for_cli(message))
 
     proc = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
@@ -111,21 +144,33 @@ def run_claude(session_path, workdir, message, handle_angel_during_wait=False):
     child_pids.add(proc.pid)
 
     start = time.time()
+    last_heartbeat = start
     while True:
         try:
             stdout, stderr = proc.communicate(timeout=POLL_INTERVAL)
             child_pids.discard(proc.pid)
             return clean(stdout or stderr or "")
         except subprocess.TimeoutExpired:
-            if time.time() - start > TIMEOUT:
+            elapsed = time.time() - start
+            if elapsed > effective_timeout:
+                log(f"Timeout after {int(elapsed)}s (limit {int(effective_timeout)}s)")
                 proc.kill()
                 proc.communicate()
-                raise subprocess.TimeoutExpired(cmd, TIMEOUT)
+                child_pids.discard(proc.pid)
+                raise subprocess.TimeoutExpired(cmd, effective_timeout)
             if check_stop():
                 proc.kill()
                 proc.communicate()
+                child_pids.discard(proc.pid)
                 return ""
             if handle_angel_during_wait:
+                # Heartbeat: send status to Angel periodically
+                now = time.time()
+                if now - last_heartbeat >= HEARTBEAT_INTERVAL:
+                    mins = int(elapsed / 60)
+                    # Only log to daemon stdout, not to Angel's Telegram
+                    log(f"Specialist still processing... ({mins}m)")
+                    last_heartbeat = now
                 angel_msg = check_angel_inbox()
                 if angel_msg:
                     log(f"Angel interrupt while waiting: {angel_msg[:80]}")
@@ -133,6 +178,7 @@ def run_claude(session_path, workdir, message, handle_angel_during_wait=False):
                     if r == "stop":
                         proc.kill()
                         proc.communicate()
+                        child_pids.discard(proc.pid)
                         return ""
 
 
@@ -206,30 +252,64 @@ def handle_angel_mode(initial_msg):
     """Handle Angel conversation. Returns ('resume', msg) or ('stop', None)."""
     log(f"Angel mode: {initial_msg[:80]}")
 
-    gob_output = run_claude(GOB_SESSION, WORKDIR, f"[MENSAJE_DE_ANGEL] {initial_msg}")
+    try:
+        gob_output = run_claude(GOB_SESSION, WORKDIR,
+                                f"[MENSAJE_DE_ANGEL] {initial_msg}",
+                                timeout_override=ANGEL_MODE_TIMEOUT)
+    except subprocess.TimeoutExpired:
+        log(f"Angel mode: gob timed out ({ANGEL_MODE_TIMEOUT}s). Auto-resuming.")
+        write_angel_outbox("[Auto] Procesando tu mensaje. Sigo trabajando con el especialista.")
+        return "resume", None
+
+    if not gob_output:
+        log("Angel mode: gob empty response. Auto-resuming.")
+        write_angel_outbox("[Auto] Mensaje recibido. Sigo trabajando.")
+        return "resume", None
+
     result = process_angel_response(gob_output)
     if result:
         return result
 
+    # Wait for Angel follow-up with idle timeout
+    idle_start = time.time()
     while True:
         if check_stop():
             log("Stop requested during Angel mode.")
             return "stop", None
+
+        if time.time() - idle_start > ANGEL_IDLE_TIMEOUT:
+            log(f"Angel mode: idle {ANGEL_IDLE_TIMEOUT}s. Auto-resuming to specialist.")
+            return "resume", None
 
         time.sleep(POLL_INTERVAL)
         angel_msg = check_angel_inbox()
         if not angel_msg:
             continue
 
+        idle_start = time.time()  # reset idle timer on new message
+
         if angel_msg.lower().strip() in RESUME_KEYWORDS:
             log("Angel: resume -> back to specialist")
             return "resume", None
 
         log(f"Angel: {angel_msg[:80]}")
-        gob_output = run_claude(GOB_SESSION, WORKDIR, f"[MENSAJE_DE_ANGEL] {angel_msg}")
+        try:
+            gob_output = run_claude(GOB_SESSION, WORKDIR,
+                                    f"[MENSAJE_DE_ANGEL] {angel_msg}",
+                                    timeout_override=ANGEL_MODE_TIMEOUT)
+        except subprocess.TimeoutExpired:
+            log(f"Angel mode: gob timed out. Auto-resuming.")
+            write_angel_outbox("[Auto] Timeout procesando. Sigo con el especialista.")
+            return "resume", None
+
+        if not gob_output:
+            log("Angel mode: gob empty response. Auto-resuming.")
+            return "resume", None
+
         result = process_angel_response(gob_output)
         if result:
             return result
+        idle_start = time.time()  # reset after sending response
 
 
 child_pids = set()
@@ -254,6 +334,9 @@ def main():
     atexit.register(cleanup_children)
 
     message = sys.argv[1] if len(sys.argv) > 1 else "Empezamos. ¿Qué tenemos pendiente?"
+    # Always inject daemon mode context into initial message
+    if DAEMON_MODE_DISCLAIMER not in message:
+        message = message + DAEMON_MODE_DISCLAIMER
     last_spec_output = None
 
     log(f"Daemon started. Initial: {message[:80]}")
@@ -281,8 +364,18 @@ def main():
             gob_output = run_claude(GOB_SESSION, WORKDIR, message)
 
             if not gob_output:
-                log("Gob: empty. Retry in 5min...")
+                log(f"Gob: empty. Retry in {RETRY_WAIT}s...")
                 if interruptible_wait(RETRY_WAIT) == "stop":
+                    break
+                continue
+
+            if is_crash_output(gob_output):
+                log(f"Gob: CRASH DETECTED. Resetting gob session. Retry in 60s...")
+                # Reset session so next call creates fresh one
+                sid = str(uuid.uuid4())
+                with open(GOB_SESSION, "w") as f:
+                    f.write(f"{sid}\nnew\n")
+                if interruptible_wait(60) == "stop":
                     break
                 continue
 
@@ -301,9 +394,19 @@ def main():
                                      handle_angel_during_wait=True)
 
             if not spec_output:
-                log("Spec: empty. Retry in 5min...")
+                log(f"Spec: empty. Retry in {RETRY_WAIT}s...")
                 message = gob_output
                 if interruptible_wait(RETRY_WAIT) == "stop":
+                    break
+                continue
+
+            if is_crash_output(spec_output):
+                log(f"Spec: CRASH DETECTED. Resetting spec session. Retry in 60s...")
+                sid = str(uuid.uuid4())
+                with open(SPEC_SESSION, "w") as f:
+                    f.write(f"{sid}\nnew\n")
+                message = gob_output  # retry with same gob message
+                if interruptible_wait(60) == "stop":
                     break
                 continue
 
@@ -321,7 +424,7 @@ def main():
             last_spec_output = spec_output
 
             # --- 5-minute interruptible sleep ---
-            log("Sleeping 5min...")
+            log(f"Next turn in {TURN_SLEEP}s...")
             result = interruptible_sleep(TURN_SLEEP)
             if result == "stop":
                 log("Stop requested during sleep. Exiting.")
@@ -338,7 +441,7 @@ def main():
                         message = last_spec_output or "Continúa con lo que estabas haciendo."
 
         except subprocess.TimeoutExpired:
-            log(f"Timeout. Retry in 5min...")
+            log(f"Timeout. Retry in {RETRY_WAIT}s...")
             if interruptible_wait(RETRY_WAIT) == "stop":
                 break
         except KeyboardInterrupt:

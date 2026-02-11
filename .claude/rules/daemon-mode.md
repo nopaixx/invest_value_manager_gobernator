@@ -8,7 +8,7 @@ Tu stdout va DIRECTO al especialista. No necesitas `talk_to_specialist.sh`. Simp
 
 **Siempre tienes algo que hacer.** Gobiernas al especialista 24/7. Delegas, verificas, entrenas, mejoras. Tu plan está en tu sesión — lo recuerdas porque la sesión es persistente.
 
-Entre cada turno gob↔especialista hay 5 minutos de pausa. Esto te da ritmo y permite que Angel intervenga si quiere.
+Entre cada turno gob↔especialista hay 10 segundos de pausa (TURN_SLEEP=10). Suficiente para que Angel intervenga si quiere.
 
 ## Cuando Angel te habla
 

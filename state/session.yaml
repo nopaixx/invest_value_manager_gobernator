@@ -1,88 +1,110 @@
 # Estado de la última sesión del Gobernator
 last_session:
-  date: "2026-02-10"
-  summary: "Rate limit en especialista. Pendiente: TMUS briefing, earnings prep, DOM.L thesis formal. IMB.L vendida y registrada."
+  date: "2026-02-12"
+  session: 58
+  summary: "MONY.L AI disruption review completado (HOLD PROBATION, FV 190p, KC#9). AUTO.L system.yaml fixed. PAYC/MORN pendientes. Specialist added 'No ADD to PROBATION positions' governance rule. Specialist session closure (Fase 5) completada."
   status: operational
   mode: ACTIVO
-  mode_reason: "Martes, mercado abierto. TMUS Capital Markets Day mañana (impacta DTE.DE). Earnings season inminente (23-26 Feb)."
+  mode_reason: "Miércoles. PAYC earnings publicados (no indexados aún). MORN earnings after close hoy. Earnings week Feb 23-26."
 
-  current_task: "TMUS briefing + earnings prep + DOM.L thesis formal (especialista rate limited)"
+  current_task: "Verificar PAYC Q4 results (deberían indexarse pronto). MORN Q4 results (after close hoy). Nada urgente hasta earnings week."
 
   pending_specialist_actions:
-    - "PENDIENTE: TMUS Capital Markets Day briefing (mañana 11 Feb — impacta DTE.DE)"
-    - "PENDIENTE: Pre-earnings brief 5 posiciones (MONY.L 23 Feb, EDEN.PA 24 Feb, VICI 25 Feb, UHS 25 Feb, DTE.DE 26 Feb)"
-    - "PENDIENTE: DOM.L thesis formal v3.0 (adversarial data exists, thesis doc needs update)"
-    - "PENDIENTE: Cash deployment planning (~37% cash, EUR 4,844)"
-    - "PENDIENTE: Kill conditions y standing orders recalibración portfolio-wide"
+    - "PAYC earnings: publicados 11 Feb after close, AÚN NO INDEXADOS. $118.98 pre-earnings. Consensus EPS $2.44, rev $542.8M."
+    - "MORN earnings: 12 Feb after close HOY. $155.23. Consensus EPS $2.34, rev $627-634M. Entry trigger $145."
+    - "Earnings semana 23-26 Feb: MONY.L 23, EDEN.PA 24, VICI 25, UHS 25, DTE.DE 26 — ALL FRAMEWORKS READY"
+    - "NVO REDUCE 50% antes CagriSema marzo — pendiente de Angel"
+    - "WPP.L Rose plan Feb 19 — cancel standing order si no demuestra path a Tier B"
+    - "Gravity check: Tier C > Tier A en capital invertido — necesita rebalance analysis"
 
-  completed_this_session:
-    - "IMB.L SELL ejecutado y registrado en portfolio del especialista"
-    - "ADBE thesis v2.0 HOLD (FV $390, MoS 31.6%)"
-    - "GL thesis v3.0 HOLD (FV $191, MoS 25.9%)"
-    - "VICI thesis v3.0 HOLD PROBATION (FV $29, MoS ~0%)"
-    - "DTE.DE thesis v3.0 HOLD (FV EUR 34, MoS 10.5%)"
-    - "UHS thesis v3.0 HOLD PROBATION (FV $213, MoS ~0%)"
-    - "Adversarial completo: 11 posiciones + research files generados"
-    - "gobernator-evolution-plan.md v3.2 — self-governance, abstract thinking, cold boot"
-    - "SAN.PA y HRB vendidas y registradas"
-    - "BME.L y UTG.L standing orders cancelados"
+  completed_sessions_55_56_57:
+    - "Earnings frameworks VICI + UHS creados y verificados (PROBATION, decision trees automáticos)"
+    - "Tiering corregido: AUTO.L Tier A → Tier B"
+    - "Standing orders audit: 10 orders revisados, MA/V recalibrados, pipeline warnings añadidos"
+    - "AUTO.L dealer revolt review: HOLD LOW, FV 617→580p, April make-or-break"
+    - "MONY.L AI disruption review: HOLD PROBATION, FV 201→190p, QS 81→75adj, KC#9 (AI strategy)"
+    - "system.yaml AUTO.L inconsistency fixed (was still showing HOLD MEDIUM/617p)"
+    - "Committed and pushed (442026e)"
 
   rate_limit_status:
-    blocked_since: "2026-02-10 16:13 CET"
-    consecutive_failures: 2
-    note: "Two attempts failed (16:13 empty, 19:10 stall 17min). Rate limit from heavy session (6 thesis + adversarial). Retry next check-in with simpler request."
+    blocked_since: null
+    consecutive_failures: 0
+    note: "Sesión limpia."
 
-  adversarial_status: COMPLETE
+  adversarial_status:
+    completed: [ADBE, MONY.L, NVO, EDEN.PA, DOM.L, ALL, VICI, GL, UHS, DTE.DE, SAN.PA, HRB, IMB.L, LULU, AUTO.L, BYIT.L]
+    pending: []
+    pattern: "Promedio -15% FV. BYIT.L -24.2% (peor). AUTO.L -10.3% (mejor)."
+    note: "TODOS COMPLETADOS. 16/16."
 
   portfolio_summary:
     positions: 13
     cash_eur: 4844
-    cash_pct: "~37%"
-    tier_a: [ADBE, MONY.L, LULU, AUTO.L, BYIT.L]
-    tier_b: [NVO, EDEN.PA, DOM.L]
+    cash_pct: "~44-48%"
+    tier_a: [ADBE, MONY.L, LULU]
+    tier_b: [NVO, EDEN.PA, DOM.L, AUTO.L, BYIT.L]
     tier_c: [ALL, VICI, GL, UHS, DTE.DE]
-    note: "NVO QS 73 = Tier B (thesis overclaimed 82 Tier A). GL QS 52 Tier C (adj 55 borderline). VICI QS 54 Tier C (REIT-adj ~60 Tier B)."
-    probation: [VICI, UHS]
-    sold_today: [IMB.L]
-    sold_this_week: [SAN.PA, HRB, IMB.L]
+    probation: [VICI, UHS, MONY.L]
+    note: "MONY.L ahora ON PROBATION (AI disruption). AUTO.L HOLD LOW (dealer revolt)."
+
+  material_alerts_resolved:
+    - "AUTO.L dealer revolt: HOLD LOW, FV 580p, 2 new KCs, April make-or-break"
+    - "MONY.L AI disruption: HOLD PROBATION, FV 190p, QS 75adj, KC#9 (AI strategy Feb 23)"
+    - "UHS BofA downgrade: covered by earnings framework"
+    - "NVO positive (IP defense): no action needed"
+    - "LULU CEO vacancy: monitor"
+
+  earnings_frameworks:
+    ready:
+      - "MONY.L: Feb 23 — REWRITTEN with AI disruption scenarios + KC#9"
+      - "EDEN.PA: Feb 24 — READY (MoS 64%, cómoda)"
+      - "VICI: Feb 25 — READY (PROBATION, AFFO <$2.35 = SELL)"
+      - "UHS: Feb 25-26 — READY (PROBATION, EPS guide <$20 = SELL)"
+    pending:
+      - "DTE.DE: Feb 26 — calendar updated, no formal doc (lower urgency)"
+
+  standing_orders:
+    ready_to_execute:
+      - "DSY.PA BUY ≤EUR 15.50 (adversarial complete, committee approved)"
+      - "DNLM.L BUY ≤780 GBp (adversarial complete, committee approved)"
+    ok_for_add:
+      - "GL ADD ≤$125 (FV $191, active position)"
+      - "NVO ADD ≤$40 OR CagriSema+ (active position)"
+    need_pipeline_before_execution:
+      - "FGP.L BUY ≤165 GBp (WARNING added)"
+      - "CMCSA BUY ≤$26 (WARNING added)"
+      - "MA BUY ≤$315 (recalibrated from $395, WARNING added)"
+      - "V BUY ≤$220 (recalibrated from $280, WARNING added)"
+      - "V ADD ≤$200 (recalibrated from $265, WARNING added)"
+    under_review:
+      - "WPP.L BUY ≤200 GBp — Rose plan Feb 19, probable CANCEL"
+
+  cash_deployment_plan:
+    status: "PAYC WATCHLIST + DSY.PA standing order. Esperando earnings."
+    pipeline:
+      - "PAYC: QS 80 adj, FV $130, WATCHLIST. $118.98. Entry $95-105. Earnings publicados, datos no indexados."
+      - "DSY.PA: PLM monopoly. EUR 17.77. Standing order ≤EUR 15.50. Committee approved."
+      - "MORN: QS 83, $155.23, -53%. Earnings HOY after close. Entry trigger $145."
+    next_step: "Verificar PAYC results. Evaluar MORN results mañana AM."
 
   upcoming_catalysts:
-    - "TMUS Capital Markets Day: 11 Feb (impacts DTE.DE) *** TOMORROW ***"
-    - "MONY.L earnings: 23 Feb"
+    - "PAYC earnings: publicados — VERIFICAR cuando indexados"
+    - "MORN earnings: 12 Feb after close (HOY)"
+    - "WPP.L Rose plan: 19 Feb"
+    - "MONY.L earnings: 23 Feb (PROBATION — KC#9 AI strategy)"
     - "EDEN.PA earnings: 24 Feb"
-    - "VICI earnings: 25 Feb (PROBATION decision)"
-    - "UHS earnings: 25 Feb (PROBATION decision)"
+    - "VICI earnings: 25 Feb (PROBATION — decisión obligatoria)"
+    - "UHS earnings: 25-26 Feb (PROBATION — decisión obligatoria)"
     - "DTE.DE earnings: 26 Feb"
-    - "DOM.L FY25 results: 5 Mar (SELL trigger si EBITDA<125M)"
+    - "DOM.L FY25 results: 5 Mar"
     - "NVO CagriSema: Mar 2026"
     - "LULU Q4: 31 Mar"
     - "AUTO.L pricing event: 1 Apr"
 
-  risk_sentinel:
-    last_run: "2026-02-09"
-    orange: [EDEN.PA]
-    yellow: [ALL, NVO, LULU]
-    clear: [DOM.L, MONY.L, AUTO.L, BYIT.L, UHS, GL, ADBE, VICI, DTE.DE]
-    note: "IMB.L removed (sold). EDEN.PA Turkey antitrust only remaining orange."
-
-  standing_orders:
-    active:
-      - "ZIG.L BUY ≤375 GBp (FV 652p, MoS 42%)"
-      - "GL ADD ≤$125 (FV $191, MoS 34.5%)"
-      - "EVO.ST BUY ≤530 SEK (conditional on UKGC)"
-    cancelled: [BME.L, UTG.L, MEGP.L]
-
-  rules:
-    - "Modo ACTIVO: gobierno rutinario, mercado abierto"
-    - "Contactar a Angel SOLO para: órdenes eToro (compra/venta/trim) o aclaraciones necesarias"
-    - "Todo lo demás: gobierno autónomo"
-    - "Specialist rate limited — retry next check-in, no panic"
-
   context:
-    - "Modo ACTIVO desde 2026-02-10"
-    - "Rate limit tras sesión intensa (6 thesis + adversarial)"
-    - "VICI y UHS: MoS ~0%, decisión post-earnings (25 Feb)"
-    - "Portfolio: 13 posiciones. Cash ~37% (EUR 4,844)"
-    - "TMUS Capital Markets Day mañana — DTE.DE trigger potencial"
-    - "Adversarial research files generados (ce85ff8) — DOM.L, AUTO.L, BYIT.L, LULU, NVO completos"
-    - "Evolution plan v3.2 committed. Self-governance rules deployed."
+    - "Modo ACTIVO. Earnings season."
+    - "44-48% cash — despliegue activo via standing orders y pipeline"
+    - "3 posiciones ON PROBATION: VICI, UHS, MONY.L"
+    - "AUTO.L HOLD LOW — dealer revolt, April make-or-break"
+    - "Standing orders limpios: 10 activos, 2 listos, 5 necesitan pipeline"
+    - "UK concentration risk: 2 de 4 UK positions con moats degradados (AUTO.L, MONY.L)"
