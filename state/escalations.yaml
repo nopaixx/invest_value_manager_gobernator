@@ -1,0 +1,10 @@
+# Decisiones pendientes de Angel
+pending: []
+
+resolved:
+  - id: 1
+    date: "2026-02-10"
+    topic: "SELL IMB.L"
+    context: "Thesis v3.0: FV 2,796p vs precio 3,274p = MoS -14.6%. QS 54 (Tier C)."
+    status: resolved
+    resolution: "Angel vendió IMB.L en eToro. Especialista pendiente de registrar (rate limit)."

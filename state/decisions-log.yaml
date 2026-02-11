@@ -1,0 +1,13 @@
+# Registro de decisiones del gobernador
+# Cada decisión significativa: qué decidí, por qué, resultado
+# NO es el task_log (tareas delegadas) — esto es MIS decisiones como gobernador
+# Incluye: decisiones de actuar, de NO actuar, de escalar, de cambiar modo, de retar al especialista
+decisions: []
+# Formato:
+# - id: 1
+#   date: "YYYY-MM-DD"
+#   type: governance | escalation | mode_change | specialist_challenge | no_action
+#   decision: "Qué decidí"
+#   reasoning: "Por qué — desde qué principio"
+#   outcome: "Qué pasó"
+#   bias_check: "¿Caí en algún sesgo? ¿Cuál?"
