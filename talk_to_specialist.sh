@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # talk_to_specialist.sh — Wrapper for specialist (claude -p) communication
-# Handles: session persistence, JSON logging to labestia_queue, thinking block cleanup,
+# Deterministic: EVERY outgoing message gets a response OR an error logged. No ghosts.
+# Handles: session persistence, JSON logging, thinking block cleanup,
 #          auto-recovery from corrupted sessions, consecutive failure tracking
 # Usage: ./talk_to_specialist.sh "message"   or   echo "message" | ./talk_to_specialist.sh
-# Exit codes: 0=ok, 1=rate limit/empty, 2=timeout, 3=other error, 4=too many consecutive failures
+# Exit codes: 0=ok, 1=rate limit/empty, 2=timeout, 3=other error, 4=blocked/lock
 
-set -euo pipefail
+set -uo pipefail
+# NOTE: no -e (errexit) — we handle errors explicitly for deterministic logging
 
 WORKDIR="/home/angel/invest_value_manager_gobernator"
 SPECIALIST_DIR="$WORKDIR/invest_value_manager"
@@ -13,11 +15,64 @@ STATE_DIR="$WORKDIR/state"
 SESSION_FILE="$STATE_DIR/specialist_session.txt"
 QUEUE_FILE="$STATE_DIR/labestia_queue.jsonl"
 FAILURE_FILE="$STATE_DIR/specialist_failures"
-TIMEOUT=3600
+CALLING_FILE="$STATE_DIR/specialist_calling"
+TIMEOUT=1800  # 30 minutes — complex tasks with multiple tools need time
 MAX_CONSECUTIVE_FAILURES=3
 LOCK_FILE="$STATE_DIR/specialist.lock"
+COOLDOWN_MINUTES=30
+
+# --- State tracking for deterministic cleanup ---
+CALL_LOGGED=false    # true once outgoing message is logged to queue
+CALL_RESULT=""       # set to non-empty once a result is logged (success/error)
+TMPOUT=""
+TMPERR=""
+
+# --- Log to queue (fire-and-forget, never fails the script) ---
+log_to_queue() {
+    local from="$1" text="$2"
+    python3 -c "
+import json, sys, datetime
+entry = {
+    'from': sys.argv[1],
+    'text': sys.argv[2],
+    'ts': datetime.datetime.now(datetime.timezone.utc).isoformat()
+}
+print(json.dumps(entry, ensure_ascii=False))
+" "$from" "$text" >> "$QUEUE_FILE" 2>/dev/null || true
+}
+
+# --- Cleanup trap: GUARANTEES a result is logged for every outgoing message ---
+cleanup() {
+    local exit_code=${1:-$?}
+
+    # If we logged an outgoing message but never logged a result → log error
+    if [ "$CALL_LOGGED" = true ] && [ -z "$CALL_RESULT" ]; then
+        log_to_queue "system" "KILLED: specialist call interrupted before completion (exit=$exit_code)"
+        # Count as failure
+        local failures
+        failures=$(cat "$FAILURE_FILE" 2>/dev/null || echo 0)
+        [[ "$failures" =~ ^[0-9]+$ ]] || failures=0
+        failures=$((failures + 1))
+        echo "$failures" > "$FAILURE_FILE" 2>/dev/null || true
+    fi
+
+    # Remove calling state file
+    rm -f "$CALLING_FILE" 2>/dev/null
+
+    # Remove temp files
+    rm -f "$TMPOUT" "$TMPERR" 2>/dev/null
+
+    exit "$exit_code"
+}
+
+# Trap ALL catchable signals + normal exit
+trap 'cleanup $?' EXIT
+trap 'cleanup 130' INT
+trap 'cleanup 143' TERM
+trap 'cleanup 131' HUP
 
 # --- Exclusive lock: only one specialist invocation at a time ---
+mkdir -p "$STATE_DIR"
 exec 9>"$LOCK_FILE"
 if ! flock -n 9; then
     echo "Another specialist invocation is already running" >&2
@@ -40,8 +95,6 @@ if [ -z "$MESSAGE" ]; then
 fi
 
 # --- Consecutive failure check with auto-cooldown ---
-mkdir -p "$STATE_DIR"
-COOLDOWN_MINUTES=30
 FAILURES=0
 if [ -f "$FAILURE_FILE" ]; then
     FAILURES=$(cat "$FAILURE_FILE" 2>/dev/null || echo 0)
@@ -51,15 +104,13 @@ if [ -f "$FAILURE_FILE" ]; then
 fi
 
 if [ "$FAILURES" -ge "$MAX_CONSECUTIVE_FAILURES" ]; then
-    # Check if cooldown period has passed since last failure
     LAST_MOD=$(stat -c %Y "$FAILURE_FILE" 2>/dev/null || echo 0)
     NOW=$(date +%s)
     ELAPSED=$(( (NOW - LAST_MOD) / 60 ))
     if [ "$ELAPSED" -ge "$COOLDOWN_MINUTES" ]; then
-        # Cooldown passed — auto-reset and retry
         FAILURES=0
         echo 0 > "$FAILURE_FILE"
-        log_to_queue "system" "Auto-reset after ${COOLDOWN_MINUTES}min cooldown. Retrying specialist..."
+        log_to_queue "system" "Auto-reset after ${COOLDOWN_MINUTES}min cooldown. Retrying..."
     else
         REMAINING=$(( COOLDOWN_MINUTES - ELAPSED ))
         echo "BLOCKED: $FAILURES consecutive failures. Auto-retry in ${REMAINING}min." >&2
@@ -85,30 +136,16 @@ create_new_session() {
 
 read_session
 
-# --- Log to queue ---
-log_to_queue() {
-    local from="$1" text="$2"
-    python3 -c "
-import json, sys, datetime
-entry = {
-    'from': sys.argv[1],
-    'text': sys.argv[2],
-    'ts': datetime.datetime.now(datetime.timezone.utc).isoformat()
-}
-print(json.dumps(entry, ensure_ascii=False))
-" "$from" "$text" >> "$QUEUE_FILE"
-}
-
-# Log gobernator message immediately (dedup handled by flock + failure counter)
+# --- Log outgoing message + mark calling state ---
 log_to_queue "gobernator" "$MESSAGE"
+CALL_LOGGED=true
+echo "$$:$(date +%s)" > "$CALLING_FILE"
 
 # --- Temp files ---
 TMPOUT=$(mktemp)
 TMPERR=$(mktemp)
-trap 'rm -f "$TMPOUT" "$TMPERR"' EXIT
 
-# --- Kill leftover specialist processes (NOT gobernator) ---
-# Specialist always runs via "timeout 300 claude -p", gobernator does not use timeout
+# --- Kill leftover specialist processes from previous stale runs ---
 pkill -9 -f "timeout $TIMEOUT claude -p" 2>/dev/null || true
 
 # --- Build and run specialist command ---
@@ -138,16 +175,19 @@ if grep -q "resume requires a valid session" "$TMPERR" 2>/dev/null; then
     RC=$(run_once)
 fi
 
-# timeout returns 124 on timeout, 137 on SIGKILL
+# --- Process result: EVERY path sets CALL_RESULT (deterministic) ---
+
+# Timeout (exit code 124 from timeout command)
 if [ "$RC" -eq 124 ]; then
     FAILURES=$((FAILURES + 1))
     echo "$FAILURES" > "$FAILURE_FILE"
     log_to_queue "system" "TIMEOUT: specialist did not respond in ${TIMEOUT}s (failures: $FAILURES/$MAX_CONSECUTIVE_FAILURES)"
+    CALL_RESULT="timeout"
     echo "Specialist timeout (${TIMEOUT}s)" >&2
     exit 2
 fi
 
-# --- Clean thinking blocks ---
+# Clean thinking blocks
 RAW=$(cat "$TMPOUT")
 if [ -z "$RAW" ]; then
     RAW=$(cat "$TMPERR")
@@ -160,41 +200,42 @@ text = re.sub(r'<thinking>.*?</thinking>', '', text, flags=re.DOTALL)
 print(text.strip())
 " <<< "$RAW")
 
-# --- Check for empty/rate-limited response ---
+# Empty response
 if [ -z "$CLEANED" ]; then
     FAILURES=$((FAILURES + 1))
     echo "$FAILURES" > "$FAILURE_FILE"
     log_to_queue "system" "EMPTY: specialist returned no output (rc=$RC, failures: $FAILURES/$MAX_CONSECUTIVE_FAILURES)"
+    CALL_RESULT="empty"
     echo "Specialist returned empty response" >&2
     exit 1
 fi
 
-# --- Check for runtime crashes (Bun, Node, etc.) ---
-# These are garbage output, not real specialist responses
+# Runtime crash detection
 if echo "$CLEANED" | grep -qE "TypeError:.*CommonJS|SyntaxError:|ReferenceError:|bug in Bun|node:internal|FATAL ERROR|segmentation fault|panic:"; then
     FAILURES=$((FAILURES + 1))
     echo "$FAILURES" > "$FAILURE_FILE"
-    # Session is likely corrupted after a crash — reset it
     create_new_session
     CRASH_PREVIEW=$(echo "$CLEANED" | head -3 | tr '\n' ' ')
     log_to_queue "system" "CRASH: runtime error detected, session reset (failures: $FAILURES/$MAX_CONSECUTIVE_FAILURES). Preview: $CRASH_PREVIEW"
+    CALL_RESULT="crash"
     echo "Specialist crashed: $CRASH_PREVIEW" >&2
     exit 3
 fi
 
+# Rate limit detection
 LOWER=$(echo "$CLEANED" | tr '[:upper:]' '[:lower:]')
 if echo "$LOWER" | grep -q "out of extra usage\|you've exceeded\|rate_limit_error\|overloaded_error\|server is overloaded"; then
     FAILURES=$((FAILURES + 1))
     echo "$FAILURES" > "$FAILURE_FILE"
     log_to_queue "system" "RATE_LIMIT: $CLEANED (failures: $FAILURES/$MAX_CONSECUTIVE_FAILURES)"
+    CALL_RESULT="rate_limit"
     echo "$CLEANED" >&2
     exit 1
 fi
 
-# --- Success: reset failure counter ---
+# --- Success ---
 echo 0 > "$FAILURE_FILE"
-
-# --- Log specialist response on success ---
 log_to_queue "especialista" "$CLEANED"
+CALL_RESULT="success"
 echo "$CLEANED"
 exit 0
