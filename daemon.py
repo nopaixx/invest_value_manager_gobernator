@@ -54,9 +54,9 @@ def log(msg):
 
 
 def log_to_queue(sender, text):
-    # Never log rate-limit or crash noise to LaBestia
-    if is_rate_limited(text) or is_crash_output(text):
-        log(f"Skipping queue log ({sender}): rate-limit/crash noise")
+    # Never log rate-limit, crash, or dead session noise to LaBestia
+    if is_rate_limited(text) or is_crash_output(text) or is_dead_session(text):
+        log(f"Skipping queue log ({sender}): noise filtered")
         return
     entry = {"from": sender, "text": text, "ts": datetime.now(timezone.utc).isoformat()}
     with open(QUEUE_FILE, "a") as f:
@@ -94,10 +94,17 @@ CRASH_PATTERNS = [
     "bun.report", "oh no: Bun has crashed"
 ]
 
+DEAD_SESSION_PATTERN = "No conversation found with session ID:"
+
 
 def is_crash_output(text):
     """Detect if output is a Bun/runtime crash dump instead of a real response."""
     return any(p in text for p in CRASH_PATTERNS)
+
+
+def is_dead_session(text):
+    """Detect if output indicates the session ID no longer exists."""
+    return DEAD_SESSION_PATTERN in text
 
 
 def get_session(path):
@@ -266,6 +273,20 @@ def handle_angel_mode(initial_msg):
         write_angel_outbox("[Auto] Mensaje recibido. Sigo trabajando.")
         return "resume", None
 
+    # Filter noise before sending to Angel
+    if is_crash_output(gob_output) or is_dead_session(gob_output):
+        log(f"Angel mode: gob returned noise (crash/dead session). Resetting session, auto-resuming.")
+        sid = str(uuid.uuid4())
+        with open(GOB_SESSION, "w") as f:
+            f.write(f"{sid}\nnew\n")
+        write_angel_outbox("[Auto] Mensaje recibido. Sigo trabajando.")
+        return "resume", None
+
+    if is_rate_limited(gob_output):
+        log(f"Angel mode: gob rate limited. Auto-resuming.")
+        write_angel_outbox("[Auto] Mensaje recibido. Sigo trabajando.")
+        return "resume", None
+
     result = process_angel_response(gob_output)
     if result:
         return result
@@ -306,6 +327,20 @@ def handle_angel_mode(initial_msg):
             log("Angel mode: gob empty response. Auto-resuming.")
             return "resume", None
 
+        # Filter noise before sending to Angel
+        if is_crash_output(gob_output) or is_dead_session(gob_output):
+            log(f"Angel mode: gob returned noise. Resetting session, auto-resuming.")
+            sid = str(uuid.uuid4())
+            with open(GOB_SESSION, "w") as f:
+                f.write(f"{sid}\nnew\n")
+            write_angel_outbox("[Auto] Mensaje recibido. Sigo trabajando.")
+            return "resume", None
+
+        if is_rate_limited(gob_output):
+            log(f"Angel mode: gob rate limited. Auto-resuming.")
+            write_angel_outbox("[Auto] Mensaje recibido. Sigo trabajando.")
+            return "resume", None
+
         result = process_angel_response(gob_output)
         if result:
             return result
@@ -338,8 +373,14 @@ def main():
     if DAEMON_MODE_DISCLAIMER not in message:
         message = message + DAEMON_MODE_DISCLAIMER
     last_spec_output = None
+    pending_spec_retry = None  # gob_output to retry directly to specialist (skip gob turn)
 
-    log(f"Daemon started. Initial: {message[:80]}")
+    # Always start with a fresh gob session to avoid sharing with CLI
+    # Context recovery happens via session.yaml + DAEMON_MODE_DISCLAIMER
+    fresh_gob_sid = str(uuid.uuid4())
+    with open(GOB_SESSION, "w") as f:
+        f.write(f"{fresh_gob_sid}\nnew\n")
+    log(f"Daemon started. Fresh gob session: {fresh_gob_sid[:8]}. Initial: {message[:80]}")
 
     while True:
         if check_stop():
@@ -354,39 +395,54 @@ def main():
                 if result == "stop":
                     break
                 elif result == "resume_with_msg":
-                    message = msg
+                    pending_spec_retry = msg
                 else:
                     message = last_spec_output or "Continúa con lo que estabas haciendo."
+                    pending_spec_retry = None
                 continue
 
-            # --- Gobernator turn ---
-            log(f"-> Gob [{len(message)} chars]")
-            gob_output = run_claude(GOB_SESSION, WORKDIR, message)
+            # --- If specialist failed last turn, retry directly (skip gob) ---
+            if pending_spec_retry:
+                gob_output = pending_spec_retry
+                pending_spec_retry = None
+                log(f"-> Spec (retry) [{len(gob_output)} chars]")
+            else:
+                # --- Gobernator turn ---
+                log(f"-> Gob [{len(message)} chars]")
+                gob_output = run_claude(GOB_SESSION, WORKDIR, message)
 
-            if not gob_output:
-                log(f"Gob: empty. Retry in {RETRY_WAIT}s...")
-                if interruptible_wait(RETRY_WAIT) == "stop":
-                    break
-                continue
+                if not gob_output:
+                    log(f"Gob: empty. Retry in {RETRY_WAIT}s...")
+                    if interruptible_wait(RETRY_WAIT) == "stop":
+                        break
+                    continue
 
-            if is_crash_output(gob_output):
-                log(f"Gob: CRASH DETECTED. Resetting gob session. Retry in 60s...")
-                # Reset session so next call creates fresh one
-                sid = str(uuid.uuid4())
-                with open(GOB_SESSION, "w") as f:
-                    f.write(f"{sid}\nnew\n")
-                if interruptible_wait(60) == "stop":
-                    break
-                continue
+                if is_crash_output(gob_output):
+                    log(f"Gob: CRASH DETECTED. Resetting gob session. Retry in 60s...")
+                    sid = str(uuid.uuid4())
+                    with open(GOB_SESSION, "w") as f:
+                        f.write(f"{sid}\nnew\n")
+                    if interruptible_wait(60) == "stop":
+                        break
+                    continue
 
-            if is_rate_limited(gob_output):
-                log(f"Gob: RATE LIMITED. Sleeping {RETRY_WAIT}s...")
-                if interruptible_wait(RETRY_WAIT) == "stop":
-                    break
-                continue
+                if is_dead_session(gob_output):
+                    log(f"Gob: DEAD SESSION. Resetting gob session and retrying...")
+                    sid = str(uuid.uuid4())
+                    with open(GOB_SESSION, "w") as f:
+                        f.write(f"{sid}\nnew\n")
+                    if interruptible_wait(10) == "stop":
+                        break
+                    continue
 
-            log(f"<- Gob [{len(gob_output)} chars]: {gob_output[:120]}")
-            log_to_queue("gobernator", gob_output)
+                if is_rate_limited(gob_output):
+                    log(f"Gob: RATE LIMITED. Sleeping {RETRY_WAIT}s...")
+                    if interruptible_wait(RETRY_WAIT) == "stop":
+                        break
+                    continue
+
+                log(f"<- Gob [{len(gob_output)} chars]: {gob_output[:120]}")
+                log_to_queue("gobernator", gob_output)
 
             # --- Specialist turn ---
             log(f"-> Spec [{len(gob_output)} chars]")
@@ -395,7 +451,7 @@ def main():
 
             if not spec_output:
                 log(f"Spec: empty. Retry in {RETRY_WAIT}s...")
-                message = gob_output
+                pending_spec_retry = gob_output
                 if interruptible_wait(RETRY_WAIT) == "stop":
                     break
                 continue
@@ -405,14 +461,24 @@ def main():
                 sid = str(uuid.uuid4())
                 with open(SPEC_SESSION, "w") as f:
                     f.write(f"{sid}\nnew\n")
-                message = gob_output  # retry with same gob message
+                pending_spec_retry = gob_output
                 if interruptible_wait(60) == "stop":
+                    break
+                continue
+
+            if is_dead_session(spec_output):
+                log(f"Spec: DEAD SESSION. Resetting spec session and retrying...")
+                sid = str(uuid.uuid4())
+                with open(SPEC_SESSION, "w") as f:
+                    f.write(f"{sid}\nnew\n")
+                pending_spec_retry = gob_output
+                if interruptible_wait(10) == "stop":
                     break
                 continue
 
             if is_rate_limited(spec_output):
                 log(f"Spec: RATE LIMITED. Sleeping {RETRY_WAIT}s...")
-                message = gob_output
+                pending_spec_retry = gob_output
                 if interruptible_wait(RETRY_WAIT) == "stop":
                     break
                 continue
@@ -436,7 +502,7 @@ def main():
                     if r == "stop":
                         break
                     elif r == "resume_with_msg":
-                        message = msg
+                        pending_spec_retry = msg
                     else:
                         message = last_spec_output or "Continúa con lo que estabas haciendo."
 

@@ -18,6 +18,8 @@
 | `tail -f /tmp/daemon.log` | Watch daemon output live |
 | `tail -f /tmp/gobernator_bot.log` | Watch bot output live |
 | `wc -l state/angel_outbox.jsonl` | Check outbox size |
+| `bash monitor.sh &` | Lightweight system monitor (daemon/bot health, every 2min) |
+| `tail -f /tmp/monitor.log` | Watch monitor output |
 
 ### Telegram Bot Commands
 | Command | Description |
@@ -265,6 +267,7 @@ invest_value_manager_gobernator/
 ├── adversarial-consolidation.md # Resultados adversarial completo (16 posiciones)
 ├── specialist-improvement-plan.md # Plan de mejora del especialista (4 fases)
 ├── restart_bot.sh               # Script de reinicio manual del bot
+├── monitor.sh                   # Lightweight system monitor (daemon/bot health, alerts)
 └── invest_value_manager/        # Especialista (SOLO LECTURA, symlink)
 ```
 

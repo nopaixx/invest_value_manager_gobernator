@@ -1,40 +1,58 @@
 # Estado de la última sesión del Gobernator
 last_session:
   date: "2026-02-12"
-  session: 58
-  summary: "MONY.L AI disruption review completado (HOLD PROBATION, FV 190p, KC#9). AUTO.L system.yaml fixed. PAYC/MORN pendientes. Specialist added 'No ADD to PROBATION positions' governance rule. Specialist session closure (Fase 5) completada."
+  session: 62
+  summary: "Session 62. LULU review completed → ON PROBATION (QS 78, FV $196, MoS 10.3%). 4/13 probation (31%). MORN Q4 not indexed. CPI 13 Feb pending. Cleveland Fed nowcast 2.36% (cool). Angel directive: '¿Por qué no estamos investigando?' — with 44% cash, pipeline improvement is MANDATORY."
   status: operational
   mode: ACTIVO
-  mode_reason: "Miércoles. PAYC earnings publicados (no indexados aún). MORN earnings after close hoy. Earnings week Feb 23-26."
+  mode_reason: "Feb 12. Angel directive to actively improve system and investigate pipeline. 44% cash undeployed."
 
-  current_task: "Verificar PAYC Q4 results (deberían indexarse pronto). MORN Q4 results (after close hoy). Nada urgente hasta earnings week."
+  current_task: "Next daemon session priorities: (1) MORN R1 buy-pipeline — closest trigger at 7.1%, UNSAFE without pipeline. (2) Fase 5: delegate compounder_screener.py to specialist. (3) CPI reaction if published. (4) MORN Q4 evaluation if indexed. (5) FGP.L R1 after MORN."
+
+  standing_orders_audit:
+    safe: [DSY.PA, DNLM.L, RACE.MI]
+    partial: [PAYC, INTU]
+    unsafe: [MORN, FGP.L, CMCSA, MA, V, WPP.L]
+    ok_adds: [GL, NVO, BYIT.L]
+    note: "5 UNSAFE standing orders. DO NOT EXECUTE without at least R1-R2. MORN most urgent (7.1% from trigger)."
 
   pending_specialist_actions:
-    - "PAYC earnings: publicados 11 Feb after close, AÚN NO INDEXADOS. $118.98 pre-earnings. Consensus EPS $2.44, rev $542.8M."
-    - "MORN earnings: 12 Feb after close HOY. $155.23. Consensus EPS $2.34, rev $627-634M. Entry trigger $145."
-    - "Earnings semana 23-26 Feb: MONY.L 23, EDEN.PA 24, VICI 25, UHS 25, DTE.DE 26 — ALL FRAMEWORKS READY"
+    - "MORN Q4: verify results next session (not yet on web). Consensus EPS $2.34, rev $627-634M. Entry trigger $145. AH price $156 (+0.42%)."
+    - "ADBE: prepare Q1 FY2026 earnings framework for March. Watch seat count, Firefly ARR, churn. Add Apple Creator Studio risk to thesis."
+    - "Earnings semana 23-26 Feb: MONY.L 23, EDEN.PA 24, VICI 25, UHS 25, DTE.DE 26 — ALL 5 FRAMEWORKS READY"
+    - "DTE.DE QS upgrade 48→61 (Tier C→B): DEFERRED to post-Feb 26 earnings. Need FY2025 actuals."
     - "NVO REDUCE 50% antes CagriSema marzo — pendiente de Angel"
     - "WPP.L Rose plan Feb 19 — cancel standing order si no demuestra path a Tier B"
-    - "Gravity check: Tier C > Tier A en capital invertido — necesita rebalance analysis"
+    - "Gravity check: Tier C 1.86x Tier A en capital invertido — post-earnings rotation analysis needed"
+    - "Screening coverage: 67% del universo. 33% still missing"
+    - "INTU buy-pipeline: next priority after MORN evaluation"
+    - "CPI 13 Feb: CRITICAL for Fed path. Monitor market reaction."
 
-  completed_sessions_55_56_57:
-    - "Earnings frameworks VICI + UHS creados y verificados (PROBATION, decision trees automáticos)"
-    - "Tiering corregido: AUTO.L Tier A → Tier B"
-    - "Standing orders audit: 10 orders revisados, MA/V recalibrados, pipeline warnings añadidos"
-    - "AUTO.L dealer revolt review: HOLD LOW, FV 617→580p, April make-or-break"
-    - "MONY.L AI disruption review: HOLD PROBATION, FV 201→190p, QS 81→75adj, KC#9 (AI strategy)"
-    - "system.yaml AUTO.L inconsistency fixed (was still showing HOLD MEDIUM/617p)"
-    - "Committed and pushed (442026e)"
+  session_61_completed:
+    - "DTE.DE earnings_framework_feb2026.md created and verified (21.9KB)"
+    - "DTE.DE QS upgrade 48→61 flagged, DEFERRED to post-earnings (decision #12)"
+    - "ADBE at 52w low thesis reviewed: INTACT, HOLD, no ADD until $240 (decision #14)"
+    - "ADBE Apple Creator Studio risk identified: minor, prosumer not professional"
+    - "MORN Q4 not yet on web, deferred (decision #15). AH $156 (+0.42%)"
+    - "Session state fully updated, decisions log IDs 12-15"
+
+  session_60_completed:
+    - "INTU R1: QS 77, FV ~$460, stock $389 = ~15% upside. WATCHLIST $330-365 entry."
+    - "Market pulse updated (14:00 CET scan)"
+    - "Specialist crashed 2x on MORN Q4 request — Bun runtime errors"
+
+  session_59_completed:
+    - "PAYC Q4 verified, RACE.MI pipeline complete, FICO R1 done, Screening V2.5"
+    - "Daemon v1.3-v1.4: dead session detection + angel mode crash filter"
 
   rate_limit_status:
     blocked_since: null
     consecutive_failures: 0
-    note: "Sesión limpia."
+    note: "Session 61 ran clean. Specialist responsive after daemon restart."
 
   adversarial_status:
     completed: [ADBE, MONY.L, NVO, EDEN.PA, DOM.L, ALL, VICI, GL, UHS, DTE.DE, SAN.PA, HRB, IMB.L, LULU, AUTO.L, BYIT.L]
     pending: []
-    pattern: "Promedio -15% FV. BYIT.L -24.2% (peor). AUTO.L -10.3% (mejor)."
     note: "TODOS COMPLETADOS. 16/16."
 
   portfolio_summary:
@@ -44,67 +62,47 @@ last_session:
     tier_a: [ADBE, MONY.L, LULU]
     tier_b: [NVO, EDEN.PA, DOM.L, AUTO.L, BYIT.L]
     tier_c: [ALL, VICI, GL, UHS, DTE.DE]
-    probation: [VICI, UHS, MONY.L]
-    note: "MONY.L ahora ON PROBATION (AI disruption). AUTO.L HOLD LOW (dealer revolt)."
-
-  material_alerts_resolved:
-    - "AUTO.L dealer revolt: HOLD LOW, FV 580p, 2 new KCs, April make-or-break"
-    - "MONY.L AI disruption: HOLD PROBATION, FV 190p, QS 75adj, KC#9 (AI strategy Feb 23)"
-    - "UHS BofA downgrade: covered by earnings framework"
-    - "NVO positive (IP defense): no action needed"
-    - "LULU CEO vacancy: monitor"
-
-  earnings_frameworks:
-    ready:
-      - "MONY.L: Feb 23 — REWRITTEN with AI disruption scenarios + KC#9"
-      - "EDEN.PA: Feb 24 — READY (MoS 64%, cómoda)"
-      - "VICI: Feb 25 — READY (PROBATION, AFFO <$2.35 = SELL)"
-      - "UHS: Feb 25-26 — READY (PROBATION, EPS guide <$20 = SELL)"
-    pending:
-      - "DTE.DE: Feb 26 — calendar updated, no formal doc (lower urgency)"
+    probation: [VICI, UHS, MONY.L, LULU]
+    watchlist_flags:
+      - "ADBE $257 at 52w low (MoS 34%, thesis intact, HOLD)"
+      - "AUTO.L 470p near 52w low (-28.6%, April make-or-break)"
+      - "BYIT.L 295p near 52w low (-27.1%)"
+      - "MORN $155-156, approaching $145 entry"
 
   standing_orders:
     ready_to_execute:
-      - "DSY.PA BUY ≤EUR 15.50 (adversarial complete, committee approved)"
-      - "DNLM.L BUY ≤780 GBp (adversarial complete, committee approved)"
+      - "DSY.PA BUY ≤EUR 15.50 (committee approved)"
+      - "DNLM.L BUY ≤780 GBp (committee approved)"
+      - "RACE.MI BUY ≤EUR 270 / ADD ≤EUR 260 (committee approved)"
     ok_for_add:
-      - "GL ADD ≤$125 (FV $191, active position)"
-      - "NVO ADD ≤$40 OR CagriSema+ (active position)"
-    need_pipeline_before_execution:
-      - "FGP.L BUY ≤165 GBp (WARNING added)"
-      - "CMCSA BUY ≤$26 (WARNING added)"
-      - "MA BUY ≤$315 (recalibrated from $395, WARNING added)"
-      - "V BUY ≤$220 (recalibrated from $280, WARNING added)"
-      - "V ADD ≤$200 (recalibrated from $265, WARNING added)"
+      - "GL ADD ≤$125 (FV $191)"
+      - "NVO ADD ≤$40 OR CagriSema+"
+    need_pipeline:
+      - "FGP.L BUY ≤165 GBp"
+      - "CMCSA BUY ≤$26"
+      - "MA BUY ≤$315"
+      - "V BUY ≤$220 / ADD ≤$200"
     under_review:
-      - "WPP.L BUY ≤200 GBp — Rose plan Feb 19, probable CANCEL"
+      - "WPP.L BUY ≤200 GBp — Rose plan Feb 19"
 
-  cash_deployment_plan:
-    status: "PAYC WATCHLIST + DSY.PA standing order. Esperando earnings."
-    pipeline:
-      - "PAYC: QS 80 adj, FV $130, WATCHLIST. $118.98. Entry $95-105. Earnings publicados, datos no indexados."
-      - "DSY.PA: PLM monopoly. EUR 17.77. Standing order ≤EUR 15.50. Committee approved."
-      - "MORN: QS 83, $155.23, -53%. Earnings HOY after close. Entry trigger $145."
-    next_step: "Verificar PAYC results. Evaluar MORN results mañana AM."
+  cash_deployment_pipeline:
+    approved_standing_orders: [DSY.PA, DNLM.L, RACE.MI]
+    watchlist: [PAYC, MORN, FICO]
+    screening_candidates: [INTU, CPRT, ADSK, FSG.L, RMV.L, PAYX, NFLX]
+    next_pipeline: "SYSTEM IMPROVEMENT (Fase 5) → compounder_screener.py → pipeline automation → sector views → MORN Q4 → INTU pipeline"
 
   upcoming_catalysts:
-    - "PAYC earnings: publicados — VERIFICAR cuando indexados"
-    - "MORN earnings: 12 Feb after close (HOY)"
+    - "MORN Q4: 12 Feb after close — RESULTS PENDING (AH $156 +0.42%)"
+    - "US CPI: 13 Feb — CRITICAL for Fed path"
     - "WPP.L Rose plan: 19 Feb"
     - "MONY.L earnings: 23 Feb (PROBATION — KC#9 AI strategy)"
     - "EDEN.PA earnings: 24 Feb"
-    - "VICI earnings: 25 Feb (PROBATION — decisión obligatoria)"
-    - "UHS earnings: 25-26 Feb (PROBATION — decisión obligatoria)"
-    - "DTE.DE earnings: 26 Feb"
+    - "VICI earnings: 25 Feb (PROBATION — AFFO guide)"
+    - "UHS earnings: 25-26 Feb (PROBATION — EPS guide)"
+    - "DTE.DE earnings: 26 Feb (framework READY, QS upgrade pending)"
+    - "ADBE Q1 FY2026: ~March (seat count, Firefly ARR critical)"
     - "DOM.L FY25 results: 5 Mar"
+    - "Fed FOMC: 5 Mar"
     - "NVO CagriSema: Mar 2026"
     - "LULU Q4: 31 Mar"
     - "AUTO.L pricing event: 1 Apr"
-
-  context:
-    - "Modo ACTIVO. Earnings season."
-    - "44-48% cash — despliegue activo via standing orders y pipeline"
-    - "3 posiciones ON PROBATION: VICI, UHS, MONY.L"
-    - "AUTO.L HOLD LOW — dealer revolt, April make-or-break"
-    - "Standing orders limpios: 10 activos, 2 listos, 5 necesitan pipeline"
-    - "UK concentration risk: 2 de 4 UK positions con moats degradados (AUTO.L, MONY.L)"

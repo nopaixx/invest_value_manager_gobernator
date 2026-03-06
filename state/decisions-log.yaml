@@ -2,12 +2,131 @@
 # Cada decisión significativa: qué decidí, por qué, resultado
 # NO es el task_log (tareas delegadas) — esto es MIS decisiones como gobernador
 # Incluye: decisiones de actuar, de NO actuar, de escalar, de cambiar modo, de retar al especialista
-decisions: []
-# Formato:
-# - id: 1
-#   date: "YYYY-MM-DD"
-#   type: governance | escalation | mode_change | specialist_challenge | no_action
-#   decision: "Qué decidí"
-#   reasoning: "Por qué — desde qué principio"
-#   outcome: "Qué pasó"
-#   bias_check: "¿Caí en algún sesgo? ¿Cuál?"
+decisions:
+  - id: 1
+    date: "2026-02-08"
+    type: specialist_challenge
+    decision: "Lanzar adversarial completo de las 16 posiciones del portfolio"
+    reasoning: "Auditoría reveló que thesis QS divergían de system.yaml QS. Pre-adversarial FV es poco fiable. Principio 9 (calidad gravita) requiere verificación de cada posición."
+    outcome: "16/16 adversariales completados. FV bajó -15% de media. 3 reclasificaciones A→B (AUTO.L, BYIT.L, NVO). 5 posiciones vendidas por baja calidad (A2A.MI, VNA.DE, TATE.L, SAN.PA, HRB, IMB.L). Portfolio mejorado."
+    bias_check: "Sesgo de actividad posible (¿era necesario TODOS a la vez?). Pero el resultado justificó: >30% del capital invertido estaba en posiciones de baja calidad."
+
+  - id: 2
+    date: "2026-02-09"
+    type: governance
+    decision: "Exigir SELL de SAN.PA tras adversarial (ROIC < WACC, Dupixent gap)"
+    reasoning: "Principio 9: calidad gravita. SAN.PA QS 55-59 (Tier B low-end), ROIC < WACC (-2.1pp). Amlitelimab inferior a Dupixent. UBS downgrade. 8vo ROIC<WACC exit."
+    outcome: "Angel ejecutó SELL. P&L -0.84%. Capital liberado para rotación a Tier A."
+    bias_check: "No. Datos claros. Múltiples señales convergentes (adversarial + UBS + Phase III inferior)."
+
+  - id: 3
+    date: "2026-02-09"
+    type: governance
+    decision: "Exigir SELL de HRB tras adversarial (moat breach por Intuit)"
+    reasoning: "Intuit abrió 600 Expert Offices + $100M OpenAI partnership. FCF decline -23% 3yr. Devil's advocate counter 18/24 STRONG. El moat de red de oficinas ya no es irreplicable."
+    outcome: "Angel ejecutó SELL. P&L -13.25%. Lección: moats pueden invalidarse rápidamente."
+    bias_check: "No. La pérdida duele pero la tesis estaba rota. Mejor salir con -13% que esperar más deterioro."
+
+  - id: 4
+    date: "2026-02-10"
+    type: governance
+    decision: "Exigir SELL de IMB.L tras adversarial (QS 54 Tier C, FV overvalued)"
+    reasoning: "Thesis decía Tier A QS 9.5/10 pero adversarial reveló QS 54 Tier C. FV 2,796p vs precio 3,274p = MoS -14.6%. $400M HMRC payment + UK generational ban no estaban en la thesis original."
+    outcome: "Angel ejecutó SELL. P&L +6.9%. Capital liberado."
+    bias_check: "No. Divergencia thesis vs realidad era flagrante. Completeness bias del especialista (QS inflado)."
+
+  - id: 5
+    date: "2026-02-11"
+    type: specialist_challenge
+    decision: "Reclasificar AUTO.L de Tier A a Tier B post urgent re-eval"
+    reasoning: "Jefferies + Berenberg downgrades. 180+ dealer downgrades. QS Tool 63, Adj 71 (de 79). FV de 688p → 617p → 580p. Dealer revolt = structural risk. Principio 5: QS como input, no dictador, pero la dirección es clara."
+    outcome: "AUTO.L: HOLD LOW conviction. April pricing = make-or-break. Si Tier A necesita capital, candidata a rotación."
+    bias_check: "Posible sesgo de sobre-reacción a noticias negativas. Pero Jefferies + Berenberg + 180 downgrades son datos, no ruido."
+
+  - id: 6
+    date: "2026-02-12"
+    type: specialist_challenge
+    decision: "Reclasificar MONY.L: agregar KC#9 (AI strategy) y bajar FV a 190p"
+    reasoning: "Insurify ChatGPT proof-of-concept demostró que AI puede disrumpir price comparison. Moat prob erosion 30-35%. Rewrite completo del earnings framework con AI disruption scenarios."
+    outcome: "MONY.L HOLD ON PROBATION. Feb 23 earnings decisivos. Si management no tiene AI strategy → SELL."
+    bias_check: "AI disruption podría ser overhyped (US-only Insurify ≠ UK threat yet). Pero como kill condition es correcto: si management ni siquiera lo reconoce, es señal negativa."
+
+  - id: 7
+    date: "2026-02-12"
+    type: governance
+    decision: "Aprobar RACE.MI condicionalmente tras full pipeline (R1-R4)"
+    reasoning: "QS 84adj, FV EUR 355, el sistema lo procesó con todos sus pipelines. Standing orders EUR 270/260 están lejos del precio actual (323). Conditional = no desperdiciar capital ahora, pero estar listos."
+    outcome: "Standing orders añadidos. Candidata queda en pipeline."
+    bias_check: "¿Aprobé demasiado rápido? No — el especialista completó las 4 rondas y el investment committee pasó. Mi rol es gobernar, no duplicar su análisis."
+
+  - id: 8
+    date: "2026-02-12"
+    type: governance
+    decision: "Diferir FICO tras R1 revelar QS 70adj (Tier B downgrade)"
+    reasoning: "QS bajó de 75 (Tier A) a 70adj (Tier B). VantageScore threat, 127 insider sales, DOJ risk. Precio $1,363 = -51% overvalued vs FV $900. No tiene sentido pipeline completo cuando el precio está tan lejos."
+    outcome: "FICO deferred. Correctamente evitado gastar tokens en pipeline completo."
+    bias_check: "No. Datos claros. -51% overvalued no necesita más análisis."
+
+  - id: 9
+    date: "2026-02-12"
+    type: no_action
+    decision: "NO escalar a Angel durante la noche — resolver autónomamente todos los problemas técnicos"
+    reasoning: "Dead session loop de 1.5h, Bun crashes, rate limits, múltiples reintentos. Angel dijo 'no parar nunca' y se fue a dormir. Principio: si puedo resolverlo yo, lo resuelvo."
+    outcome: "Todos los problemas técnicos resueltos sin molestar a Angel. Daemon v1.3 implementado. Resumen matutino en outbox."
+    bias_check: "Correcto. Ninguno de los problemas requería la atención de Angel."
+
+  - id: 10
+    date: "2026-02-12"
+    type: governance
+    decision: "Identificar inversión de gravedad del portfolio (Tier C 1.86x Tier A)"
+    reasoning: "Principio 9: calidad gravita hacia arriba. Tier C ($2,526) > Tier B ($2,168) > Tier A ($1,357). DTE.DE ($700, QS 48) es la posición más grande. Esto es estructuralmente incorrecto."
+    outcome: "Análisis preparado. Pendiente de delegar al especialista post-earnings (Feb 23-26). Earnings resolverán 3 probation positions naturalmente."
+    bias_check: "¿Sesgo de actividad (querer rotar ya)? Posible. Pero la inversión es objetiva: 1.86x ratio C/A. Esperar a earnings es correcto porque 3 posiciones Tier C están en probation."
+
+  - id: 11
+    date: "2026-02-12"
+    type: governance
+    decision: "Implementar filtro de crash/noise en Angel mode del daemon"
+    reasoning: "Bug: Bun crash se envió a Angel como respuesta (00:14:51). Las funciones is_crash_output() y is_dead_session() existían pero no se aplicaban dentro de handle_angel_mode(). Auto-mejora inmediata."
+    outcome: "daemon.py v1.4 — filtro implementado en ambos puntos de handle_angel_mode. Pendiente reinicio del daemon para aplicar."
+    bias_check: "No. Bug claro, fix directo."
+
+  - id: 12
+    date: "2026-02-12"
+    type: no_action
+    decision: "DEFER DTE.DE tier reclassification (QS 48→61, Tier C→B) until post-Feb 26 earnings"
+    reasoning: "Specialist's DTE.DE earnings framework agent flagged QS upgrade based on TMUS Q4 beat (ROIC spread -0.7pp → +3.9pp). But this is forward-looking. FY2025 actuals needed to validate. Principio 5: QS como input, no dictador. Reclasificar antes de earnings sería prematuro."
+    outcome: "Tier change deferred. Will evaluate post-Feb 26 with FY2025 data."
+    bias_check: "Sesgo de actividad posible (querer reclasificar ya). Correcto esperar datos reales."
+
+  - id: 13
+    date: "2026-02-12"
+    type: governance
+    decision: "Flag ADBE at 52w low for thesis review — AI 'software-mageddon' narrative"
+    reasoning: "ADBE $257, -5% vs cost, 34% MoS vs FV $390. Tier A position at 52w low due to AI disruption narrative. Could be opportunity to ADD or could be thesis-breaking. Need specialist to assess: is Creative Cloud moat intact? Does Firefly AI defend or erode the moat?"
+    outcome: "Flagged for specialist review next session. Not urgent (3 AM, no action needed tonight)."
+    bias_check: "Contrarian bias possible (wanting to buy the dip without verifying thesis). Correct approach: verify first, act second."
+
+  - id: 14
+    date: "2026-02-12"
+    type: governance
+    decision: "ADBE thesis INTACT — HOLD, no ADD until $240 or FTC clarity"
+    reasoning: "Specialist assessed: fundamentals improving (FY2025 rev +11%, EPS +35%, ARR +11.5%) while price declining (52w low, P/E 15.8x decade low). AI threat real at margins (10-15% of market) but NOT for professional core (85%). Firefly embedding AI, not being disrupted. Apple Creator Studio targets prosumer, not professional. Short interest at 8yr high = potential squeeze. But FTC trial Oct 2026 + AI overhang = patience warranted."
+    outcome: "HOLD. ADD threshold $240. Next datapoint: Q1 FY2026 earnings March (seat count, Firefly ARR, churn). Apple Creator Studio added as minor risk."
+    bias_check: "Verified specialist reasoning against thesis in disk. FV $390 vs price $257 = 34% MoS. Fundamentals support hold. NOT recommending ADD now due to FTC + AI narrative overhang — patience is correct, not contrarian impulse."
+
+  - id: 15
+    date: "2026-02-12"
+    type: no_action
+    decision: "MORN Q4 results deferred — not yet indexed on web"
+    reasoning: "Multiple web searches failed to find MORN Q4 results despite being >5h after market close. After-hours price $156 (+0.42%) suggests neutral reaction. Results likely published on Morningstar IR page but not yet crawled by search engines."
+    outcome: "Deferred to next session. $145 entry target maintained. Will need specialist to verify with web search + price_checker."
+    bias_check: "No action bias — correct. Cannot evaluate what I cannot see."
+
+  - id: 16
+    date: "2026-02-12"
+    type: governance
+    decision: "Acknowledge LULU governance crisis — already captured in thesis, defer deep review to next session"
+    reasoning: "Specialist flagged LULU governance crisis (CEO out, Elliott $1B, Wilson proxy). Verified: this is REAL (web search confirmed). But thesis already updated Feb 11 (adversarial: FV $261→$202, -22.6%, conviction LOW-MEDIUM, ADD orders cancelled). No new developments since Feb 11 that would change the thesis tonight. 3:30 AM — no action possible."
+    outcome: "LULU review-agent delegated to next session. Priority 3 after MORN Q4 and CPI."
+    bias_check: "Checked for complacency — am I dismissing this because it's late? No. The thesis was literally updated yesterday with all these factors. If something changed in the last 24h, the specialist's review-agent will catch it."

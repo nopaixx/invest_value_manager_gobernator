@@ -108,16 +108,60 @@ El especialista es inteligente y capaz. No necesita que le diga qué está mal �
 
 ## Cómo mido el progreso
 
-| Métrica | Hoy | Objetivo 1 mes | Objetivo 3 meses |
-|---------|-----|-----------------|-------------------|
-| Compras sin pipeline adversarial | 3/6 | 0 | 0 |
-| Discrepancias QS thesis vs tool | 5/6 | 0 | 0 |
-| Errores factuales en thesis | ~2 por thesis | <0.5 | 0 |
-| Thesis con datos >3 meses | ~60% | <30% | <10% |
-| Vigilancia ejecutada por sesión | ~20% | >80% | 100% |
-| Sesiones con cierre formal | ~40% | >80% | >95% |
-| Risk-sentinel scans | 0 total | >4 | >12 |
-| Escenarios macro modelados | 0 | 3 | actualizado trimestral |
+| Métrica | Baseline (Feb 9) | Actual (Feb 12) | Objetivo 1 mes | Objetivo 3 meses |
+|---------|------------------|-----------------|-----------------|-------------------|
+| Compras sin pipeline adversarial | 3/6 | **0** (RACE.MI pasó R1-R4) | 0 | 0 |
+| Discrepancias QS thesis vs tool | 5/6 | **~1** (MONY.L 83 vs 75adj ambiguo) | 0 | 0 |
+| Errores factuales en thesis | ~2 por thesis | **~0.5** (mejora con tool-first) | <0.5 | 0 |
+| Thesis con datos >3 meses | ~60% | **~20%** (adversariales actualizaron 16) | <10% | <5% |
+| Vigilancia ejecutada por sesión | ~20% | **~60%** (worldview refresh, but inconsistent) | >80% | 100% |
+| Sesiones con cierre formal | ~40% | **~70%** (Fase 5 ejecutada en S59) | >80% | >95% |
+| Risk-sentinel scans | 0 total | **2** (DTE.DE net neutrality, NVO litigation) | >4 | >12 |
+| Escenarios macro modelados | 0 | **0** (PENDIENTE) | 3 | actualizado trimestral |
+| Screening cobertura | ~40% (V1) | **67%** (V2.5) | >85% | >95% |
+| system.yaml tamaño | ~83KB | **~76KB** | <40KB | <20KB (split) |
+
+---
+
+## Fase 5: Sistema de Descubrimiento de Compounders (PRIORIDAD — Angel 12 Feb)
+
+> **Contexto:** 44% cash, pipeline estancado. Angel preguntó "¿por qué no estamos investigando?"
+> **Diagnóstico:** El sistema es excelente analizando empresas, pero malo descubriéndolas. 100% de posiciones actuales nacieron de conocimiento manual, no de screening sistemático.
+
+### 5.1 Nueva tool: `compounder_screener.py` (PRIORIDAD 1)
+**Problema:** El screener actual (`dynamic_screener.py`) filtra por P/E y yield — encuentra "baratas", no "quality-baratas". No filtra por ROIC, growth consistency, ni moat signals.
+**Qué necesita:**
+- Filtrar por: ROIC > WACC + 10pp, Revenue CAGR > 8%, FCF margin > 12%, Debt/EBITDA < 2x
+- ROIC trajectory (estable/creciente, no solo snapshot)
+- Gross margin premium vs sector (señal de moat)
+- Output: top 20 candidatas rankeadas por (ROIC spread × growth quality)
+- Auto-append a watchlist en system.yaml
+**Cómo instruir:** "Tenemos el screener que encuentra empresas baratas, pero necesitamos uno que encuentre compounders — alto ROIC sostenido, crecimiento consistente, poca deuda. ¿Puedes crear una tool que escanee SP500+STOXX600+FTSE por ROIC>WACC+10pp, CAGR>8%, FCF>12%? Que rankee por calidad, no por baratura."
+**Métrica:** Tool funcional que produce ≥10 candidatas cualificadas por scan.
+
+### 5.2 Pipeline automático: screening → análisis (PRIORIDAD 2)
+**Problema:** El screener genera CSV que nadie recoge. No alimenta watchlist ni quality scorer. Es trabajo manual desconectado.
+**Qué necesita:**
+- Screener output → opportunity_filter → quality_scorer batch → candidatas QS ≥75 flaggeadas para thesis
+- Tracking: cuántas pasaron de screen → watchlist → investment committee
+- Resultados datados guardados en `data/screening_results/`
+**Cómo instruir:** "El screener genera resultados pero se quedan en un CSV. ¿Puedes conectar el pipeline para que los resultados fluyan automáticamente al opportunity_filter, luego al quality_scorer, y las mejores lleguen al watchlist? Quiero un flujo continuo, no manual."
+**Métrica:** Pipeline end-to-end funcional. ≥5 candidatas nuevas en watchlist por semana.
+
+### 5.3 Ampliar sector views (PRIORIDAD 3)
+**Problema:** 18 sectores documentados pero faltan Semiconductores, SaaS puro, Utilities, Infrastructure, Aerospace/Defense. Decenas de compounders invisibles en esos sectores.
+**Qué necesita:**
+- Sector view completo para: Semiconductores, Software/SaaS, Utilities/Infrastructure, Aerospace/Defense
+- Cada uno con: TAM, trends, player matrix, 5-10 target companies
+**Cómo instruir:** "He estado mirando sectores y creo que nos faltan algunos importantes. ¿Tenemos sector views de semiconductores, SaaS puro, utilities o aerospace? Si no, ¿puedes crear al menos semiconductores y SaaS? Son sectores con muchos compounders que no estamos viendo."
+**Métrica:** ≥4 nuevos sector views. Cobertura universo >85%.
+
+### Estado de Fase 5
+| Item | Status | Fecha inicio | Fecha completado |
+|------|--------|-------------|-----------------|
+| 5.1 Compounder screener | PENDIENTE | — | — |
+| 5.2 Pipeline automático | PENDIENTE | — | — |
+| 5.3 Sector views nuevos | PENDIENTE | — | — |
 
 ---
 
