@@ -17,8 +17,9 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Incoming images from Telegram
+# Telegram
 telegram/incoming_images/
+telegram/config.json
 
-# Specialist repo (submodule or separate)
+# Specialist repo (symlink, read-only)
 invest_value_manager/
