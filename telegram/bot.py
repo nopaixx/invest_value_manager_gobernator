@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Telegram bot — Angel <-> Gobernator bridge via file I/O.
 
-Simplified v2: no LaBestia, no watchdog, no /conectar.
+v2.1: no runner dependency, fixed JsonlPoller.
 Just moves text: Angel (Telegram) <-> state/ files.
 """
 
@@ -9,6 +9,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 import subprocess
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -25,9 +26,7 @@ WORKDIR = Path("/home/angel/invest_value_manager_gobernator")
 STATE = WORKDIR / "state"
 INBOX = STATE / "angel_inbox.jsonl"
 OUTBOX = STATE / "angel_outbox.jsonl"
-STOP_FILE = STATE / "stop_requested"
-LAST_CYCLE = STATE / "last_cycle.txt"
-WAKE_FILE = STATE / "next_wake_seconds"
+GOB_SESSION = STATE / "gobernator_session.txt"
 CONFIG_FILE = WORKDIR / "telegram" / "config.json"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(message)s")
@@ -75,12 +74,6 @@ async def on_message(update, context):
     if not text:
         return
 
-    # Stop keywords
-    if text.lower() in {"para", "stop", "parada"}:
-        STOP_FILE.touch()
-        await update.message.reply_text("Stop solicitado.")
-        return
-
     # Append to inbox (JSONL)
     STATE.mkdir(exist_ok=True)
     entry = json.dumps({"text": text, "ts": datetime.now(timezone.utc).isoformat()})
@@ -115,41 +108,34 @@ async def on_status(update, context):
     if not is_angel(update):
         return
 
-    # Runner alive?
-    try:
-        r = subprocess.run(["pgrep", "-f", "runner.sh"], capture_output=True, timeout=5)
-        runner = "RUNNING" if r.returncode == 0 else "STOPPED"
-    except Exception:
-        runner = "UNKNOWN"
-
-    # Last cycle
-    last = LAST_CYCLE.read_text().strip() if LAST_CYCLE.exists() else "never"
-
-    # Next wake
-    wake = WAKE_FILE.read_text().strip() + "s" if WAKE_FILE.exists() else "default (300s)"
-
-    # Stop requested?
-    stop = "YES" if STOP_FILE.exists() else "no"
+    # Gobernator session
+    gob_session = GOB_SESSION.read_text().strip() if GOB_SESSION.exists() else "no session"
 
     # Inbox pending
     inbox_lines = 0
     if INBOX.exists():
         inbox_lines = sum(1 for _ in open(INBOX))
 
+    # Outbox size
+    outbox_size = 0
+    if OUTBOX.exists():
+        outbox_size = OUTBOX.stat().st_size
+
     await update.message.reply_text(
-        f"Runner: {runner}\n"
-        f"Last cycle: {last}\n"
-        f"Next wake: {wake}\n"
-        f"Stop: {stop}\n"
-        f"Inbox pending: {inbox_lines} msg"
+        f"Gobernator session: {gob_session[:8]}...\n"
+        f"Inbox pending: {inbox_lines} msg\n"
+        f"Outbox size: {outbox_size} bytes"
     )
 
 
 async def on_stop(update, context):
     if not is_angel(update):
         return
-    STOP_FILE.touch()
-    await update.message.reply_text("Stop solicitado.")
+    # Append stop message to inbox so gobernator sees it
+    entry = json.dumps({"text": "STOP", "ts": datetime.now(timezone.utc).isoformat()})
+    with open(INBOX, "a") as f:
+        f.write(entry + "\n")
+    await update.message.reply_text("Stop enviado al gobernator.")
 
 
 # --- Outbox poller ---
@@ -164,7 +150,11 @@ class JsonlPoller:
             return []
         size = self.path.stat().st_size
         if size <= self.offset:
-            return []
+            if size < self.offset:
+                # File was truncated/reset, start from beginning
+                self.offset = 0
+            else:
+                return []
         entries = []
         with open(self.path) as f:
             f.seek(self.offset)
@@ -175,13 +165,17 @@ class JsonlPoller:
                 try:
                     entries.append(json.loads(line))
                 except json.JSONDecodeError:
-                    for part in line.replace("}{", "}\n{").split("\n"):
-                        part = part.strip()
-                        if part:
-                            try:
-                                entries.append(json.loads(part))
-                            except json.JSONDecodeError:
-                                pass
+                    fixed = re.sub(r'\\([^"\\/bfnrtu])', r'\1', line)
+                    try:
+                        entries.append(json.loads(fixed))
+                    except json.JSONDecodeError:
+                        for part in fixed.replace("}{", "}\n{").split("\n"):
+                            part = part.strip()
+                            if part:
+                                try:
+                                    entries.append(json.loads(part))
+                                except json.JSONDecodeError:
+                                    log.warning(f"Unparseable outbox line: {part[:100]}")
         self.offset = size
         return entries
 
@@ -218,7 +212,7 @@ def main():
 
     app.job_queue.run_repeating(poll_outbox, interval=timedelta(seconds=5), first=timedelta(seconds=5))
 
-    log.info("Bot v2 started")
+    log.info("Bot v2.1 started")
     app.run_polling()
 
 
