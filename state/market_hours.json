@@ -1,0 +1,13 @@
+{
+  "exchanges": {
+    "NYSE": {"tz": "America/New_York", "open": "09:30", "close": "16:00", "days": [1,2,3,4,5]},
+    "NASDAQ": {"tz": "America/New_York", "open": "09:30", "close": "16:00", "days": [1,2,3,4,5]},
+    "LSE": {"tz": "Europe/London", "open": "08:00", "close": "16:30", "days": [1,2,3,4,5]},
+    "Euronext": {"tz": "Europe/Paris", "open": "09:00", "close": "17:30", "days": [1,2,3,4,5]},
+    "Xetra": {"tz": "Europe/Berlin", "open": "09:00", "close": "17:30", "days": [1,2,3,4,5]},
+    "BIT": {"tz": "Europe/Rome", "open": "09:00", "close": "17:25", "days": [1,2,3,4,5]},
+    "SIX": {"tz": "Europe/Zurich", "open": "09:00", "close": "17:20", "days": [1,2,3,4,5]},
+    "OSE": {"tz": "Europe/Oslo", "open": "09:00", "close": "16:20", "days": [1,2,3,4,5]}
+  },
+  "note": "days: 1=Mon..5=Fri. Holidays NOT included — verify manually for market holidays. eToro may have different hours."
+}

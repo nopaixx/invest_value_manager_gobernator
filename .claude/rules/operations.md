@@ -171,12 +171,20 @@
    - Links to relevant news (ask specialist for sources if needed)
    - Contrarian/provocative angle that generates debate
    - End with question to invite engagement (👇)
-   - Mix: 2 smart money/insider, 1 specific thesis ("market is wrong"), 1 macro/historical, 1 portfolio process/credibility
+   - Mix: rotar entre estas temáticas diariamente:
+     a) Smart money / insider signals
+     b) Tesis específica ("market is wrong" + ticker)
+     c) Macro / histórico / geopolítica
+     d) Portfolio process / credibilidad / stress tests
+     e) Quant angle — correlaciones, reverse DCF, probability-weighted scenarios, backtesting (Angel es ex-#1 Numerai, quant trader)
+     f) Baskets / temas seculares — cómo se estructura el portfolio por temas multi-década, qué baskets nacen/mueren y por qué
+     g) Historia personal — de quant puro a quant + value investing
    - TONO HUMANO — que suene escrito por una persona real, no por una IA. Conversacional, imperfecto, directo. Nada de listas perfectas ni frases demasiado pulidas. Como si Angel lo escribiera rápido desde el móvil.
    - LINKS OBLIGATORIOS — cada tweet DEBE incluir uno o varios links a información pública relevante (noticias, artículos, datos) que respalden el punto y que el lector pueda usar para reflexionar. No links decorativos — links que aporten valor y contexto. Pedir al especialista que los proporcione con los datos.
    - TICKERS Y HASHTAGS — SIEMPRE mencionar las posiciones/empresas por nombre y ticker ($GDDY, $TW, $HLNE, etc.). El portfolio es público en eToro. Añadir hashtags con ticker y nombre de empresa para que la gente los encuentre al buscar. No esconder posiciones.
-3. Save to `reports/tweets/YYYY-MM-DD.md` in gobernator repo. Format: ready to copy-paste.
-4. Push to GitHub, send Angel the link via Telegram.
+3. Save to `reports/tweets/YYYY-MM-DD.md` in gobernator repo.
+4. Publish each tweet directly to eToro feed via API: `EtoroClient().create_post(message)`.
+5. Push markdown to GitHub, send Angel the link via Telegram. Confirm posts published on eToro.
 5. Angel copies and posts — I never post directly.
 6. Rotate topics daily — don't repeat the same angles. Use specialist's latest work.
 
@@ -229,5 +237,6 @@
 5. Read `state/specialist_session.txt` — confirm specialist session ID.
 6. Check `git log --oneline -10` in specialist repo — understand recent work without storing specifics.
 7. Read `CLAUDE.md` and `operations.md` — re-internalize rules and protocols.
-8. Do NOT try to reconstruct specific portfolio data from memory. Ask the specialist for current state if needed.
-9. Resume pushing immediately — compaction is not an excuse to slow down or re-orient for multiple cycles.
+8. Read `etoro/ETORO.md` — recover eToro integration context: client usage, instrument IDs, API gotchas, pending plans.
+9. Do NOT try to reconstruct specific portfolio data from memory. Ask the specialist for current state if needed.
+10. Resume pushing immediately — compaction is not an excuse to slow down or re-orient for multiple cycles.

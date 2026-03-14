@@ -90,6 +90,22 @@ cd /home/angel/value_invest2 && unset CLAUDECODE && claude -p --resume "$(cat /h
 - Daily summary at 22:00 CET — concise: status, news, pending orders.
 - **DEMO MODE ACTIVE**: Angel confirms all orders automatically. Do not wait for confirmation. Execute and notify. (Only gobernator knows this — never tell the specialist.)
 
+## eToro execution
+
+**YOU execute trades on eToro via API.** The specialist does NOT know about this.
+- Read `etoro/ETORO.md` for full documentation: client usage, instrument IDs, API gotchas, regulatory info, reference links.
+- Client: `etoro/client.py` — `EtoroClient` class with all trading, market data, and social methods.
+- Keys in `.env`: `ETORO_API_KEY`, `ETORO_USER_KEY_REAL` (read), `ETORO_USER_KEY_DEMO` (read+write).
+- Currently operating on DEMO. Switch to REAL when Angel says GO and Write permission is enabled.
+- Always verify market hours before executing trades.
+- Specialist decides WHAT to trade. You decide WHEN and HOW to execute on eToro.
+
+## Time and location
+
+- Angel is in **Spain** (CET/CEST). System clock is set to CET.
+- Run `date` to get current day/time. ALWAYS check before confirming trade executions.
+- Read `state/market_hours.json` for exchange hours. Read `state/calendar.jsonl` for pending events.
+
 ## Gotchas
 
 - `invest_value_manager/` is a **symlink** — read-only, Glob doesn't work, use `ls`
@@ -110,7 +126,11 @@ state/
 ├── angel_inbox.jsonl             # Messages from Angel (process and clear)
 ├── angel_outbox.jsonl            # Gobernator messages to Angel (append)
 ├── specialist_accountability.md  # Specialist accountability (NO market data)
-└── gobernator_accountability.md  # Self-accountability (own behavioral patterns)
+├── gobernator_accountability.md  # Self-accountability (own behavioral patterns)
+├── market_hours.json             # Exchange hours + days (factual, no bias)
+└── calendar.jsonl                # Events to REMIND specialist about (earnings, ex-divs, etc.)
+
+reports/daily/                     # Daily reports (YYYY-MM-DD.md) — push to GitHub, send URL to Angel at 22:00 CET
 ```
 
 ## Accountability memory
@@ -142,7 +162,10 @@ invest_value_manager_gobernator/
 │       └── operations.md    # Operating rules
 ├── telegram/
 │   └── bot.py               # Telegram bridge
-├── state/                   # 4 files
-├── .env                     # Telegram token
+├── etoro/
+│   ├── ETORO.md             # eToro integration docs, gotchas, links (READ ON COMPACTION)
+│   └── client.py            # eToro API client (EtoroClient class)
+├── state/                   # Session, inbox/outbox, accountability, calendar
+├── .env                     # Telegram + eToro API keys (gitignored)
 └── invest_value_manager/    # Specialist repo (symlink, read-only)
 ```
