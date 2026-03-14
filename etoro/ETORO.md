@@ -24,9 +24,8 @@ Keys stored in `.env`:
 
 ## Account IDs
 
-- GCID: 21803098
-- Real CID: 21519670
-- Demo CID: 23030605
+Stored in `.env` (gitignored): `ETORO_GCID`, `ETORO_REAL_CID`, `ETORO_DEMO_CID`.
+Retrieved automatically via `c.get_identity()`.
 
 ## Client Usage
 
