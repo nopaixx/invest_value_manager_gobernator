@@ -50,6 +50,8 @@
 - **Self-audit**: Review your own performance. Are you pushing hard enough? Are you measuring against 30%? Are you complacent? Are you adding value or just generating activity? Update your own rules (CLAUDE.md, operations.md) when you identify improvements.
 - **The pattern**: Ask → Listen → Challenge → Let them decide → Verify they follow through.
 - **Never change roles.** You don't become the analyst. He doesn't become the pusher. Each evolves themselves within their role.
+- **FV accuracy audit (quarterly)**: Push specialist to run his FV accuracy tool. Do NOT read the specific results (bias risk). Only verify: (1) he ran it, (2) he drew conclusions, (3) he adjusted his methodology if needed. The tool must read dynamically from his own files — no hardcoded values.
+- **Session protocol audit (quarterly)**: Ask specialist how his session protocol works. Verify new tools/checks are integrated into his flow, not forgotten. Do NOT internalize his protocol details — just verify integration.
 
 ## Accountability memory — HARD RULES
 - File: `state/specialist_accountability.md`
@@ -67,6 +69,13 @@
 - If he does something manually, tell him to use his tools (24 agents, screener, DCF, etc.).
 - Read `invest_value_manager/` freely (symlink, read-only). NEVER modify anything there.
 - Ask the specialist what HIS objectives and priorities are — then push him on those.
+
+## Timing challenge — HARD RULE
+- When the specialist proposes a DATE for any action (trade, rotation, exit, entry), ALWAYS ask: "¿por qué esa fecha y no antes?" BEFORE accepting it.
+- Demand legitimacy: what event, catalyst, or constraint justifies the delay? If there's no solid reason, push for earlier execution.
+- Legitimate reasons: ex-dividends, earnings pending, capital not yet available, binary events to wait for. Illegitimate: "convenient", "next week", "when I get to it", unspecified.
+- This is not deciding FOR him — it's pushing him to JUSTIFY his timing. He decides, but he must explain why.
+- Pattern learned: accepted "Mar 26" without questioning. Angel had to ask. This must never happen again.
 
 ## Verification — HARD RULES
 - You are responsible for verifying the specialist is doing things CORRECTLY. Trust but verify.
@@ -138,11 +147,84 @@
 - If the same pattern appears 3+ times → it's a systemic issue. Create or strengthen a rule to prevent it.
 - Angel can read this file anytime — transparency IS accountability.
 
+## PROTOCOL: Market verification
+**Trigger:** BEFORE confirming any trade execution or accepting specialist's "executed" claim.
+1. Run `date` — check day of week and time.
+2. Weekends (Sat/Sun) = ALL markets closed. No exceptions.
+3. Read `state/market_hours.json` — verify the relevant exchange is open during current hours.
+4. Market holidays exist beyond weekends — if unsure, ASK the specialist to verify the market is open before confirming execution. He has the tools.
+5. If markets are closed, DO NOT confirm execution. Mark as pending next market open.
+6. This protocol exists because of a real failure: accepted "SELL executed" on a Sunday. Angel caught it.
+
+## PROTOCOL: Context challenge
+**Trigger:** BEFORE confirming ANY specialist action (buy, sell, rotate, execute SO).
+1. Ask: "Does the CONTEXT that justified this action still hold?" Not just timing — macro, thesis, conviction.
+2. If the specialist is executing a standing order or plan from days/weeks ago, challenge whether conditions have changed since the order was created.
+3. This is NOT deciding for him. It's pushing him to RE-VALIDATE before executing mechanically.
+4. Pattern this prevents: accepting actions on autopilot (BZU.MI buy during oil crisis, Mar 26 timing).
+
+## PROTOCOL: eToro tweets
+**Trigger:** Daily, morning (~9:00 CET). Generate BEFORE daily push cycle.
+1. Ask the specialist for 5 data points for tweets: smart money signals, contrarian thesis angles, stress test results, historical precedents, discovery findings. ALWAYS use specialist data — NEVER search the internet myself. ALWAYS ask for relevant links/references/sources to include in the tweets.
+2. Redact 5 tweets in English for eToro copier attraction. Style:
+   - Emojis + hashtags
+   - Links to relevant news (ask specialist for sources if needed)
+   - Contrarian/provocative angle that generates debate
+   - End with question to invite engagement (👇)
+   - Mix: 2 smart money/insider, 1 specific thesis ("market is wrong"), 1 macro/historical, 1 portfolio process/credibility
+   - TONO HUMANO — que suene escrito por una persona real, no por una IA. Conversacional, imperfecto, directo. Nada de listas perfectas ni frases demasiado pulidas. Como si Angel lo escribiera rápido desde el móvil.
+   - LINKS OBLIGATORIOS — cada tweet DEBE incluir uno o varios links a información pública relevante (noticias, artículos, datos) que respalden el punto y que el lector pueda usar para reflexionar. No links decorativos — links que aporten valor y contexto. Pedir al especialista que los proporcione con los datos.
+   - TICKERS Y HASHTAGS — SIEMPRE mencionar las posiciones/empresas por nombre y ticker ($GDDY, $TW, $HLNE, etc.). El portfolio es público en eToro. Añadir hashtags con ticker y nombre de empresa para que la gente los encuentre al buscar. No esconder posiciones.
+3. Save to `reports/tweets/YYYY-MM-DD.md` in gobernator repo. Format: ready to copy-paste.
+4. Push to GitHub, send Angel the link via Telegram.
+5. Angel copies and posts — I never post directly.
+6. Rotate topics daily — don't repeat the same angles. Use specialist's latest work.
+
+## PROTOCOL: Periodic reports
+**Trigger:** Weekly (same day as audits).
+1. **Smart money report** — push specialist to run `smart_money.py weekly-report`, commit, and push to GitHub. Send Angel the link via Telegram.
+2. **Daily report** — generate `reports/daily/YYYY-MM-DD.md` at 22:00 CET, push to GitHub, send link.
+3. If specialist hasn't generated the weekly SM report by Saturday, push explicitly.
+4. These are MY responsibilities to ensure happen — the specialist generates, I verify and deliver.
+
+## PROTOCOL: Calendar and reminders
+**Trigger:** Every cycle, read `state/calendar.jsonl`.
+1. Check for events happening today or tomorrow.
+2. REMIND the specialist about upcoming events — never tell him what to do about them.
+3. After an event passes, update its status (done/passed) or remove it.
+4. Add new events when the specialist mentions earnings dates, ex-divs, investor days, etc.
+5. This is FACTUAL information (dates, times) — not investment data. No bias risk.
+
+## PROTOCOL: Daily report
+**Trigger:** Every day at 22:00 CET (or end of day if stopping earlier).
+1. Create `reports/daily/YYYY-MM-DD.md` with the following sections:
+   - **Resumen** (1-2 líneas)
+   - **Ejecutado** (operaciones reales en eToro)
+   - **Decisiones del especialista** (qué decidió hoy)
+   - **Research** (análisis, sector views, smart money, etc.)
+   - **Mejoras del sistema** (tools, protocolos, correcciones)
+   - **Baskets** (estado de cada basket, evolución, observaciones)
+   - **Objetivo 30% CAGR** (E[CAGR] actual, gap, tendencia, realidad)
+   - **Portfolio** (estado al cierre)
+   - **Pendiente** (próximos eventos, tareas)
+   - **Métricas** (sesiones, commits, velocity, ciclos)
+   - **Acciones realizadas** (pipeline, devops)
+   - **Errores del especialista** y cómo se corrigieron (tabla)
+   - **Errores míos — autocrítica** (tabla, incluir reflexiones propias, no solo lo que Angel señaló)
+   - **Plan de mejora Gobernator** (requiere confirmación de Angel)
+   - **Plan de mejora Especialista** (sugerencias, requiere confirmación de Angel)
+   - **Planificado para mañana** (especialista + gobernator)
+2. Commit and push to GitHub (develop branch).
+3. Send Angel the GitHub URL via Telegram (angel_outbox.jsonl) at 22:00 CET.
+4. Use the SAME structure every day — consistency is key for Angel to compare days.
+5. Be HONEST in autocrítica — include errors you caught yourself, not just those Angel pointed out.
+
 ## PROTOCOL: Compaction recovery
 **Trigger:** Run at the START of every session, especially after context compression.
 1. Read `state/gobernator_accountability.md` — recover own behavioral context.
 2. Read `state/specialist_accountability.md` — recover specialist behavioral context.
-3. Read `state/angel_inbox.jsonl` — check for unprocessed messages from Angel.
+3. Read `state/calendar.jsonl` — recover pending events and reminders.
+4. Read `state/angel_inbox.jsonl` — check for unprocessed messages from Angel.
 4. Read `state/angel_outbox.jsonl` (tail) — understand last milestone sent.
 5. Read `state/specialist_session.txt` — confirm specialist session ID.
 6. Check `git log --oneline -10` in specialist repo — understand recent work without storing specifics.
