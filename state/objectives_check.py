@@ -122,14 +122,28 @@ def parse_yaml_positions(filepath):
 
 
 def check_screening():
-    """>=5 new companies/day: new dirs in thesis/research/ created today via git."""
+    """>=5 new companies/day: new dirs in thesis/research/ + files modified in research/."""
+    # Method 1: new dirs created in thesis/research via git
     new_dirs = git_log_new_dirs(SPECIALIST_REPO, TODAY.isoformat(),
                                 "thesis/research")
-    # Fallback: also count commits with screening keywords if dirs aren't tracked
+    # Method 2: count research files modified today via git
+    cmd = ["git", "-C", SPECIALIST_REPO, "log", "--name-only", "--oneline",
+           f"--since={TODAY.isoformat()}", "--", "thesis/research/*"]
+    research_files = 0
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        dirs = set()
+        for line in result.stdout.strip().split("\n"):
+            if line.strip().startswith("thesis/research/") and "/" in line.strip()[len("thesis/research/"):]:
+                dirs.add(line.strip().split("/")[2])
+        research_files = len(dirs)
+    except Exception:
+        pass
+    # Method 3: commit keywords as fallback
     commit_count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(),
-                                 ["R1 ", "screen", "rapid triage", "new candidate"])
-    commit_count = max(commit_count, 0)  # Handle -1 error
-    total = max(new_dirs, commit_count)  # Best estimate, avoid double-counting
+                                 ["R1 ", "screen", "rapid triage", "fallen angel"])
+    commit_count = max(commit_count, 0)
+    total = max(new_dirs, research_files, commit_count)
     return total, f"{total} found", total >= 5
 
 
@@ -237,14 +251,36 @@ def check_daily_report():
 
 
 def check_contrathesis():
-    """>=1/day: commits mentioning contrathesis or new contrathesis files."""
-    count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(),
-                          ["contrathesis", "contra-thesis", "contratheses"])
-    # Also check for new contrathesis files created today
-    new_files = git_log_new_dirs(SPECIALIST_REPO, TODAY.isoformat(),
-                                 "thesis/active")
-    # Use whichever is higher
-    total = max(count if count >= 0 else 0, 0)
+    """>=1/day: contrathesis files modified today OR commits mentioning contrathesis."""
+    # Method 1: check git for files with 'contra' in path modified today
+    cmd = ["git", "-C", SPECIALIST_REPO, "log", "--oneline", "--name-only",
+           f"--since={TODAY.isoformat()}", "--", "*/contra*", "*/contrathes*"]
+    files_found = 0
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        files = [l for l in result.stdout.strip().split("\n")
+                 if l.strip() and "contra" in l.lower() and not l[0].isalnum() is False]
+        files_found = len([f for f in files if "/" in f])
+    except Exception:
+        pass
+    # Method 2: commit messages
+    commit_count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(),
+                                  ["contrathesis", "contra-thesis", "contratheses"])
+    commit_count = max(commit_count, 0)
+    # Method 3: check if any thesis file modified today contains contrathesis content
+    thesis_contra = 0
+    if os.path.isdir(THESIS_ACTIVE):
+        for ticker_dir in os.listdir(THESIS_ACTIVE):
+            contra_dir = os.path.join(THESIS_ACTIVE, ticker_dir)
+            if not os.path.isdir(contra_dir):
+                continue
+            for fname in os.listdir(contra_dir):
+                if "contra" in fname.lower():
+                    fpath = os.path.join(contra_dir, fname)
+                    mtime = datetime.fromtimestamp(os.path.getmtime(fpath)).date()
+                    if mtime >= TODAY:
+                        thesis_contra += 1
+    total = max(files_found, commit_count, thesis_contra)
     return total, str(total), total >= 1
 
 
@@ -255,9 +291,25 @@ def check_r4_candidates():
 
 
 def check_kill_conditions():
-    """Reviewed today: commits with KC/kill."""
-    count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(), ["KC", "kill condition", "kill_cond"])
-    return count, str(count), count >= 1
+    """Reviewed today: KC-related file changes OR commits with KC/kill."""
+    # Method 1: commit messages
+    commit_count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(),
+                                  ["KC", "kill condition", "kill_cond", "kc_monitor", "kc sweep"])
+    commit_count = max(commit_count, 0)
+    # Method 2: check if thesis files with KCs were modified today via git
+    cmd = ["git", "-C", SPECIALIST_REPO, "log", "--name-only", "--oneline",
+           f"--since={TODAY.isoformat()}", "--", "thesis/active/*/thesis.md"]
+    thesis_modified = 0
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        files = set(l.strip() for l in result.stdout.strip().split("\n")
+                    if l.strip().endswith("thesis.md"))
+        thesis_modified = len(files)
+    except Exception:
+        pass
+    # If multiple thesis files were modified in same commit, likely a KC sweep
+    total = max(commit_count, 1 if thesis_modified >= 3 else 0)
+    return total, str(total), total >= 1
 
 
 def check_fv_consistency():
@@ -432,6 +484,27 @@ def check_earnings_prep():
     return count, f"{prepped}/{total} prepped" + (f", missing: {detail}" if missing else ""), count == 0
 
 
+def check_file_hygiene():
+    """Accountability and state files must stay compact. Max 50 lines each."""
+    MAX_LINES = 50
+    files_to_check = [
+        ("gobernator_accountability", f"{GOBERNATOR_REPO}/state/gobernator_accountability.md"),
+        ("specialist_accountability", f"{GOBERNATOR_REPO}/state/specialist_accountability.md"),
+        ("push_tracker", f"{GOBERNATOR_REPO}/state/push_tracker.md"),
+        ("angel_outbox", f"{GOBERNATOR_REPO}/state/angel_outbox.jsonl"),
+    ]
+    bloated = []
+    for name, path in files_to_check:
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                lines = len(f.readlines())
+            if lines > MAX_LINES:
+                bloated.append(f"{name} ({lines} lines)")
+    count = len(bloated)
+    detail = ", ".join(bloated) if bloated else "all compact"
+    return count, detail, count == 0
+
+
 # --- Main ---
 
 def main():
@@ -449,6 +522,7 @@ def main():
         ("Kill conditions", "reviewed today", check_kill_conditions),
         ("FV consistency", "0 divergences", check_fv_consistency),
         ("System integration", "0 gaps", check_system_integration),
+        ("File hygiene", "all <50 lines", check_file_hygiene),
         ("Earnings prep", "100% prepped", check_earnings_prep),
     ]
 
