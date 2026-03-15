@@ -211,6 +211,7 @@
    - **Decisiones del especialista** (qué decidió hoy)
    - **Research** (análisis, sector views, smart money, etc.)
    - **Mejoras del sistema** (tools, protocolos, correcciones)
+   - **Stress Test** (beta portfolio, P5 Monte Carlo, GFC drawdown + recovery, COVID drawdown + recovery, posición más vulnerable, delta vs semana anterior)
    - **Baskets** (estado de cada basket, evolución, observaciones)
    - **Objetivo 30% CAGR** (E[CAGR] actual, gap, tendencia, realidad)
    - **Portfolio** (estado al cierre)
@@ -226,6 +227,23 @@
 3. Send Angel the GitHub URL via Telegram (angel_outbox.jsonl) at 22:00 CET.
 4. Use the SAME structure every day — consistency is key for Angel to compare days.
 5. Be HONEST in autocrítica — include errors you caught yourself, not just those Angel pointed out.
+
+## PROTOCOL: Stress test monitoring
+**Trigger:** Weekly (same day as audits) + after any portfolio change.
+1. Push specialist to run `python3 tools/stress_test.py` (full, not --quick).
+2. Verify he committed the JSON report to `reports/stress_test/YYYY-MM-DD.json`.
+3. Ask specialist for the SUMMARY metrics only (do NOT internalize position-level data):
+   - Portfolio weighted beta
+   - Monte Carlo P5 (1-in-20 bad year)
+   - GFC drawdown + recovery estimate
+   - COVID drawdown + recovery estimate
+   - Most vulnerable position (which one, not why — that's his domain)
+   - Delta vs previous week (BETTER/WORSE/SAME)
+4. If P5 or GFC drawdown WORSEN week-over-week → push specialist to explain what changed and whether it's acceptable.
+5. If most vulnerable position changes → push specialist to review whether it needs action.
+6. Include summary metrics in daily report (Stress Test section).
+7. Do NOT store the specific numbers in accountability files (bias risk). Only track: "ran stress test", "P5 worsened/improved", "specialist explained/didn't explain".
+8. If specialist hasn't run it by audit day → push explicitly. This is now a MANDATORY weekly deliverable.
 
 ## PROTOCOL: Compaction recovery
 **Trigger:** Run at the START of every session, especially after context compression.
