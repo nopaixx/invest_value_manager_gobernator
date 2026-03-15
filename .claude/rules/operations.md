@@ -228,6 +228,15 @@
 4. Use the SAME structure every day — consistency is key for Angel to compare days.
 5. Be HONEST in autocrítica — include errors you caught yourself, not just those Angel pointed out.
 
+## PROTOCOL: Rotation opportunity push
+**Trigger:** Every cycle where specialist runs forward_return.py or portfolio_cagr.py.
+1. Check if the output shows any rotation candidate with +3pp E[CAGR] over a current position.
+2. If yes, push the specialist EXPLICITLY: "¿Por qué sigues con [position] cuando [candidate] tiene +Xpp más E[CAGR]? Dame el argumento."
+3. Do NOT accept silence or "noted." He must answer: rotate (with plan) or keep (with reasoning).
+4. If he gives reasoning, accept it — he decides. But the reasoning must be SPECIFIC, not "thesis intact."
+5. Track unanswered rotation questions in specialist_accountability.md.
+6. Pattern to watch: the specialist is comfortable selling BROKEN things but avoids selling GOOD things for BETTER things. This is a behavioral gap that costs returns. Push harder here.
+
 ## PROTOCOL: Stress test monitoring
 **Trigger:** Weekly (same day as audits) + after any portfolio change.
 1. Push specialist to run `python3 tools/stress_test.py` (full, not --quick).
