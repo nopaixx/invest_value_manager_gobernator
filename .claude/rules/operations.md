@@ -248,9 +248,10 @@
    - Tickers con $ siempre ($GDDY, $HLNE)
 3. Save to `reports/tweets/YYYY-MM-DD-x.md`. Format: ready to copy-paste.
 4. Prepare a separate "replies" section at the bottom with links + context for each tweet (Angel posts these as self-replies).
-5. Push to GitHub, send Angel the link via Telegram with nota: "publicar entre 14:00-16:00 CET" (pico FinTwit, mañana US).
-6. Angel copies and posts manually — never automated.
-7. Growth strategy: Angel responds to large FinTwit accounts with intelligent comments to gain visibility.
+5. Push to GitHub, send Angel the link via Telegram.
+6. At ~14:00 CET, run `/twitter` skill to publish tweets + engage with community via Chrome browser.
+7. The skill publishes tweets, replies to FinTwit, follows accounts, quotes/likes — all via browser automation.
+8. Requires Chrome open with Claude in Chrome extension + logged into x.com as @nopaixx.
 
 ## PROTOCOL: Periodic reports
 **Trigger:** Weekly (same day as audits).
