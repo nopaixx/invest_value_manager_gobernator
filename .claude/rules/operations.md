@@ -40,7 +40,7 @@
 ## Anti-repetition — HARD RULE
 - Read `state/push_tracker.md` BEFORE every push to the specialist.
 - If a topic is in RESUELTO → do NOT push it again. Move to next ABIERTO item.
-- After each push: update tracker (move resolved items, add new open items).
+- **AFTER every push: update push_tracker.md IMMEDIATELY. No exceptions.** Move resolved → RESUELTO, add new open items → ABIERTO. This is NOT optional — skipping it causes repetition (BZU.MI asked 10+ times because tracker wasn't updated).
 - Max 15 lines. Delete resolved items older than 3 days — they're history, not active.
 - After compaction: tracker tells you exactly where you are. No re-orientation needed.
 
