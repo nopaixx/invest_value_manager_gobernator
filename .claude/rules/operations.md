@@ -230,11 +230,27 @@
    - TONO HUMANO — que suene escrito por una persona real, no por una IA. Conversacional, imperfecto, directo. Nada de listas perfectas ni frases demasiado pulidas. Como si Angel lo escribiera rápido desde el móvil.
    - LINKS OBLIGATORIOS — cada tweet DEBE incluir uno o varios links a información pública relevante (noticias, artículos, datos) que respalden el punto y que el lector pueda usar para reflexionar. No links decorativos — links que aporten valor y contexto. Pedir al especialista que los proporcione con los datos.
    - TICKERS Y HASHTAGS — SIEMPRE mencionar las posiciones/empresas por nombre y ticker ($GDDY, $TW, $HLNE, etc.). El portfolio es público en eToro. Añadir hashtags con ticker y nombre de empresa para que la gente los encuentre al buscar. No esconder posiciones.
-3. Save to `reports/tweets/YYYY-MM-DD.md` in gobernator repo.
+3. Save eToro version to `reports/tweets/YYYY-MM-DD.md` in gobernator repo.
 4. Publish each tweet directly to eToro feed via API: `EtoroClient().create_post(message)`.
 5. Push markdown to GitHub, send Angel the link via Telegram. Confirm posts published on eToro.
-5. Angel copies and posts — I never post directly.
 6. Rotate topics daily — don't repeat the same angles. Use specialist's latest work.
+
+## PROTOCOL: X/Twitter tweets
+**Trigger:** Daily, same time as eToro tweets. Generate BOTH versions.
+1. Generate 5 tweets adapted for X from the same data as eToro tweets. Same topics, different format.
+2. X tweet rules (different from eToro):
+   - MAX 280 characters each — shorter, punchier, more provocative
+   - NO links in the main tweet (kills reach). Links go in a self-reply (prepare reply text separately)
+   - Pregunta al final SIEMPRE (algoritmo premia respuestas)
+   - Max 2 hashtags (not 5+). Less is more on X.
+   - Datos concretos > opiniones genéricas. "$ADBE P/E 14.9x" > "Adobe está barata"
+   - Tono directo, imperfecto, como escrito desde el móvil
+   - Tickers con $ siempre ($GDDY, $HLNE)
+3. Save to `reports/tweets/YYYY-MM-DD-x.md`. Format: ready to copy-paste.
+4. Prepare a separate "replies" section at the bottom with links + context for each tweet (Angel posts these as self-replies).
+5. Push to GitHub, send Angel the link via Telegram with nota: "publicar entre 14:00-16:00 CET" (pico FinTwit, mañana US).
+6. Angel copies and posts manually — never automated.
+7. Growth strategy: Angel responds to large FinTwit accounts with intelligent comments to gain visibility.
 
 ## PROTOCOL: Periodic reports
 **Trigger:** Weekly (same day as audits).
