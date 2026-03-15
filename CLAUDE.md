@@ -125,6 +125,7 @@ state/
 ├── specialist_session.txt        # Specialist session UUID (permanent)
 ├── angel_inbox.jsonl             # Messages from Angel (process and clear)
 ├── angel_outbox.jsonl            # Gobernator messages to Angel (append)
+├── push_tracker.md              # What's resolved (don't repeat) + what's open (push next). Read EVERY cycle.
 ├── specialist_accountability.md  # Specialist accountability (NO market data)
 ├── gobernator_accountability.md  # Self-accountability (own behavioral patterns)
 ├── market_hours.json             # Exchange hours + days (factual, no bias)

@@ -50,4 +50,5 @@
 - 2026-03-15: COMMITMENT — run stress_test.py weekly (same day as audits) + after any portfolio change. Report JSON must be committed. This is now MANDATORY, not optional.
 - 2026-03-15: POSITIVE — SO sweep cleaned 3 stale SOs (pipeline 20→17). STMN.SW caught by GM gate before purchase — system working correctly.
 - 2026-03-15: POSITIVE — responded well to audit feedback. 5 bugs found → 5 fixed. COVID scenario added. Recovery times added. Zero pushback, immediate execution.
+- 2026-03-15: AUDIT S200 — 3 issues found after Angel prompted me to audit: (1) regime detector silent failure (except pass), (2) portfolio_stats.py hardcoded FX (6th tool with this pattern), (3) intentional_weight values stale (wrong last-action references). All 3 fixed in ec1af72. Pattern: FX hardcoding recurs despite previous fixes — specialist fixes one tool but not others. Monitor if pattern is finally eliminated.
 - Next audit: verify Mar 26 execution happens (4 trades), monitor "asking permission" pattern, verify FOMC processing Mar 18, verify stress test ran this week, check if specialist closes session over weekend.

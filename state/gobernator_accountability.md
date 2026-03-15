@@ -55,6 +55,10 @@
 - Visible progress: stress_test.py created, audited, 5+4 bugs fixed, COVID added, recovery times added, 3 SOs purged, tweets generated. PASS.
 - POSITIVE: Tool audit caught 5 real problems (FX hardcoded, SECTOR_MAP silent defaults, fixed seed, beta fallback, cost-basis weights). Angel's feedback led to COVID scenario + recovery times + hard-fail on unmapped tickers. Good collaboration.
 - NEW RESPONSIBILITY: stress test monitoring protocol added. Must verify weekly execution + flag if metrics worsen.
+- VERIFICATION GAP — did not audit S199-S200 changes immediately when specialist committed them. Angel had to ask "as auditado lo que ha echo?". Pattern: I accept specialist's "done" without verifying the diff. This is the SAME pattern as timing acceptance and context challenge — I accept without questioning. NEW PROTOCOL needed: audit EVERY system change before accepting it.
+- S199-S200 AUDIT RESULTS (post-Angel prompt): Found 3 issues: (1) regime detector silent failure on yfinance error (silent default pattern), (2) portfolio_stats.py still uses hardcoded FX fallbacks instead of fx_defaults.py (recurring inconsistency pattern), (3) intentional_weight values may not reflect actual last action (stale data risk). Pushed specialist to fix all 3.
+- SELF-AUDIT of own tool (objectives_check.py): Found 9 issues in my own script — same patterns I audit in the specialist (silent failures, false positives, hardcoded assumptions). Fixed: git error now returns -1 not 0, contrathesis search narrowed, system integration check added. Pattern: I create tools with the same biases I criticize.
+- INTEGRATION GAP: Created objectives_check.py but didn't reference it in CLAUDE.md or operations.md. After compaction, would not have known it exists. Fixed: added to anti-complacency protocol, compaction recovery, and as HARD RULE. Pattern: same as specialist — creates tools, doesn't integrate them.
 
 ## Rules for this file
 - Review EVERY cycle (part of anti-complacency protocol).
