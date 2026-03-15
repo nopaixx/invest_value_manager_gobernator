@@ -143,7 +143,24 @@ def check_screening():
     commit_count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(),
                                  ["R1 ", "screen", "rapid triage", "fallen angel"])
     commit_count = max(commit_count, 0)
-    total = max(new_dirs, research_files, commit_count)
+    # Method 4: screening report files in reports/
+    screening_reports = 0
+    reports_dir = f"{SPECIALIST_REPO}/reports"
+    if os.path.isdir(reports_dir):
+        for f in os.listdir(reports_dir):
+            if "screen" in f.lower() and TODAY.isoformat() in f:
+                # Try to count candidates in the report
+                fpath = os.path.join(reports_dir, f)
+                try:
+                    with open(fpath, "r") as fh:
+                        content = fh.read()
+                    # Count ticker-like patterns (e.g., lines with | that look like table rows)
+                    table_rows = [l for l in content.split("\n")
+                                  if "|" in l and not l.strip().startswith("---") and not l.strip().startswith("|--")]
+                    screening_reports = max(screening_reports, len(table_rows) - 1)  # minus header
+                except Exception:
+                    screening_reports = max(screening_reports, 1)
+    total = max(new_dirs, research_files, commit_count, screening_reports)
     return total, f"{total} found", total >= 5
 
 
@@ -291,7 +308,7 @@ def check_r4_candidates():
 
 
 def check_kill_conditions():
-    """Reviewed today: KC-related file changes OR commits with KC/kill."""
+    """Reviewed today: KC-related file changes OR commits with KC/kill OR kc_sweep report."""
     # Method 1: commit messages
     commit_count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(),
                                   ["KC", "kill condition", "kill_cond", "kc_monitor", "kc sweep"])
@@ -307,8 +324,16 @@ def check_kill_conditions():
         thesis_modified = len(files)
     except Exception:
         pass
+    # Method 3: check for kc_sweep report file today
+    kc_report = 0
+    reports_dir = f"{SPECIALIST_REPO}/reports"
+    if os.path.isdir(reports_dir):
+        for f in os.listdir(reports_dir):
+            if "kc" in f.lower() and TODAY.isoformat() in f:
+                kc_report = 1
+                break
     # If multiple thesis files were modified in same commit, likely a KC sweep
-    total = max(commit_count, 1 if thesis_modified >= 3 else 0)
+    total = max(commit_count, 1 if thesis_modified >= 3 else 0, kc_report)
     return total, str(total), total >= 1
 
 
