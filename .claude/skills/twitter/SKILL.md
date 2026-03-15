@@ -78,7 +78,43 @@ g) Personal story — from pure quant to quant + value
 - Mention our eToro portfolio link in bio, not in replies
 - Be genuinely helpful — growth follows value
 
+## Growth Strategy (learned from Grok, March 2026)
+
+### Core Differentiator
+"Ex-Numerai #1 quant + public eToro portfolio + international shorts" = extremely rare on FinTwit. Lean ALL the way in.
+
+### Reply Strategy (fastest 0→1K path)
+- **20 replies/day** to big accounts (QCompounding, BrianFeroldi, morganhousel, iancassel, etc.)
+- Reply EARLY on their posts (first 30 min = most visibility)
+- Go to their PROFILE, like + reply their recent posts — not just search
+- Add data/experience, never generic comments
+- Diversify topics: don't repeat ADBE/GDDY. Use correlations, stress test, baskets, shorts, kill conditions, insider clusters, geographic diversification, regime detection, etc.
+
+### Content Strategy (barbell approach)
+- **Short punchy tweets** (daily) — one data point, one insight, one question
+- **Threads** (1-2/week) — deep dives that feel like "insider leaks" or "here's exactly how I do it"
+- **Polls** occasionally ("Value trap or bargain? Vote + why")
+- **Quote-tweets** of viral posts with our quant angle
+
+### Thread Ideas (high engagement, from Grok)
+1. "From Numerai #1 to Value Investing" — origin story + why quant alone isn't enough
+2. "My 12 Quality Compounders" — full holdings, DCF, QS, insider data, 1 tweet per position
+3. "Monte Carlo Stress Test: My Entire Portfolio" — recession, inflation, oil shock scenarios
+4. "Why I Short $TSLA at 386x and Buy $ADBE at 14.9x" — contrarian thesis with data
+5. "$3.2M in Insider Buying Nobody Noticed" — $HLNE deep dive with academic research
+
+### Milestones
+- Month 1: 100-200 followers. Profile + 20 replies/day + 3 posts/week + one intro thread
+- Month 2-3: 500+. Ramp to 5 posts/week + portfolio update thread. Track analytics
+- By 1K: reciprocity — people start replying to YOU
+
+### What Kills Growth
+- Posting more than engaging (ratio should be 3:1 replies:posts)
+- Generic hot takes or recycled news
+- AI-sounding content (no AI slop)
+- Only talking about same 2-3 tickers
+
 ## Schedule
 - Best time to publish: 14:00-16:00 CET (morning US = peak FinTwit)
 - Run this skill ONCE per day
-- Total session: ~20-30 minutes
+- Total session: ~30-40 minutes (20 min engagement + 10-15 min publishing)
