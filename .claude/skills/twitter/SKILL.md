@@ -28,12 +28,16 @@ Call `tabs_context_mcp` with `createIfEmpty: true`
 ### Step 4: Publish tweets
 - Navigate to x.com/home
 - For each tweet in today's file:
-  - Click the post text field
+  - Click the post text field (ref for "Post text" textbox)
   - Type the tweet text
-  - Check the character indicator — if red, shorten the text and retry
-  - Click Post button
-  - Wait 2-3 seconds between tweets
+  - Take screenshot to check character indicator — if red circle with negative number, clear text (ctrl+a, Backspace) and rewrite shorter
+  - **PUBLISH VIA JAVASCRIPT** (click by coordinates is unreliable):
+    - Home timeline post: `document.querySelector('[data-testid="tweetButtonInline"]').click()`
+    - Reply/Quote modal post: `document.querySelector('[data-testid="tweetButton"]').click()`
+  - Wait 3 seconds, take screenshot to verify "Your post was sent" or empty composer
+  - If text is still in composer, the post failed — retry with JavaScript click
 - Space tweets 2-3 minutes apart for better algorithm treatment
+- **NEVER use coordinate clicks for Post/Reply buttons** — they miss due to viewport offset issues
 
 ### Step 5: Engage with community (15-20 min)
 1. **Search #ValueInvesting, #QualityInvesting, $ADBE, $HLNE, $GDDY** (our tickers)
