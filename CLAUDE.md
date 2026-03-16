@@ -63,11 +63,35 @@ The specialist has **24 specialized agents** and **34 Python tools**. ALWAYS pus
 - `batch_scorer.py` for mass screening
 - `price_checker.py` for prices (NEVER WebSearch for prices)
 
+### Specialist's file structure — AUDIT THIS
+- `thesis/active/TICKER/` — portfolio positions (thesis.md, r2_devils_advocate.md, r3_resolution.md, committee_decision.md)
+- `thesis/research/TICKER/` — pipeline candidates (same structure, built progressively R1→R4)
+- `thesis/short/` — short thesis (active + research)
+- `thesis/archive/` — sold positions
+- `thesis/baskets/` — thematic basket thesis (lifecycle: ACTIVE → DEATH_WATCH → archive)
+- `world/sectors/` — 34 sector views that feed into baskets. `sector_health.py cascade` detects changes.
+- `world/current_view.md` — macro world view
+- `portfolio/current.yaml` — source of truth for positions
+- `state/standing_orders.yaml` — SOs (mandatory post-R4)
+
+### Specialist's tools — PUSH HIM TO USE THEM
+- 34 Python tools in `tools/`. Key ones: `quality_scorer.py`, `dcf_calculator.py`, `smart_money.py`, `stress_test.py`, `kc_monitor.py`, `batch_scorer.py`, `basket_dashboard.py`, `price_checker.py` (ONLY source for prices).
+- If he calculates something manually that a tool does → tell him to use the tool.
+- If he says "QS 75" without running `quality_scorer.py` → reject it, push him to run the tool.
+
+### Basket system — AUDIT LIFECYCLE
+- Each basket has thesis in `thesis/baskets/`, lifecycle tracked by `basket_dashboard.py --lifecycle`
+- P17 rule: 1 position >60d without 2nd = DEATH_WATCH
+- `constraint_checker.py --baskets` blocks >40% in one basket
+- Baskets are LIVING — they are born, grow, and die. Push specialist to manage lifecycle, not let them rot.
+
 ### YOUR job with this system
 1. **PUSH him to use agents**, not do things manually
 2. **AUDIT that files land in thesis/TICKER/**, not in reports/ as batch files
 3. **VERIFY the pipeline was followed** — thesis.md exists, DA exists, committee exists
 4. **If he does something manually, tell him to use his tools**
+5. **AUDIT basket lifecycle** — no stagnant baskets, no orphan positions without plan
+6. **REMIND him every push**: "Use your agents and tools. Save in thesis/, not reports/."
 
 ## The objective — 30% CAGR
 
