@@ -139,7 +139,7 @@ def check_screening():
     # SECONDARY: new dirs created in thesis/research (may not have thesis.md yet)
     new_dirs = git_log_new_dirs(SPECIALIST_REPO, TODAY.isoformat(), "thesis/research")
     total = max(len(tickers), new_dirs)
-    return total, f"{total} thesis.md in research/", total >= 25
+    return total, f"{total} thesis.md in research/", total >= 5
 
 
 def check_pipeline():
@@ -274,7 +274,7 @@ def check_pipeline_velocity():
     except Exception:
         pass
     total = len(files)
-    return total, f"{total} pipeline files this week", total >= 20
+    return total, f"{total} pipeline files this week", total >= 15
 
 
 def check_tweets():
@@ -328,7 +328,7 @@ def check_contrathesis():
                     if mtime >= TODAY:
                         da_files.add(ticker_dir)
     total = len(da_files)
-    return total, f"{total} DA files in thesis/", total >= 10
+    return total, f"{total} DA files in thesis/", total >= 5
 
 
 def check_r4_candidates():
@@ -349,7 +349,7 @@ def check_r4_candidates():
     except Exception:
         pass
     count = len(tickers)
-    return count, f"{count} committee files this week", count >= 15
+    return count, f"{count} committee files this week", count >= 5
 
 
 def check_kill_conditions():
@@ -587,12 +587,12 @@ def check_file_hygiene():
 def main():
     objectives = [
         # Flow metrics (Phase 1 active)
-        ("Screening", ">=25 new/day", check_screening),
-        ("Contrathesis", ">=10/day", check_contrathesis),
+        ("Screening", ">=5 R1/day", check_screening),
+        ("DA (R2)", ">=5 DA/day", check_contrathesis),
         ("Smart money", ">=1/day", check_smart_money_daily),
         # Flow metrics (Phase 2 — week 2)
-        ("R4 candidates", ">=15/week", check_r4_candidates),
-        ("Pipeline velocity", ">=20 adv/week", check_pipeline_velocity),
+        ("R4 candidates", ">=5/week", check_r4_candidates),
+        ("Pipeline velocity", ">=15 files/week", check_pipeline_velocity),
         # Quality metrics
         ("Pipeline", ">=50 in R1-R4", check_pipeline),
         ("Thesis freshness", "0 stale (>7d)", check_thesis_freshness),

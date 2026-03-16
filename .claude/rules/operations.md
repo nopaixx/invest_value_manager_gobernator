@@ -118,23 +118,24 @@
 
 ## Measurable objectives (report daily to Angel)
 ### Flow metrics (the real bottleneck for 30% CAGR)
-| Objetivo | Meta | Frecuencia | Fase |
-|----------|------|------------|------|
-| Screening (descubiertas) | ≥25 empresas nuevas/día | Diario | 1 |
-| Pipeline velocity (avances de stage) | ≥20 avances/semana | Semanal | 2 |
-| R4 aprobadas | ≥15 nuevas/semana | Semanal | 2 |
-| Rotaciones evaluadas | ≥5 comparaciones/semana | Semanal | 3 |
-| Contrathesis | ≥10/día | Diario | 1 |
-| Smart money | 1 report/día | Diario | 1 |
-| Universo cubierto | 100% global quality (QS≥70), refresh cada 30d | Continuo | 3 |
+| Objetivo | Meta | Frecuencia |
+|----------|------|------------|
+| Screening (R1 con agentes) | ≥5 thesis.md nuevos/día | Diario |
+| DA (R2 con agente) | ≥5 devils_advocate.md/día | Diario |
+| R4 aprobadas | ≥5/semana con committee_decision.md | Semanal |
+| Pipeline velocity | ≥15 ficheros pipeline/semana | Semanal |
+| Rotaciones evaluadas | ≥5 comparaciones/semana | Semanal |
+| Smart money | 1 report/día | Diario |
+| Universo cubierto | 100% global quality (QS≥70), refresh cada 30d | Continuo |
 
-### CRITICAL: How to measure these objectives
-- **Screening** = new `thesis/research/TICKER/thesis.md` created with `fundamental-analyst` agent. NOT a line in a batch report.
-- **Contrathesis** = `devils_advocate.md` or `counter_analysis.md` inside `thesis/TICKER/` created by `devils-advocate` agent. NOT embedded bear cases or batch files in reports/.
-- **R4 approved** = `committee_decision.md` inside `thesis/TICKER/` created by `investment-committee` agent + SO in standing_orders.yaml.
-- **Pipeline velocity** = files advancing through stages (thesis.md → devils_advocate.md → r3_resolution.md → committee_decision.md) inside thesis/ folders.
-- **NEVER accept batch/inline shortcuts as meeting these objectives.** Volume without proper process = zero value.
-- **ALWAYS push specialist to use his agents**, not do things manually. "Use your fundamental-analyst agent" not "screen 25 companies."
+### CRITICAL: How to measure — PROCESS not VOLUME
+- **Screening** = `thesis/research/TICKER/thesis.md` created by `fundamental-analyst` agent. NOT batch reports.
+- **DA** = `devils_advocate.md` in `thesis/TICKER/` by `devils-advocate` agent. NOT embedded bear cases.
+- **R4** = `committee_decision.md` in `thesis/TICKER/` by `investment-committee` + SO in standing_orders.yaml.
+- **Pipeline velocity** = files in thesis/ advancing (thesis.md → DA → r3 → committee).
+- **5 real R1s + 5 real DAs/day = ~2h of agent work.** Rest for portfolio, stress test, sectors, smart money, KC.
+- **NEVER accept batch/inline shortcuts.** 5 real > 150 empty.
+- **ALWAYS push specialist to use agents.** "Use your fundamental-analyst agent" not "screen 25 companies."
 
 ### Quality metrics
 | Objetivo | Meta | Frecuencia |
