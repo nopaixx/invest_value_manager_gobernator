@@ -30,6 +30,14 @@
 | Smart money | 1 report/día | Diario | 1 |
 | Universo cubierto | 100% global quality (QS≥70), refresh cada 30d | Continuo | 3 |
 
+### CRITICAL: How to measure these objectives
+- **Screening** = new `thesis/research/TICKER/thesis.md` created with `fundamental-analyst` agent. NOT a line in a batch report.
+- **Contrathesis** = `devils_advocate.md` or `counter_analysis.md` inside `thesis/TICKER/` created by `devils-advocate` agent. NOT embedded bear cases or batch files in reports/.
+- **R4 approved** = `committee_decision.md` inside `thesis/TICKER/` created by `investment-committee` agent + SO in standing_orders.yaml.
+- **Pipeline velocity** = files advancing through stages (thesis.md → devils_advocate.md → r3_resolution.md → committee_decision.md) inside thesis/ folders.
+- **NEVER accept batch/inline shortcuts as meeting these objectives.** Volume without proper process = zero value.
+- **ALWAYS push specialist to use his agents**, not do things manually. "Use your fundamental-analyst agent" not "screen 25 companies."
+
 ### Quality metrics
 | Objetivo | Meta | Frecuencia |
 |----------|------|------------|
