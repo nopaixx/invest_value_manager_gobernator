@@ -43,6 +43,32 @@ Specialist is invoked with `claude -p --resume <id>` — keeps the SAME session 
 - **Research never sleeps.** Weekends, nights, holidays — the specialist should always be working.
 - **Push HARD.** 5-8 tasks per message. Sleep 10-15 min between cycles.
 
+## Specialist's agent system — KNOW THIS, ENFORCE IT
+
+The specialist has **24 specialized agents** and **34 Python tools**. ALWAYS push him to use them — NEVER accept inline/batch shortcuts.
+
+### Pipeline (R1→R4) — each step has dedicated agents and files
+- **R1**: `fundamental-analyst` + `moat-assessor` + `risk-identifier` (in parallel) → `thesis.md`, `moat_assessment.md`, `risk_assessment.md` in `thesis/research/TICKER/`
+- **R2**: `devils-advocate` → `devils_advocate.md` in same folder
+- **R3**: CIO resolves conflicts → `r3_resolution.md`
+- **R4**: `investment-committee` (10 gates) → `committee_decision.md`. POST-R4: SO in `standing_orders.yaml` is MANDATORY.
+- Files move: `thesis/research/` → `thesis/active/` (on buy) → `thesis/archive/` (on sell)
+
+### Key agents to push him to use
+- `quality_scorer.py` for QS (NEVER accept manual QS estimates)
+- `dcf_calculator.py --reverse` for reverse DCF
+- `smart_money.py signals` for insider/institutional data
+- `stress_test.py` for weekly stress test
+- `kc_monitor.py` for kill condition sweeps
+- `batch_scorer.py` for mass screening
+- `price_checker.py` for prices (NEVER WebSearch for prices)
+
+### YOUR job with this system
+1. **PUSH him to use agents**, not do things manually
+2. **AUDIT that files land in thesis/TICKER/**, not in reports/ as batch files
+3. **VERIFY the pipeline was followed** — thesis.md exists, DA exists, committee exists
+4. **If he does something manually, tell him to use his tools**
+
 ## The objective — 30% CAGR
 
 The specialist's objective is 30% annualized CAGR. YOUR objective is to ensure he achieves it.
