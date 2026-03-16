@@ -143,13 +143,18 @@ def check_screening():
 
 
 def check_pipeline():
-    """>=50 companies in R1-R4 pipeline."""
+    """>=50 companies in R1-R4 pipeline with at least thesis.md."""
     if not os.path.isdir(THESIS_PIPELINE):
         return 0, "pipeline dir not found", False
-    dirs = [d for d in os.listdir(THESIS_PIPELINE)
-            if os.path.isdir(os.path.join(THESIS_PIPELINE, d)) and not d.startswith(".")]
-    count = len(dirs)
-    return count, str(count), count >= 50
+    with_thesis = 0
+    total_dirs = 0
+    for d in os.listdir(THESIS_PIPELINE):
+        dpath = os.path.join(THESIS_PIPELINE, d)
+        if os.path.isdir(dpath) and not d.startswith(".") and d != "ANALYSIS_NOTES":
+            total_dirs += 1
+            if os.path.exists(os.path.join(dpath, "thesis.md")):
+                with_thesis += 1
+    return with_thesis, f"{with_thesis} with thesis.md ({total_dirs} dirs)", with_thesis >= 50
 
 
 def check_thesis_freshness():
