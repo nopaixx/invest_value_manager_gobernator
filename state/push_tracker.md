@@ -2,14 +2,13 @@
 # Read EVERY cycle before pushing specialist. No excuses.
 
 ## RESUELTO (no repetir)
-- S200-S224: BZU.MI sold, Iran digested, FOMC ready, demo synced, Phase 1 delivered
-- Screening 25/25, contrathesis 11/10, SM daily 1/1
+- S200-S230: BZU.MI sold, Iran digested, FOMC ready, Phase 1 6x, MONC.MI R4, demo synced EU
+- eToro search fix: use ticker prefix not company name. MONC.MI/GAW.L/CPU.ASX/WDFC cached.
 
 ## ABIERTO (por prioridad CAGR)
-- FOMC mañana martes 20:00 CET
-- Demo sync: US positions pending NYSE 15:30
-- Stress test: needs run this week (RED)
-- KC review: push specialist (RED)
-- Tweets 14:00 CET + engagement
-- Mar 26: trades (GDDY, DNLM.L, NVO trim, MONY.L sell)
-- objectives_check.py: improve contrathesis detection (embedded bear cases)
+- Demo sync: verify US positions 15:30 NYSE open
+- FOMC mañana martes 20:00 CET — 14/14 ready
+- AJB.L discovery — IHP.L rival QS 85 vs 80. KC#9 approaching.
+- Mar 26: GDDY + DNLM.L + NVO trim + MONY.L sell
+- Daily report 22:00 CET
+- Twitter: engagement session done, ~10 replies today
