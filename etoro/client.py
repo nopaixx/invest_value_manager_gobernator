@@ -179,12 +179,17 @@ class EtoroClient:
     def close_position(
         self,
         position_id: int,
+        instrument_id: Optional[int] = None,
         units_to_deduct: Optional[float] = None,
         mode: Optional[str] = None,
     ) -> dict:
         """POST /api/v1/trading/execution/{mode}/market-close-orders/positions/{positionId}"""
         m = mode or self.mode
-        body = {"UnitsToDeduct": units_to_deduct}
+        body: dict = {}
+        if instrument_id is not None:
+            body["instrumentID"] = instrument_id
+        if units_to_deduct is not None:
+            body["UnitsToDeduct"] = units_to_deduct
         return self._request(
             "POST",
             f"/trading/execution/{m}/market-close-orders/positions/{position_id}",
