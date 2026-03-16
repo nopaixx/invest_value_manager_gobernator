@@ -61,6 +61,10 @@ Call `tabs_context_mcp` with `createIfEmpty: true`
 - Tono directo, imperfecto, como desde el móvil
 - Tickers con $ siempre ($GDDY, $HLNE)
 - TONO HUMANO — no AI-sounding. Conversational, imperfect, direct.
+- **ALWAYS ask specialist for fresh data points FIRST** — never generate tweets from own knowledge. Specialist has the real discoveries, signals, and data.
+- **NEVER admit amateur mistakes publicly** — don't mention using Wikipedia as data source, don't reveal internal errors that make us look unprofessional. Show process improvements, not embarrassing failures.
+- **NEVER repeat same themes** across tweets — each tweet must cover a DIFFERENT topic. No "beta 0.62" in 3 tweets.
+- **Prepare engagement topics** alongside tweets — 3-4 debate angles for replies during the day.
 
 ## Topic Rotation (daily)
 a) Smart money / insider signals
