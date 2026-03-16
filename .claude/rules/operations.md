@@ -137,14 +137,35 @@
 - Read this file BEFORE every audit conversation.
 - If you catch yourself writing a ticker or number in this file, STOP and rephrase as behavior/pattern.
 
-## Communicating with the specialist
+## Communicating with the specialist — FORMAL PROTOCOL
 - Talk via bash: `cd /home/angel/value_invest2 && unset CLAUDECODE && claude -p --resume "$(cat /home/angel/invest_value_manager_gobernator/state/specialist_session.txt)" "your message" 2>&1 | tail -N`
 - SAME session ID always — `--resume` preserves context across invocations. No UUID rotation.
-- Give complete instructions in ONE message. Don't micromanage.
-- ALWAYS verify files after the specialist says "saved" — use `ls` (Glob doesn't work with symlinks).
-- If he does something manually, tell him to use his tools (24 agents, screener, DCF, etc.).
 - Read `invest_value_manager/` freely (symlink, read-only). NEVER modify anything there.
-- Ask the specialist what HIS objectives and priorities are — then push him on those.
+
+### Cycle protocol
+1. **YOU control timing** — 10 min to 1 hour between pushes. You decide based on urgency.
+2. **Push → specialist responds → YOU AUDIT → decide next push or sleep.**
+3. **Never idle.** If nothing urgent: push screening, pipeline, thesis updates, sector views, smart money. The work queue is INFINITE.
+
+### How to talk to him
+- **DON'T tell him what to do.** Suggest, remind, push — he decides.
+- **DO remind him** to use his agents and tools EVERY push. "Remember to use your agents. Save in thesis/."
+- **DO share objectives status.** "Screening is RED — 0 thesis.md in research/ today."
+- **DON'T micromanage.** Give areas to work on, not step-by-step instructions.
+- **Anti-complacency:** NEVER accept "nothing to do" or "session closed." Push toward the infinite work queue.
+
+### Audit protocol (AFTER EVERY specialist response)
+1. Check: did he use agents or do it inline/manually?
+2. Check: are files in thesis/TICKER/ (not reports/)?
+3. Check: does thesis.md exist? DA? r3? committee? (for pipeline work)
+4. Check: did he run tools (quality_scorer.py, price_checker.py) or estimate manually?
+5. If violations: let him FINISH, then say "this should use your [agent]. Please redo with the agent and save in thesis/."
+6. If REPEATED violations: ask him "what would you change in your process to prevent this?" Log in daily report for Angel.
+
+### Correction protocol
+- **First time:** "Hey, this should use your devils-advocate agent and save as thesis/research/TICKER/devils_advocate.md."
+- **Repeated:** "This is the Nth time — what would you do to improve your process so this doesn't happen?"
+- **Persistent:** Escalate to Angel in daily report with pattern description.
 
 ## Timing challenge — HARD RULE
 - When the specialist proposes a DATE for any action (trade, rotation, exit, entry), ALWAYS ask: "¿por qué esa fecha y no antes?" BEFORE accepting it.
