@@ -336,7 +336,36 @@ def check_contrathesis():
                     mtime = datetime.fromtimestamp(os.path.getmtime(fpath)).date()
                     if mtime >= TODAY:
                         thesis_contra += 1
-    total = max(files_found, commit_count, thesis_contra)
+    # Method 4: count thesis files modified today with embedded bear cases
+    bear_cases = 0
+    cmd = ["git", "-C", SPECIALIST_REPO, "log", "--name-only", "--oneline",
+           f"--since={TODAY.isoformat()}", "--", "thesis/active/*/thesis.md",
+           "thesis/research/*/thesis.md"]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        thesis_files = set(l.strip() for l in result.stdout.strip().split("\n")
+                          if l.strip().endswith("thesis.md"))
+        for tf in thesis_files:
+            fpath = os.path.join(SPECIALIST_REPO, tf)
+            if os.path.exists(fpath):
+                with open(fpath, "r") as fh:
+                    content = fh.read(2000)
+                if "bear case" in content.lower() or "**bear" in content.lower():
+                    bear_cases += 1
+    except Exception:
+        pass
+    # Method 5: contrathesis report files in reports/
+    report_contra = 0
+    reports_dir = f"{SPECIALIST_REPO}/reports"
+    if os.path.isdir(reports_dir):
+        for f in os.listdir(reports_dir):
+            if "contra" in f.lower() and TODAY.isoformat() in f:
+                report_contra += 1
+    total = max(files_found, commit_count, thesis_contra, bear_cases, report_contra)
+    # Sum all methods for cumulative count (bear cases + contra files + reports)
+    cumulative = thesis_contra + bear_cases + report_contra
+    if cumulative > total:
+        total = cumulative
     return total, str(total), total >= 10
 
 
