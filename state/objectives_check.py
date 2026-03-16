@@ -122,46 +122,24 @@ def parse_yaml_positions(filepath):
 
 
 def check_screening():
-    """>=5 new companies/day: new dirs in thesis/research/ + files modified in research/."""
-    # Method 1: new dirs created in thesis/research via git
-    new_dirs = git_log_new_dirs(SPECIALIST_REPO, TODAY.isoformat(),
-                                "thesis/research")
-    # Method 2: count research files modified today via git
+    """>=25 new companies/day: new thesis.md files in thesis/research/TICKER/ created today."""
+    # PRIMARY: count thesis/research/TICKER/thesis.md files created or modified today via git
     cmd = ["git", "-C", SPECIALIST_REPO, "log", "--name-only", "--oneline",
-           f"--since={TODAY.isoformat()}", "--", "thesis/research/*"]
-    research_files = 0
+           f"--since={TODAY.isoformat()}", "--", "thesis/research/*/thesis.md"]
+    tickers = set()
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
-        dirs = set()
         for line in result.stdout.strip().split("\n"):
-            if line.strip().startswith("thesis/research/") and "/" in line.strip()[len("thesis/research/"):]:
-                dirs.add(line.strip().split("/")[2])
-        research_files = len(dirs)
+            line = line.strip()
+            if line.startswith("thesis/research/") and line.endswith("/thesis.md"):
+                ticker = line.split("/")[2]
+                tickers.add(ticker)
     except Exception:
         pass
-    # Method 3: commit keywords as fallback
-    commit_count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(),
-                                 ["R1 ", "screen", "rapid triage", "fallen angel"])
-    commit_count = max(commit_count, 0)
-    # Method 4: screening report files in reports/
-    screening_reports = 0
-    reports_dir = f"{SPECIALIST_REPO}/reports"
-    if os.path.isdir(reports_dir):
-        for f in os.listdir(reports_dir):
-            if "screen" in f.lower() and TODAY.isoformat() in f:
-                # Try to count candidates in the report
-                fpath = os.path.join(reports_dir, f)
-                try:
-                    with open(fpath, "r") as fh:
-                        content = fh.read()
-                    # Count ticker-like patterns (e.g., lines with | that look like table rows)
-                    table_rows = [l for l in content.split("\n")
-                                  if "|" in l and not l.strip().startswith("---") and not l.strip().startswith("|--")]
-                    screening_reports = max(screening_reports, len(table_rows) - 1)  # minus header
-                except Exception:
-                    screening_reports = max(screening_reports, 1)
-    total = max(new_dirs, research_files, commit_count, screening_reports)
-    return total, f"{total} found", total >= 25
+    # SECONDARY: new dirs created in thesis/research (may not have thesis.md yet)
+    new_dirs = git_log_new_dirs(SPECIALIST_REPO, TODAY.isoformat(), "thesis/research")
+    total = max(len(tickers), new_dirs)
+    return total, f"{total} thesis.md in research/", total >= 25
 
 
 def check_pipeline():
@@ -271,25 +249,27 @@ def check_smart_money_daily():
 
 
 def check_pipeline_velocity():
-    """>=20 pipeline stage advances per week (R1->R2, R2->R3, R3->R4, new R4)."""
-    # Count commits this week mentioning stage advances
-    advances = git_log_count(SPECIALIST_REPO, WEEK_START.isoformat(),
-                              ["R1", "R2", "R3", "R4", "triage", "DA ", "committee",
-                               "pipeline", "advancement", "advanced"])
-    advances = max(advances, 0)
-    # Also count thesis files modified this week (proxy for pipeline work)
+    """>=20 pipeline file creations per week in thesis/ (thesis.md, DA, r3, committee)."""
+    # Count pipeline-stage files created this week in thesis/research/ and thesis/active/
     cmd = ["git", "-C", SPECIALIST_REPO, "log", "--name-only", "--oneline",
-           f"--since={WEEK_START.isoformat()}", "--", "thesis/research/*/thesis.md"]
-    research_modified = 0
+           f"--since={WEEK_START.isoformat()}", "--",
+           "thesis/research/*/thesis.md", "thesis/research/*/devils_advocate.md",
+           "thesis/research/*/r2_devils_advocate.md", "thesis/research/*/counter_analysis.md",
+           "thesis/research/*/r3_resolution.md", "thesis/research/*/committee_decision.md",
+           "thesis/research/*/moat_assessment.md", "thesis/research/*/risk_assessment.md",
+           "thesis/active/*/thesis.md", "thesis/active/*/devils_advocate.md",
+           "thesis/active/*/r2_devils_advocate.md"]
+    files = set()
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
-        files = set(l.strip() for l in result.stdout.strip().split("\n")
-                    if l.strip().endswith("thesis.md"))
-        research_modified = len(files)
+        for line in result.stdout.strip().split("\n"):
+            line = line.strip()
+            if line.startswith("thesis/") and "/" in line[7:]:
+                files.add(line)
     except Exception:
         pass
-    total = max(advances, research_modified)
-    return total, f"{total} this week", total >= 20
+    total = len(files)
+    return total, f"{total} pipeline files this week", total >= 20
 
 
 def check_tweets():
@@ -307,81 +287,85 @@ def check_daily_report():
 
 
 def check_contrathesis():
-    """>=10/day: contrathesis files modified today OR commits mentioning contrathesis."""
-    # Method 1: check git for files with 'contra' in path modified today
-    cmd = ["git", "-C", SPECIALIST_REPO, "log", "--oneline", "--name-only",
-           f"--since={TODAY.isoformat()}", "--", "*/contra*", "*/contrathes*"]
-    files_found = 0
+    """>=10/day: devils_advocate.md or counter_analysis.md in thesis/ folders created/modified today."""
+    # PRIMARY: count DA files in thesis/ modified today via git
+    cmd = ["git", "-C", SPECIALIST_REPO, "log", "--name-only", "--oneline",
+           f"--since={TODAY.isoformat()}", "--",
+           "thesis/active/*/devils_advocate.md", "thesis/active/*/r2_devils_advocate.md",
+           "thesis/active/*/counter_analysis.md",
+           "thesis/research/*/devils_advocate.md", "thesis/research/*/r2_devils_advocate.md",
+           "thesis/research/*/counter_analysis.md",
+           "thesis/short/*/devils_advocate.md", "thesis/short/*/counter_analysis.md"]
+    da_files = set()
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
-        files = [l for l in result.stdout.strip().split("\n")
-                 if l.strip() and "contra" in l.lower() and not l[0].isalnum() is False]
-        files_found = len([f for f in files if "/" in f])
+        for line in result.stdout.strip().split("\n"):
+            line = line.strip()
+            if "/" in line and ("devils_advocate" in line or "counter_analysis" in line):
+                # Extract ticker from path
+                parts = line.split("/")
+                if len(parts) >= 3:
+                    da_files.add(parts[2] if parts[1] != "short" else parts[3])
     except Exception:
         pass
-    # Method 2: commit messages
-    commit_count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(),
-                                  ["contrathesis", "contra-thesis", "contratheses"])
-    commit_count = max(commit_count, 0)
-    # Method 3: check if any thesis file modified today contains contrathesis content
-    thesis_contra = 0
-    if os.path.isdir(THESIS_ACTIVE):
-        for ticker_dir in os.listdir(THESIS_ACTIVE):
-            contra_dir = os.path.join(THESIS_ACTIVE, ticker_dir)
-            if not os.path.isdir(contra_dir):
+    # SECONDARY: check filesystem for DA files modified today (catches uncommitted work)
+    for base_dir in [THESIS_ACTIVE, THESIS_PIPELINE]:
+        if not os.path.isdir(base_dir):
+            continue
+        for ticker_dir in os.listdir(base_dir):
+            tpath = os.path.join(base_dir, ticker_dir)
+            if not os.path.isdir(tpath):
                 continue
-            for fname in os.listdir(contra_dir):
-                if "contra" in fname.lower():
-                    fpath = os.path.join(contra_dir, fname)
+            for fname in os.listdir(tpath):
+                if "devils_advocate" in fname or "counter_analysis" in fname:
+                    fpath = os.path.join(tpath, fname)
                     mtime = datetime.fromtimestamp(os.path.getmtime(fpath)).date()
                     if mtime >= TODAY:
-                        thesis_contra += 1
-    # Method 4: count thesis files modified today with embedded bear cases
-    bear_cases = 0
-    cmd = ["git", "-C", SPECIALIST_REPO, "log", "--name-only", "--oneline",
-           f"--since={TODAY.isoformat()}", "--", "thesis/active/*/thesis.md",
-           "thesis/research/*/thesis.md"]
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
-        thesis_files = set(l.strip() for l in result.stdout.strip().split("\n")
-                          if l.strip().endswith("thesis.md"))
-        for tf in thesis_files:
-            fpath = os.path.join(SPECIALIST_REPO, tf)
-            if os.path.exists(fpath):
-                with open(fpath, "r") as fh:
-                    content = fh.read(2000)
-                if "bear case" in content.lower() or "**bear" in content.lower():
-                    bear_cases += 1
-    except Exception:
-        pass
-    # Method 5: contrathesis report files in reports/
-    report_contra = 0
-    reports_dir = f"{SPECIALIST_REPO}/reports"
-    if os.path.isdir(reports_dir):
-        for f in os.listdir(reports_dir):
-            if "contra" in f.lower() and TODAY.isoformat() in f:
-                report_contra += 1
-    total = max(files_found, commit_count, thesis_contra, bear_cases, report_contra)
-    # Sum all methods for cumulative count (bear cases + contra files + reports)
-    cumulative = thesis_contra + bear_cases + report_contra
-    if cumulative > total:
-        total = cumulative
-    return total, str(total), total >= 10
+                        da_files.add(ticker_dir)
+    total = len(da_files)
+    return total, f"{total} DA files in thesis/", total >= 10
 
 
 def check_r4_candidates():
-    """>=15 new R4 approvals this week."""
-    count = git_log_count(SPECIALIST_REPO, WEEK_START.isoformat(), ["R4"])
-    return count, f"{count} this week", count >= 15
+    """>=15 new R4 approvals this week: committee_decision.md in thesis/ created this week."""
+    cmd = ["git", "-C", SPECIALIST_REPO, "log", "--name-only", "--oneline",
+           f"--since={WEEK_START.isoformat()}", "--",
+           "thesis/research/*/committee_decision.md",
+           "thesis/short/research/*/committee_decision.md"]
+    tickers = set()
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        for line in result.stdout.strip().split("\n"):
+            line = line.strip()
+            if "committee_decision" in line and "/" in line:
+                parts = line.split("/")
+                if len(parts) >= 3:
+                    tickers.add(parts[2])
+    except Exception:
+        pass
+    count = len(tickers)
+    return count, f"{count} committee files this week", count >= 15
 
 
 def check_kill_conditions():
-    """Reviewed today: KC-related file changes OR commits with KC/kill OR kc_sweep report."""
-    # Method 1: commit messages
-    commit_count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(),
-                                  ["KC", "kill condition", "kill_cond", "kc_monitor", "kc sweep"])
-    commit_count = max(commit_count, 0)
-    # Method 2: check if thesis files with KCs were modified today via git
+    """Reviewed today: kc_monitor.py output committed OR KC sweep report OR thesis KCs updated."""
+    # Method 1: state/kc_status files modified today
+    kc_state = 0
+    for fname in ["kc_status.yaml", "kc_monitor_output.md"]:
+        fpath = os.path.join(SPECIALIST_REPO, "state", fname)
+        if os.path.exists(fpath):
+            mtime = datetime.fromtimestamp(os.path.getmtime(fpath)).date()
+            if mtime >= TODAY:
+                kc_state = 1
+    # Method 2: KC sweep report today
+    kc_report = 0
+    reports_dir = f"{SPECIALIST_REPO}/reports"
+    if os.path.isdir(reports_dir):
+        for f in os.listdir(reports_dir):
+            if "kc" in f.lower() and TODAY.isoformat() in f:
+                kc_report = 1
+                break
+    # Method 3: multiple thesis files modified today (proxy for KC review)
     cmd = ["git", "-C", SPECIALIST_REPO, "log", "--name-only", "--oneline",
            f"--since={TODAY.isoformat()}", "--", "thesis/active/*/thesis.md"]
     thesis_modified = 0
@@ -392,16 +376,11 @@ def check_kill_conditions():
         thesis_modified = len(files)
     except Exception:
         pass
-    # Method 3: check for kc_sweep report file today
-    kc_report = 0
-    reports_dir = f"{SPECIALIST_REPO}/reports"
-    if os.path.isdir(reports_dir):
-        for f in os.listdir(reports_dir):
-            if "kc" in f.lower() and TODAY.isoformat() in f:
-                kc_report = 1
-                break
-    # If multiple thesis files were modified in same commit, likely a KC sweep
-    total = max(commit_count, 1 if thesis_modified >= 3 else 0, kc_report)
+    # Method 4: commit messages as fallback
+    commit_count = git_log_count(SPECIALIST_REPO, TODAY.isoformat(),
+                                  ["KC", "kill condition", "kc_monitor", "kc sweep"])
+    commit_count = max(commit_count, 0)
+    total = max(kc_state, kc_report, 1 if thesis_modified >= 3 else 0, commit_count)
     return total, str(total), total >= 1
 
 
