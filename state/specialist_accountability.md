@@ -33,3 +33,4 @@
 
 ## Next audit
 - Verify Mar 26 execution (4 trades), monitor "asking permission", verify stress test ran, push work persistence to files.
+- **CRITICAL: S224-S229 batch DAs and contrathesis saved as reports/ not thesis/TICKER/. Must be redone with proper agents into thesis/ structure. Plan with Angel pending.**

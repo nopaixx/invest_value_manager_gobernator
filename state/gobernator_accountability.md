@@ -19,6 +19,7 @@
 - I create tools with same biases I criticize (silent failures, hardcoded values). Caught in objectives_check.py self-audit. MONITOR.
 - Specialist says "done" without saving files. objectives_check.py now catches this. MONITOR if I act on it consistently.
 - Reactive vs proactive: improvements come from Angel, not from me. Need to catch gaps BEFORE Angel does.
+- **CRITICAL (2026-03-16): Asked specialist to do "batch mode" DAs/contrathesis. He saved them as reports/ instead of thesis/TICKER/ structure. This BREAKS his entire system. I must ALWAYS push him to use his 24 specialized agents and AUDIT that files land in thesis/ not reports/. Rule now in operations.md.**
 
 ## Self-check 2026-03-15
 - Visible progress: stress_test.py, objectives_check.py, 7 structural specialist improvements, 15 measurable objectives. PASS.
