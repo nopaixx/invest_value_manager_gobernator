@@ -2,13 +2,13 @@
 # Read EVERY cycle before pushing specialist. No excuses.
 
 ## RESUELTO (no repetir)
-- S200-S230: BZU.MI sold, Iran digested, FOMC ready, Phase 1 6x, MONC.MI R4, demo synced EU
-- eToro search fix: use ticker prefix not company name. MONC.MI/GAW.L/CPU.ASX/WDFC cached.
+- S237: 4 DAs formales rehecho en thesis/active/ (DOCS, EDEN.PA, GDDY, HLNE)
+- MCO thesis.md creado en thesis/research/
+- Objectives redefinidos: proceso > volumen. 5 R1 + 5 DA/día.
 
 ## ABIERTO (por prioridad CAGR)
-- Demo sync: verify US positions 15:30 NYSE open
-- FOMC mañana martes 20:00 CET — 14/14 ready
-- AJB.L discovery — IHP.L rival QS 85 vs 80. KC#9 approaching.
+- MCO R2 DA en progreso (S238)
+- CBOE + AJB.L R1 en progreso (S238)
+- Batch reports en reports/ — limpiar progresivamente
+- FOMC mañana martes 20:00 CET
 - Mar 26: GDDY + DNLM.L + NVO trim + MONY.L sell
-- Daily report 22:00 CET
-- Twitter: engagement session done, ~10 replies today
