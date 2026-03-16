@@ -19,23 +19,40 @@
 12. Housekeeping
 
 ## Measurable objectives (report daily to Angel)
+### Flow metrics (the real bottleneck for 30% CAGR)
+| Objetivo | Meta | Frecuencia | Fase |
+|----------|------|------------|------|
+| Screening (descubiertas) | ≥25 empresas nuevas/día | Diario | 1 |
+| Pipeline velocity (avances de stage) | ≥20 avances/semana | Semanal | 2 |
+| R4 aprobadas | ≥15 nuevas/semana | Semanal | 2 |
+| Rotaciones evaluadas | ≥5 comparaciones/semana | Semanal | 3 |
+| Contrathesis | ≥10/día | Diario | 1 |
+| Smart money | 1 report/día | Diario | 1 |
+| Universo cubierto | 100% global quality (QS≥70), refresh cada 30d | Continuo | 3 |
+
+### Quality metrics
 | Objetivo | Meta | Frecuencia |
 |----------|------|------------|
-| Screening | ≥5 empresas nuevas/día | Diario |
-| Pipeline | ≥50 empresas en R1-R4 | Semanal |
 | Thesis frescura | 0 posiciones >7 días sin revisar | Semanal |
 | Kill conditions | 0 triggers perdidos + revisión diaria | Diario |
 | Sector views | 0 sectores >3 días sin actualizar | Continuo |
-| Smart money | 2 reports/semana + alertas tiempo real | Semanal |
 | Stress test | 1/semana + después de cada cambio portfolio | Semanal |
 | Consistencia FV | 0 divergencias thesis vs yaml | Cada ciclo |
-| Auditorías sistema | ≥3/semana, cada cambio del especialista | Continuo |
-| Contrathesis | ≥1 nueva/día | Diario |
-| Candidatos R4 | ≥3 nuevos aprobados/semana | Semanal |
-| Universo cubierto | ≥200 empresas analizadas en 30 días | Mensual |
+| System integration | 0 gaps (tickers en SECTOR_MAP, FX) | Continuo |
+| File hygiene | Todos los state files <50 líneas | Continuo |
 | Earnings prep | 100% posiciones con framework antes de earnings | Continuo |
+
+### Growth metrics (Twitter @nopaixx)
+| Objetivo | Meta | Frecuencia |
+|----------|------|------------|
 | Tweets | 5 publicados/día | Diario |
+| Replies/engagement | ≥20/día | Diario |
 | Daily report | 1 entregado 22:00 CET | Diario |
+
+### Implementation phases
+- **Phase 1 (this week):** screening 5→25, contrathesis 1→10, smart money 2/week→daily
+- **Phase 2 (next week):** pipeline velocity 20/week, R4 3→15/week
+- **Phase 3 (week after):** rotations evaluated 5/week, universe global coverage
 
 ## Anti-repetition — HARD RULE
 - Read `state/push_tracker.md` BEFORE every push to the specialist.

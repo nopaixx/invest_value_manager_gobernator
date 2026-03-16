@@ -161,7 +161,7 @@ def check_screening():
                 except Exception:
                     screening_reports = max(screening_reports, 1)
     total = max(new_dirs, research_files, commit_count, screening_reports)
-    return total, f"{total} found", total >= 5
+    return total, f"{total} found", total >= 25
 
 
 def check_pipeline():
@@ -237,7 +237,7 @@ def check_stress_test():
 
 
 def check_smart_money():
-    """2 reports/week."""
+    """2 reports/week (legacy, kept for backward compat)."""
     if not os.path.isdir(SMART_MONEY_DIR):
         return 0, "dir not found", False
     found = 0
@@ -251,6 +251,45 @@ def check_smart_money():
             except ValueError:
                 pass
     return found, f"{found} this week", found >= 2
+
+
+def check_smart_money_daily():
+    """>=1 report/day: smart money report today."""
+    if not os.path.isdir(SMART_MONEY_DIR):
+        return 0, "dir not found", False
+    found = 0
+    for f in os.listdir(SMART_MONEY_DIR):
+        if TODAY.isoformat() in f:
+            found += 1
+    # Also check reports/ root for smart money files
+    reports_dir = f"{SPECIALIST_REPO}/reports"
+    if os.path.isdir(reports_dir):
+        for f in os.listdir(reports_dir):
+            if "smart" in f.lower() and TODAY.isoformat() in f:
+                found += 1
+    return found, str(found), found >= 1
+
+
+def check_pipeline_velocity():
+    """>=20 pipeline stage advances per week (R1->R2, R2->R3, R3->R4, new R4)."""
+    # Count commits this week mentioning stage advances
+    advances = git_log_count(SPECIALIST_REPO, WEEK_START.isoformat(),
+                              ["R1", "R2", "R3", "R4", "triage", "DA ", "committee",
+                               "pipeline", "advancement", "advanced"])
+    advances = max(advances, 0)
+    # Also count thesis files modified this week (proxy for pipeline work)
+    cmd = ["git", "-C", SPECIALIST_REPO, "log", "--name-only", "--oneline",
+           f"--since={WEEK_START.isoformat()}", "--", "thesis/research/*/thesis.md"]
+    research_modified = 0
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        files = set(l.strip() for l in result.stdout.strip().split("\n")
+                    if l.strip().endswith("thesis.md"))
+        research_modified = len(files)
+    except Exception:
+        pass
+    total = max(advances, research_modified)
+    return total, f"{total} this week", total >= 20
 
 
 def check_tweets():
@@ -268,7 +307,7 @@ def check_daily_report():
 
 
 def check_contrathesis():
-    """>=1/day: contrathesis files modified today OR commits mentioning contrathesis."""
+    """>=10/day: contrathesis files modified today OR commits mentioning contrathesis."""
     # Method 1: check git for files with 'contra' in path modified today
     cmd = ["git", "-C", SPECIALIST_REPO, "log", "--oneline", "--name-only",
            f"--since={TODAY.isoformat()}", "--", "*/contra*", "*/contrathes*"]
@@ -298,13 +337,13 @@ def check_contrathesis():
                     if mtime >= TODAY:
                         thesis_contra += 1
     total = max(files_found, commit_count, thesis_contra)
-    return total, str(total), total >= 1
+    return total, str(total), total >= 10
 
 
 def check_r4_candidates():
-    """>=3 new R4 approvals this week."""
+    """>=15 new R4 approvals this week."""
     count = git_log_count(SPECIALIST_REPO, WEEK_START.isoformat(), ["R4"])
-    return count, f"{count} this week", count >= 3
+    return count, f"{count} this week", count >= 15
 
 
 def check_kill_conditions():
@@ -534,21 +573,26 @@ def check_file_hygiene():
 
 def main():
     objectives = [
-        ("Screening", ">=5 new/day", check_screening),
+        # Flow metrics (Phase 1 active)
+        ("Screening", ">=25 new/day", check_screening),
+        ("Contrathesis", ">=10/day", check_contrathesis),
+        ("Smart money", ">=1/day", check_smart_money_daily),
+        # Flow metrics (Phase 2 — week 2)
+        ("R4 candidates", ">=15/week", check_r4_candidates),
+        ("Pipeline velocity", ">=20 adv/week", check_pipeline_velocity),
+        # Quality metrics
         ("Pipeline", ">=50 in R1-R4", check_pipeline),
         ("Thesis freshness", "0 stale (>7d)", check_thesis_freshness),
         ("Sector views", "0 stale (>3d)", check_sector_views),
         ("Stress test", ">=1 this week", check_stress_test),
-        ("Smart money", ">=2/week", check_smart_money),
-        ("Tweets", "published today", check_tweets),
-        ("Daily report", "yesterday done", check_daily_report),
-        ("Contrathesis", ">=1/day", check_contrathesis),
-        ("R4 candidates", ">=3/week", check_r4_candidates),
         ("Kill conditions", "reviewed today", check_kill_conditions),
         ("FV consistency", "0 divergences", check_fv_consistency),
         ("System integration", "0 gaps", check_system_integration),
         ("File hygiene", "all <50 lines", check_file_hygiene),
         ("Earnings prep", "100% prepped", check_earnings_prep),
+        # Growth metrics
+        ("Tweets", "published today", check_tweets),
+        ("Daily report", "yesterday done", check_daily_report),
     ]
 
     results = []
