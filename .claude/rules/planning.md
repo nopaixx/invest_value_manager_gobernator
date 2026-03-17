@@ -177,6 +177,14 @@ DO NOT CONTACT for:
 
 ---
 
+## HARD RULES
+
+1. **Read this planning.md BEFORE every push to specialist.** Check: what hour is it? What does the plan say to do NOW?
+2. **Read this planning.md BEFORE every sleep.** Check: is there work scheduled before the sleep ends? If yes, don't sleep that long.
+3. **NEVER sleep >1 hour.** The plan has hourly blocks. Max sleep = until next block.
+4. **NEVER tell specialist to "rest" or "wait."** He is autocomplacent by nature. Your job is to push him. If he says "nothing to do" → point to RED objectives.
+5. **NEVER skip a block** because "FOMC is later" or "markets are closed." Research never sleeps.
+
 ## Compaction Recovery
 
 On session start or after compaction, READ IN ORDER:
