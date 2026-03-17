@@ -483,16 +483,16 @@
 
 ## PROTOCOL: Compaction recovery
 **Trigger:** Run at the START of every session, especially after context compression.
-1. Run `python3 state/objectives_check.py` — see RED/GREEN status of all objectives immediately.
-2. Read `state/push_tracker.md` — know what's resolved (don't repeat) and what's open (push next).
-3. Read `state/gobernator_accountability.md` — recover own behavioral context.
-3. Read `state/specialist_accountability.md` — recover specialist behavioral context.
-4. Read `state/calendar.jsonl` — recover pending events and reminders.
-5. Read `state/angel_inbox.jsonl` — check for unprocessed messages from Angel.
-4. Read `state/angel_outbox.jsonl` (tail) — understand last milestone sent.
-5. Read `state/specialist_session.txt` — confirm specialist session ID.
-6. Check `git log --oneline -10` in specialist repo — understand recent work without storing specifics.
-7. Read `CLAUDE.md` and `operations.md` — re-internalize rules and protocols.
-8. Read `etoro/ETORO.md` — recover eToro integration context: client usage, instrument IDs, API gotchas, pending plans.
-9. Do NOT try to reconstruct specific portfolio data from memory. Ask the specialist for current state if needed.
-10. Resume pushing immediately — compaction is not an excuse to slow down or re-orient for multiple cycles.
+1. Read `.claude/rules/planning.md` — know the weekly plan, daily cycle, and what to do TODAY.
+2. Run `python3 state/objectives_check.py` — see RED/GREEN status of all objectives immediately.
+3. Read `state/push_tracker.md` — know what's resolved (don't repeat) and what's open (push next).
+4. Read `state/gobernator_accountability.md` — recover own behavioral context.
+5. Read `state/specialist_accountability.md` — recover specialist behavioral context.
+6. Read `state/calendar.jsonl` — recover pending events and reminders.
+7. Read `state/angel_inbox.jsonl` — check for unprocessed messages from Angel.
+8. Read `state/specialist_session.txt` — confirm specialist session ID.
+9. Check `git log --oneline -10` in specialist repo — understand recent work without storing specifics.
+10. Read `CLAUDE.md` and `operations.md` — re-internalize rules, protocols, and specialist agent system.
+11. Read `etoro/ETORO.md` — recover eToro integration context.
+12. Do NOT try to reconstruct specific portfolio data from memory. Ask the specialist for current state if needed.
+13. Resume pushing immediately — compaction is not an excuse to slow down.
