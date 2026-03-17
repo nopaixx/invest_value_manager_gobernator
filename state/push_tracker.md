@@ -2,13 +2,12 @@
 # Read EVERY cycle before pushing specialist. No excuses.
 
 ## RESUELTO (no repetir)
-- S237: 4 DAs formales rehecho en thesis/active/ (DOCS, EDEN.PA, GDDY, HLNE)
-- MCO thesis.md creado en thesis/research/
-- Objectives redefinidos: proceso > volumen. 5 R1 + 5 DA/día.
+- S237-S244: 12 R1 + 12 R2 formales en thesis/, HALO SO paused, FOMC prep done
+- Morning sweep done (KC, macro, news, SM)
 
 ## ABIERTO (por prioridad CAGR)
-- MCO R2 DA en progreso (S238)
-- CBOE + AJB.L R1 en progreso (S238)
-- Batch reports en reports/ — limpiar progresivamente
-- FOMC mañana martes 20:00 CET
-- Mar 26: GDDY + DNLM.L + NVO trim + MONY.L sell
+- FOMC HOY 20:00 CET — score dot plot, ejecutar action tree
+- Tweets: pendiente (Chrome no disponible) — eToro posts via API
+- Mar 26: GDDY + DNLM.L + NVO trim + MONY.L sell (9 días)
+- Batch reports en reports/ — seguir limpiando progresivamente
+- Daily report 22:00
