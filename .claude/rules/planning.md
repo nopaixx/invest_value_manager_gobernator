@@ -77,10 +77,13 @@
 
 ### 21:00 — PREPARE DAILY REPORT
 - Run `python3 state/update_tracker.py` — update portfolio vs S&P 500 tracker
-- Generate chart → save to `reports/daily/images/portfolio_vs_sp500_YYYY-MM-DD.png`
-- objectives_check.py final
-- Compile: specialist work, tweets, errors, tomorrow plan
-- **INCLUDE portfolio vs S&P 500 chart as IMAGE in daily report (mandatory)**
+- Run `python3 state/generate_analytics.py` — generate analytics dashboard image
+- Run `python3 state/objectives_check.py` — final objectives check
+- Use `reports/daily/_TEMPLATE.md` — ALWAYS follow the template, same structure every day
+- **Tools for daily report (DO NOT inline matplotlib — use these scripts):**
+  - `state/update_tracker.py` — updates portfolio_tracker.csv
+  - `state/generate_analytics.py` — generates analytics dashboard PNG
+  - `state/objectives_check.py` — generates objectives table
 - Update push_tracker.md
 - Update accountability files if needed
 
