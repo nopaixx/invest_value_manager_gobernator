@@ -493,6 +493,8 @@
 8. Read `state/specialist_session.txt` — confirm specialist session ID.
 9. Check `git log --oneline -10` in specialist repo — understand recent work without storing specifics.
 10. Read `CLAUDE.md` and `operations.md` — re-internalize rules, protocols, and specialist agent system.
-11. Read `etoro/ETORO.md` — recover eToro integration context.
-12. Do NOT try to reconstruct specific portfolio data from memory. Ask the specialist for current state if needed.
-13. Resume pushing immediately — compaction is not an excuse to slow down.
+11. Read `invest_value_manager/state/agreed_objectives.md` — recover shared objectives with specialist (cash, baskets, timing, rotations).
+12. Read `etoro/ETORO.md` — recover eToro integration context.
+13. Read `.claude/rules/conversation-flow.md` — recover how to talk to specialist.
+14. Do NOT try to reconstruct specific portfolio data from memory. Ask the specialist for current state if needed.
+15. Resume pushing immediately — compaction is not an excuse to slow down.

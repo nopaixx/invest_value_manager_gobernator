@@ -10,11 +10,16 @@
 - angel_inbox.jsonl (messages from Angel)
 - objectives_check.py (RED items = top priority)
 
-### 09:00 — EU MARKETS OPEN
+### 09:00 — EU MARKETS OPEN + DAILY STRATEGY CHAT
 - portfolio_stats.py (P&L, drift, regime detector)
 - Verify SOs near trigger (watchlist-manager)
 - Execute pending eToro trades if applicable
-- PUSH specialist: "Objectives RED are X. Remember your agents. What are your priorities?"
+- **DAILY STRATEGY CONVERSATION with specialist (mandatory):**
+  - Review agreed objectives: cash target, basket targets, timing
+  - Evaluate context: has anything changed? new opportunities? new risks?
+  - Discuss: should we act now or wait? any rotations to trigger?
+  - Update shared objectives file if needed
+  - This is collaborative — argue with data, agree on plan, both commit
 
 ### 10:00 — PIPELINE R1
 - Push 2-3 R1s with fundamental-analyst agent
