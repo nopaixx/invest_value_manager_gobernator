@@ -68,6 +68,21 @@ def read_tracker():
     return dates, np.array(port_vals), np.array(port_pcts), np.array(sp_vals), np.array(sp_pcts)
 
 
+def resample_weekly(dates, *arrays):
+    """Resample daily data to weekly (every 5 trading days + first + last)."""
+    n = len(dates)
+    if n <= 10:
+        return dates, arrays  # too few, return as-is
+    indices = [0]
+    for i in range(4, n - 1, 5):
+        indices.append(i)
+    if n - 1 not in indices:
+        indices.append(n - 1)
+    w_dates = [dates[i] for i in indices]
+    w_arrays = tuple(arr[indices] for arr in arrays)
+    return w_dates, w_arrays
+
+
 def safe(val, fmt=".2f", suffix="", prefix="", na="N/A"):
     if val is None or (isinstance(val, float) and (np.isnan(val) or np.isinf(val))):
         return na
@@ -197,7 +212,16 @@ def generate_dashboard(positions_data, dates, port_vals, port_pcts, sp_vals, sp_
     total_invested = sum(d["amount"] for d in positions_data.values())
     total_pnl = sum(d["pnl"] for d in positions_data.values())
     portfolio_value = total_invested + total_pnl
-    short_dates = [d[5:] for d in dates]
+
+    # Resample to weekly for cleaner charts (metrics use daily data)
+    w_dates, (w_port_pcts, w_sp_pcts, w_port_vals, w_drawdown, w_alpha) = resample_weekly(
+        dates, port_pcts, sp_pcts, port_vals, drawdown, alpha_series)
+    short_dates = [d[5:] for d in w_dates]
+    port_pcts_chart = w_port_pcts
+    sp_pcts_chart = w_sp_pcts
+    port_vals_chart = w_port_vals
+    drawdown_chart = w_drawdown
+    alpha_chart = w_alpha
 
     fig = plt.figure(figsize=(16, 48))
     fig.suptitle(f'Portfolio Analytics Dashboard — {TODAY}', fontsize=22, fontweight='bold', y=0.998)
@@ -205,12 +229,12 @@ def generate_dashboard(positions_data, dates, port_vals, port_pcts, sp_vals, sp_
 
     # ── 1. Cumulative Returns ──
     ax1 = fig.add_subplot(gs[0])
-    ax1.plot(short_dates, port_pcts, 'b-o', lw=2.5, ms=9, label=f'Portfolio ({port_pcts[-1]:+.1f}%)', zorder=5)
-    ax1.plot(short_dates, sp_pcts, 'r--o', lw=2.5, ms=9, label=f'S&P 500 ({sp_pcts[-1]:+.1f}%)', zorder=5)
+    ax1.plot(short_dates, port_pcts_chart, 'b-o', lw=2.5, ms=9, label=f'Portfolio ({port_pcts_chart[-1]:+.1f}%)', zorder=5)
+    ax1.plot(short_dates, sp_pcts_chart, 'r--o', lw=2.5, ms=9, label=f'S&P 500 ({sp_pcts_chart[-1]:+.1f}%)', zorder=5)
     ax1.axhline(y=0, color='gray', alpha=0.3)
-    ax1.fill_between(range(len(short_dates)), port_pcts, sp_pcts, alpha=0.15,
+    ax1.fill_between(range(len(short_dates)), port_pcts_chart, sp_pcts_chart, alpha=0.15,
                      color='red' if port_pcts[-1] < sp_pcts[-1] else 'green')
-    for i, (p, s) in enumerate(zip(port_pcts, sp_pcts)):
+    for i, (p, s) in enumerate(zip(port_pcts_chart, sp_pcts_chart)):
         ax1.annotate(f'{p:+.1f}%', (i, p), textcoords='offset points', xytext=(0, 12), fontsize=10, color='blue', fontweight='bold')
         ax1.annotate(f'{s:+.1f}%', (i, s), textcoords='offset points', xytext=(0, -18), fontsize=10, color='red', fontweight='bold')
     ax1.set_title('Retorno Acumulado', fontsize=14, fontweight='bold')
@@ -221,9 +245,9 @@ def generate_dashboard(positions_data, dates, port_vals, port_pcts, sp_vals, sp_
     # ── 2. Alpha ──
     ax2 = fig.add_subplot(gs[1])
     colors_a = ['#2ecc71' if a >= 0 else '#e74c3c' for a in alpha_series]
-    ax2.bar(short_dates, alpha_series, color=colors_a, edgecolor='white', width=0.6)
+    ax2.bar(short_dates, alpha_chart, color=colors_a, edgecolor='white', width=0.6)
     ax2.axhline(y=0, color='gray', lw=1)
-    for i, a in enumerate(alpha_series):
+    for i, a in enumerate(alpha_chart):
         ax2.annotate(f'{a:+.1f}pp', (i, a), textcoords='offset points',
                      xytext=(0, 8 if a >= 0 else -15), fontsize=10, fontweight='bold',
                      color='#2ecc71' if a >= 0 else '#e74c3c')
@@ -233,10 +257,10 @@ def generate_dashboard(positions_data, dates, port_vals, port_pcts, sp_vals, sp_
 
     # ── 3. Drawdown ──
     ax3 = fig.add_subplot(gs[2])
-    ax3.fill_between(short_dates, drawdown, 0, color='#e74c3c', alpha=0.3)
-    ax3.plot(short_dates, drawdown, 'r-o', lw=2, ms=8)
+    ax3.fill_between(short_dates, drawdown_chart, 0, color='#e74c3c', alpha=0.3)
+    ax3.plot(short_dates, drawdown_chart, 'r-o', lw=2, ms=8)
     ax3.axhline(y=0, color='gray', lw=1)
-    for i, dd in enumerate(drawdown):
+    for i, dd in enumerate(drawdown_chart):
         if dd < 0:
             ax3.annotate(f'{dd:.1f}%', (i, dd), textcoords='offset points', xytext=(0, -15),
                          fontsize=10, color='#e74c3c', fontweight='bold')
@@ -246,10 +270,10 @@ def generate_dashboard(positions_data, dates, port_vals, port_pcts, sp_vals, sp_
 
     # ── 4. Portfolio Value ──
     ax4 = fig.add_subplot(gs[3])
-    ax4.plot(short_dates, port_vals, 'b-o', lw=2.5, ms=9)
-    ax4.fill_between(short_dates, port_vals, port_vals[0], alpha=0.1,
-                     color='green' if port_vals[-1] >= port_vals[0] else 'red')
-    for i, v in enumerate(port_vals):
+    ax4.plot(short_dates, port_vals_chart, 'b-o', lw=2.5, ms=9)
+    ax4.fill_between(short_dates, port_vals_chart, port_vals_chart[0], alpha=0.1,
+                     color='green' if port_vals_chart[-1] >= port_vals_chart[0] else 'red')
+    for i, v in enumerate(port_vals_chart):
         ax4.annotate(f'${v:,.0f}', (i, v), textcoords='offset points', xytext=(0, 12),
                      fontsize=10, fontweight='bold', color='#2c3e50')
     ax4.set_title('Valor del Portfolio ($)', fontsize=14, fontweight='bold')
