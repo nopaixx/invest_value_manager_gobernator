@@ -18,7 +18,7 @@
 | ... | ... | ... | ... |
 | **TOTAL** | **$X** | **$X** | **X%** |
 
-Cash: $X (X%)
+Cash: EUR X (X%) — solo cash real del portfolio, ignorar cash sobrante de demo
 
 ## 4. Operaciones ejecutadas
 [Trades ejecutados hoy en eToro. Si ninguno: "Ninguna operación hoy."]
