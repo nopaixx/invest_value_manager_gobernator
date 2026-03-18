@@ -75,9 +75,9 @@ def generate_dashboard(positions_data, dates, portfolio, sp500, metrics):
     os.makedirs(IMAGES_DIR, exist_ok=True)
     alpha = portfolio - sp500
 
-    fig = plt.figure(figsize=(16, 12))
-    fig.suptitle(f'Portfolio Analytics — {TODAY}', fontsize=18, fontweight='bold', y=0.98)
-    gs = gridspec.GridSpec(2, 2, hspace=0.35, wspace=0.3)
+    fig = plt.figure(figsize=(14, 28))
+    fig.suptitle(f'Portfolio Analytics — {TODAY}', fontsize=20, fontweight='bold', y=0.99)
+    gs = gridspec.GridSpec(4, 1, hspace=0.3)
 
     # 1. Returns vs S&P 500
     ax1 = fig.add_subplot(gs[0, 0])
@@ -97,7 +97,7 @@ def generate_dashboard(positions_data, dates, portfolio, sp500, metrics):
     ax1.set_ylabel('Retorno (%)')
 
     # 2. Portfolio allocation pie
-    ax2 = fig.add_subplot(gs[0, 1])
+    ax2 = fig.add_subplot(gs[1, 0])
     labels = sorted(positions_data.keys(), key=lambda x: positions_data[x]["amount"], reverse=True)
     sizes = [positions_data[t]["amount"] for t in labels]
     display_labels = [f'{t} ({"S" if positions_data[t]["dir"] == "SHORT" else "L"})' for t in labels]
@@ -109,7 +109,7 @@ def generate_dashboard(positions_data, dates, portfolio, sp500, metrics):
     ax2.set_title('Distribución del Portfolio', fontsize=13, fontweight='bold')
 
     # 3. P&L by position
-    ax3 = fig.add_subplot(gs[1, 0])
+    ax3 = fig.add_subplot(gs[2, 0])
     tickers_sorted = sorted(positions_data.keys(), key=lambda x: positions_data[x]["pnl"])
     values_sorted = [positions_data[t]["pnl"] for t in tickers_sorted]
     colors_bar = ['#e74c3c' if v < 0 else '#2ecc71' for v in values_sorted]
@@ -125,7 +125,7 @@ def generate_dashboard(positions_data, dates, portfolio, sp500, metrics):
     ax3.set_xlabel('P&L ($)')
 
     # 4. Key metrics
-    ax4 = fig.add_subplot(gs[1, 1])
+    ax4 = fig.add_subplot(gs[3, 0])
     ax4.axis('off')
     y_pos = 0.95
     for label, value in metrics:
