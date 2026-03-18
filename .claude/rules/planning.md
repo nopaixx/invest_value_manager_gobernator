@@ -77,9 +77,10 @@
 
 ### 21:00 — PREPARE DAILY REPORT
 - Run `python3 state/update_tracker.py` — update portfolio vs S&P 500 tracker
+- Generate chart → save to `reports/daily/images/portfolio_vs_sp500_YYYY-MM-DD.png`
 - objectives_check.py final
 - Compile: specialist work, tweets, errors, tomorrow plan
-- **INCLUDE portfolio vs S&P 500 table in daily report (mandatory)**
+- **INCLUDE portfolio vs S&P 500 chart as IMAGE in daily report (mandatory)**
 - Update push_tracker.md
 - Update accountability files if needed
 
