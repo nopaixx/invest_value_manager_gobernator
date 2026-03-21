@@ -18,6 +18,8 @@
 | 8 | R4 committee 100% approval rate | 2026-03-08 | Auditoría | Rubber stamp — la real gate es R2 DA | ❌ PENDIENTE — el committee no rechaza nada |
 | 9 | Compra por encima de precios del committee | 2026-03-08 | Autoidentificado | Entra más caro de lo que el comité aprueba | ❌ PENDIENTE |
 | 10 | Session continuity no se actualiza al final | 2026-03-17 | Autoidentificado | Pierde contexto entre sesiones | ⚠️ Parcial — mejorado pero no consistente |
+| 11 | Nombres inconsistentes en thesis/ (6 nombres para DA, 3 para thesis) | 2026-03-21 | Auditoría | devils_advocate vs r2_devils_advocate vs counter_analysis vs da_analysis vs adversarial_thesis_review vs r2_bear_case. Imposible auditar automáticamente. | ❌ PENDIENTE |
+| 12 | Ficheros legacy en thesis/ (triage.md, screening_*.md, system_*.md) | 2026-03-21 | Auditoría | Ruido de versiones anteriores. No siguen template. Confunden. | ❌ PENDIENTE — borrar lo que no sirva |
 
 ---
 
@@ -35,6 +37,9 @@
 | M8 | Stress test post-evento automático | 2026-03-21 | Stress test es semanal. Debería correr TAMBIÉN después de cualquier evento material (Iran strikes, FOMC, etc.). | MEDIA | ❌ PENDIENTE |
 | M9 | Kill conditions monitoreadas en tiempo real, no daily | 2026-03-21 | kc_monitor.py corre 1-2x/día. Si un KC triggerea a las 10:00 y no lo vemos hasta las 18:00, perdemos 8 horas. | BAJA | ❌ PENDIENTE |
 | M10 | DA re-run periódico para posiciones >30 días | 2026-03-21 | La tesis original puede tener asunciones que ya no son válidas. DA periódico (mensual) forzaría re-evaluación. Similar a M5. | ALTA | ❌ PENDIENTE |
+| M11 | Estandarizar nombres ficheros thesis/ | 2026-03-21 | 7 nombres únicos: thesis.md, moat_assessment.md, risk_assessment.md, devils_advocate.md, r3_resolution.md, committee_decision.md, earnings_framework.md. Desde ahora todo nuevo usa estos nombres. Migrar viejo gradualmente. | **CRÍTICA** | ❌ PENDIENTE |
+| M12 | _TEMPLATE.md para cada tipo de documento | 2026-03-21 | Cada agente tiene una plantilla fija. Todos los documentos del mismo tipo tienen la misma estructura. Auditable. | **CRÍTICA** | ❌ PENDIENTE |
+| M13 | Limpieza ficheros legacy | 2026-03-21 | Borrar o archivar ficheros que no siguen el estándar y no aportan valor (triage.md, screening_*.md, system_*.md). Lo viejo que no compensa se elimina. | MEDIA | ❌ PENDIENTE |
 
 ---
 
