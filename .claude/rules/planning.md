@@ -79,7 +79,9 @@
 - Run `python3 state/update_tracker.py` — update portfolio vs S&P 500 tracker
 - Run `python3 state/generate_analytics.py` — generate analytics dashboard image
 - Run `python3 state/objectives_check.py` — final objectives check
+- Run `python3 tools/meta_compliance.py` in specialist repo — check score
 - Use `reports/daily/_TEMPLATE.md` — ALWAYS follow the template, same structure every day
+- **Post-push audit:** verify new files in thesis/ have canonical names only (7 names)
 - **Tools for daily report (DO NOT inline matplotlib — use these scripts):**
   - `state/update_tracker.py` — updates portfolio_tracker.csv
   - `state/generate_analytics.py` — generates analytics dashboard PNG

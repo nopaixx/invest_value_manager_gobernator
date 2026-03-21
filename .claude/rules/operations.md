@@ -493,7 +493,9 @@
 8. Read `state/specialist_session.txt` — confirm specialist session ID.
 9. Check `git log --oneline -10` in specialist repo — understand recent work without storing specifics.
 10. Read `CLAUDE.md` and `operations.md` — re-internalize rules, protocols, and specialist agent system.
-11. Read `invest_value_manager/state/agreed_objectives.md` — recover shared objectives with specialist (cash, baskets, timing, rotations).
+11. Read `invest_value_manager/state/agreed_objectives.md` — recover shared objectives with specialist.
+12. Read `state/specialist_improvements.md` — recover improvement plan and what's implemented.
+13. Read `state/meta_reflection_backlog.md` — recover unresolved items from sub-agents.
 12. Read `etoro/ETORO.md` — recover eToro integration context.
 13. Read `.claude/rules/conversation-flow.md` — recover how to talk to specialist.
 14. Do NOT try to reconstruct specific portfolio data from memory. Ask the specialist for current state if needed.
