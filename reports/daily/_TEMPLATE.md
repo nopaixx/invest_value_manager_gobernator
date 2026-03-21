@@ -122,6 +122,16 @@ Cash: EUR X (X%)
 
 **¿Qué significa?** [Estas son las oportunidades más interesantes — donde el mercado dice una cosa y nosotros otra. Explicar por qué creemos que estamos en lo correcto.]
 
+### Gráficos SM
+[Incluir los 5 gráficos generados por el especialista con explicación de cada uno:]
+- **Fund Network** — quién tiene qué (nodos = fondos quality + posiciones, edges = holdings)
+- **Position Health** — barra por posición, líneas CRITICAL/STALE
+- **Short Interest** — SI por posición, destacar cambios vs día anterior
+- **Coverage Heatmap** — qué datos tenemos y qué falta por posición
+- **Basket Conviction** — score SM por basket temático
+
+**¿Qué significa?** [Explicar patrones visuales: ¿qué fondo domina? ¿Qué posición tiene peor coverage? ¿Dónde está el riesgo que no se ve en las tablas?]
+
 ### Detalle técnico
 [Link al report SM diario del especialista: https://github.com/nopaixx/invest_value_manager/blob/develop/reports/smart_money/daily_YYYY-MM-DD.md]
 
