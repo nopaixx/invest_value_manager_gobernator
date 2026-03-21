@@ -71,6 +71,15 @@ Aplicar de una en una. No pasar a la siguiente hasta que la anterior esté compl
 **Qué hacer:** El especialista añade a su protocolo: después de cada R1/R2/R4, leer meta-reflexión, resolver cada item, cerrar loop. Mejorar agentes, no crear tools.
 **Cómo verifico:** `python3 tools/meta_compliance.py` — score ≥60, violations =0, coverage >50%.
 **Estado:** ✅ IMPLEMENTADO (baseline 53/100, mejorando orgánicamente)
+**Anti-compaction especialista:**
+- `state/meta_reflection_tracker.yaml` — fichero persistente, se lee en session start
+- `.claude/rules/meta-reflection-integration.md` — reglas que se cargan automáticamente cada sesión
+- `tools/meta_compliance.py` — ejecutable independiente, no necesita contexto
+**Anti-compaction gobernator:**
+- `CLAUDE.md` sección "Implemented improvements" — se lee en compaction recovery paso 10
+- `planning.md` Sunday audit — incluye `meta_compliance.py` check
+- `specialist_improvements.md` — este fichero, se lee en compaction recovery paso 5
+**Verificación post-compaction:** Si cualquiera de los dos pierde contexto, los ficheros persistentes le dicen qué hacer. No depende de memoria de sesión.
 
 ### 2. M11+M12: Estandarizar nombres + plantillas (SEGUNDO)
 **Por qué segundo:** Sin nombres y plantillas estándar no puedo auditar nada automáticamente. 6 nombres para el mismo documento = imposible verificar consistencia.
