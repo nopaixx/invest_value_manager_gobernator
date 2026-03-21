@@ -9,22 +9,30 @@
 | [inicio] | 0.0% | 0.0% | — |
 | [hoy] | X% | X% | Xpp |
 
-## 2. Resumen del día
-[2-3 líneas. Qué pasó hoy. Lo más importante.]
+**¿Qué significa?** [Explicar en lenguaje natural: ¿estamos ganando o perdiendo al mercado? ¿Por qué? ¿Es preocupante o esperado dado el contexto macro? ¿Qué posiciones empujan o lastran?]
+
+## 2. Resumen ejecutivo
+[3-5 líneas en lenguaje natural. No solo qué pasó — sino por qué importa y cómo nos acerca o aleja del 30% CAGR. Ejemplo: "Hoy el pipeline avanzó 3 candidatos a R4, lo que significa que tenemos más opciones de deployment cuando haya capital. Pero EDEN.PA sigue cayendo y representa el 18% del portfolio — eso es lo que más nos aleja del objetivo."]
 
 ## 3. Portfolio Demo
-| Ticker | Invertido | P&L | P&L% |
-|--------|----------|-----|------|
-| ... | ... | ... | ... |
-| **TOTAL** | **$X** | **$X** | **X%** |
+| Ticker | P&L | P&L% |
+|--------|-----|------|
+| ... | ... | ... |
+| **TOTAL** | **$X** | **X%** |
 
-Cash: EUR X (X%) — solo cash real del portfolio, ignorar cash sobrante de demo
+Cash: EUR X (X%)
+
+**¿Qué significa?** [¿Cuáles son los ganadores y perdedores del día? ¿Hay alguna posición que preocupe? ¿El cash es adecuado o necesitamos desplegar/acumular?]
 
 ## 4. Operaciones ejecutadas
 [Trades ejecutados hoy en eToro. Si ninguno: "Ninguna operación hoy."]
 
+**¿Por qué?** [Si hubo trade: por qué se ejecutó, qué lógica hay detrás, cómo impacta al portfolio. Si no hubo: por qué no, ¿estamos esperando algo?]
+
 ## 5. Decisiones tomadas
-[Decisiones pactadas con el especialista hoy. Cash target, rotaciones, timing, etc.]
+[Decisiones pactadas con el especialista.]
+
+**Impacto estratégico:** [¿Cómo cambia cada decisión nuestra posición hacia el 30%? ¿Qué trade-offs hay?]
 
 ## 6. Trabajo del especialista
 | Tipo | Cantidad | Detalle |
@@ -38,38 +46,32 @@ Cash: EUR X (X%) — solo cash real del portfolio, ignorar cash sobrante de demo
 | KC sweeps | X | |
 | Stress test | X | |
 
-## 7. Pipeline status
+**¿Qué significa?** [¿Este volumen es suficiente? ¿Qué descubrió hoy que cambia algo? ¿Algún DA que destruyó una thesis o algún R4 que abre una oportunidad nueva? Lo importante no es cuántos, sino qué aprendimos.]
+
+## 7. Pipeline — ¿Dónde estamos?
 | Stage | Cantidad |
 |-------|----------|
 | R1 complete | X |
 | R2 complete | X |
 | R3 complete | X |
-| R4 approved | X |
-| Near entry (<5%) | X: [tickers] |
+| R4 approved (listos para comprar) | X |
+| Near entry (<5% del trigger) | X: [tickers] |
 
-## 8. Baskets
+**¿Qué significa?** [¿Tenemos suficientes candidatos? ¿El bottleneck es capital o ideas? ¿Hay algo a punto de triggerear? ¿El pipeline está sano o estancado?]
+
+## 8. Baskets — Estructura del fondo
 | Basket | Posiciones | %Portfolio | Health |
 |--------|-----------|-----------|--------|
-| US Quality | X | X% | [HEALTHY/OK/CRITICAL] |
-| UK Quality | X | X% | |
-| D&A Monopolies | X | X% | |
-| EU Pricing Power | X | X% | |
-| Cybersecurity | X | X% | |
+| ... | X | X% | [HEALTHY/OK/CRITICAL/DEATH_WATCH] |
 
-## 9. Objetivos — cumplimiento
-| Objetivo | Meta | Resultado | ✅/❌ |
-|----------|------|-----------|------|
-| Screening (R1) | ≥5/día | X | |
-| DA (R2) | ≥5/día | X | |
-| Smart money | ≥1/día | X | |
-| R4 | ≥5/semana | X | |
-| Pipeline velocity | ≥15/semana | X | |
-| Sector views | 0 stale | X | |
-| KC review | diaria | X | |
-| Stress test | ≥1/semana | X | |
-| Tweets | 5/día | X | |
+**¿Qué significa?** [¿Cada basket cumple su función temática? ¿Alguna está muriendo? ¿La distribución tiene sentido para el 30%? ¿Estamos demasiado concentrados en algo?]
 
-Total: X/16 (X%)
+## 9. E[CAGR] — Camino al 30%
+- **E[CAGR] blended actual:** X%
+- **Gap al 30%:** Xpp
+- **Tendencia:** mejorando/empeorando/estable (vs ayer/semana)
+
+**¿Qué significa?** [¿Estamos cerrando el gap? ¿Qué rotaciones o deployments lo cerrarían? ¿Es realista con el portfolio actual? Honestidad brutal aquí.]
 
 ## 10. Smart Money & OSINT
 
@@ -86,50 +88,79 @@ Total: X/16 (X%)
 |--------|---------------|-----------------|---------------|-------|
 | ... | X fondos | cluster buy/sell/none | X% (subiendo/bajando) | BULL/BEAR/NEUTRAL |
 
+**¿Qué significa?** [¿El smart money confirma o contradice nuestras posiciones? ¿Hay alguna señal que debería preocuparnos o darnos confianza? ¿Los insiders están comprando o vendiendo?]
+
 ### Exodus check
-[¿Los fondos que tenían nuestras posiciones siguen? ¿Alguno saliendo? ALL STABLE / EXODUS en X]
+[¿Los fondos que tenían nuestras posiciones siguen? ALL STABLE / EXODUS en X]
+
+**¿Por qué importa?** [Si los fondos quality salen de algo que tenemos, puede ser señal de que sabemos algo que ellos no — o que ellos saben algo que nosotros no.]
 
 ### Sector flows
-[¿Hacia dónde rota el dinero institucional? ¿Entrando en qué sectores, saliendo de cuáles? ¿Estamos alineados?]
+[¿Hacia dónde rota el dinero institucional?]
+
+**¿Estamos alineados?** [¿Nuestros baskets están donde va el dinero institucional o estamos en contra de la corriente? Estar en contra puede ser contrarian inteligente o error — explicar cuál.]
 
 ### Basket SM overlay
 | Basket | Convergencia | Insiders | Shorts | Assessment |
 |--------|-------------|----------|--------|------------|
 | ... | X fondos | cluster/none | X% | STRONG/MODERATE/CAUTION |
 
+**¿Qué significa?** [¿Qué basket tiene más respaldo institucional? ¿Cuál está sola? ¿Eso cambia cómo priorizamos capital?]
+
 ### Crowding risk
-[¿Alguna posición con demasiados fondos concentrados? Riesgo de liquidez si salen a la vez]
+[¿Alguna posición con demasiados fondos concentrados?]
+
+**¿Qué significa?** [Crowding = si todos salen a la vez, el precio colapsa. ¿Tenemos exposición a esto?]
 
 ### Descubrimientos
-[Tickers con 3+ fondos quality convergiendo SIN thesis — R1 priorities auto-flagged]
+[Tickers con 3+ fondos quality convergiendo SIN thesis — R1 priorities]
+
+**¿Por qué importa?** [Si 8 fondos quality compran algo que no tenemos en radar, ¿estamos perdiendo una oportunidad?]
 
 ### Contrarian opportunities
-[¿Algo que los fondos venden masivamente pero creemos que están equivocados? ¿O algo que compran y no tenemos?]
+[¿Algo que los fondos venden masivamente pero creemos que están equivocados?]
+
+**¿Qué significa?** [Estas son las oportunidades más interesantes — donde el mercado dice una cosa y nosotros otra. Explicar por qué creemos que estamos en lo correcto.]
 
 ### Detalle técnico
 [Link al report SM diario del especialista: https://github.com/nopaixx/value_invest2/blob/main/reports/smart_money/daily_YYYY-MM-DD.md]
 
-## 11. Eventos y contexto
-[FOMC, Iran, earnings, macro — lo relevante del día]
+## 11. Objetivos — cumplimiento
+| Objetivo | Meta | Resultado | ✅/❌ |
+|----------|------|-----------|------|
+| ... | ... | ... | ... |
 
-## 12. Twitter @nopaixx
+Total: X/25 (X%)
+
+**¿Qué significa?** [¿Los RED son preocupantes o esperados? ¿Cuáles son los que más impactan al 30%? ¿Qué haré mañana con los RED?]
+
+## 12. Eventos y contexto
+[FOMC, Iran, earnings, macro]
+
+**¿Cómo nos afecta?** [No solo qué pasó — sino qué significa para nuestro portfolio y nuestras decisiones. ¿Cambia algo? ¿Debemos actuar?]
+
+## 13. Twitter @nopaixx
 - Tweets publicados: X (X + eToro)
 - Replies: X
 - Followers: X
 - Engagement destacado: [si alguien respondió/likeó]
 
-## 13. Errores y autocrítica
+## 14. Errores y autocrítica
 | Quién | Error | Corrección |
 |-------|-------|-----------|
 | Gobernator | ... | ... |
 | Especialista | ... | ... |
 
-## 14. Pendiente y plan mañana
+**Reflexión:** [¿Qué aprendí hoy? ¿Qué haría diferente? Ser brutalmente honesto.]
+
+## 15. Pendiente y plan mañana
 ### Urgente
 - [lo que no puede esperar]
 
 ### Mañana ([día] — [tema del día según planning])
 - [plan por bloques]
+
+**¿Por qué esto y no otra cosa?** [Justificar las prioridades de mañana en función del 30% CAGR.]
 
 ### Próximos eventos
 - [Mar 26 trades, earnings, etc.]
