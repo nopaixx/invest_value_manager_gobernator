@@ -209,7 +209,18 @@ Total: X/25 (X%)
 
 **Reflexión:** [¿Qué aprendí hoy? ¿Qué haría diferente? Ser brutalmente honesto.]
 
-## 18. Pendiente y plan mañana
+## 18. Auto-examen del Gobernator
+
+**1. ¿Qué debería haber detectado o verificado hoy que no detecté sin que me lo dijeran?**
+[Respuesta honesta. Si "nada", justificar por qué.]
+
+**2. ¿Qué aplacé hoy que tenía información suficiente para decidir?**
+[Respuesta honesta. Si "nada", justificar.]
+
+**3. ¿En qué fui menos exigente conmigo mismo que con el especialista?**
+[Respuesta honesta. Si "nada", justificar.]
+
+## 19. Pendiente y plan mañana
 ### Urgente
 - [lo que no puede esperar]
 
