@@ -106,8 +106,9 @@ The specialist has **24 specialized agents** and **34 Python tools**. ALWAYS pus
 - **Problem:** 6 different names for DA (devils_advocate, r2_devils_advocate, counter_analysis, da_analysis, adversarial_thesis_review, r2_bear_case). Impossible to audit.
 - **Specialist fix:** 7 canonical names defined. `state/naming_contract.md`. Agent prompts include exact output path. Post-agent filename check.
 - **7 canonical names:** thesis.md, moat_assessment.md, risk_assessment.md, devils_advocate.md, r3_resolution.md, committee_decision.md, earnings_framework.md. NOTHING else.
-- **My audit:** After every push, verify new files match canonical names: `ls thesis/research/TICKER/` should only show canonical names.
-- **Anti-compaction specialist:** `state/naming_contract.md` read on session start.
+- **7 _TEMPLATE files:** Each document type has a template in thesis/_TEMPLATE_*.md. All include mandatory META-REFLECTION section. Agents MUST follow their template.
+- **My audit:** After every push, verify: (1) filenames are canonical, (2) documents follow template structure, (3) META-REFLECTION section exists.
+- **Anti-compaction specialist:** `state/naming_contract.md` + templates in thesis/ read on session start.
 - **Anti-compaction gobernator:** This section in CLAUDE.md. Planning.md audit steps.
 
 #### IMP-3: Material event protocol (2026-03-21)
