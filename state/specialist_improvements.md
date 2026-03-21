@@ -52,9 +52,44 @@
 
 **Agentes > Tools.** Si un problema se puede resolver mejorando un agente (que razona, adapta, meta-reflexiona) NO crear un nuevo tool (que es código estático, puede fallar silenciosamente, no piensa). Tools = datos y cálculos. Agentes = juicio e inteligencia. Menos tools, mejores agentes.
 
-## PLAN DE APLICACIÓN
+## PLAN DE APLICACIÓN — Priorizado
 
-Aplicar gradualmente, no todo de golpe. Angel valida cada mejora.
+Aplicar de una en una. Angel valida cada mejora antes de implementar. No pasar a la siguiente hasta que la anterior esté completada y verificada.
+
+### 1. M15+M18: Loop de meta-reflexión (PRIMERO)
+**Por qué primero:** Es el problema raíz. Si arreglamos esto, el sistema se auto-mejora. Los sub-agentes YA detectan todo (36 items) pero nadie actúa. Arreglar el loop = todos los demás problemas se detectan y resuelven solos.
+**Qué hacer:** El especialista añade a su protocolo: después de cada R1/R2/R4, leer meta-reflexión, resolver cada item, cerrar loop. Mejorar agentes, no crear tools.
+**Cómo verifico:** Audito que las meta-reflexiones tienen respuestas/resoluciones debajo.
+
+### 2. M11+M12: Estandarizar nombres + plantillas (SEGUNDO)
+**Por qué segundo:** Sin nombres y plantillas estándar no puedo auditar nada automáticamente. 6 nombres para el mismo documento = imposible verificar consistencia.
+**Qué hacer:** Definir 7 nombres únicos + _TEMPLATE por tipo. Desde ahora todo nuevo sigue el estándar. Mejorar agentes para que usen plantillas.
+**Cómo verifico:** ls thesis/research/TICKER/ y verifico nombres estándar.
+
+### 3. M1+Issue 7: Protocolo evento material (TERCERO)
+**Por qué tercero:** Cuando algo cambia (news, KC, earnings) no hay protocolo para qué documentos re-run. EDEN.PA Brazil decreto: FV recalculado pero thesis/DA/moat intactos. Inconsistente.
+**Qué hacer:** Definir: evento material → qué agentes re-corren → qué documentos se actualizan. Mejorar agentes existentes, no crear nuevos.
+**Cómo verifico:** Cuando hay evento material, verifico que los documentos afectados se actualizaron.
+
+### 4. M16+M17: Meta-reflexión en TODOS los agentes (CUARTO)
+**Por qué cuarto:** Ya funciona en thesis (5/5), DA (12/13), committee (4/5). Falta en R3 (0/9), moat y risk parcialmente. Ampliar a todos.
+**Qué hacer:** El especialista mejora sus agentes para que TODOS generen sección META-REFLECTION.
+**Cómo verifico:** grep META-REFLECTION en cada fichero nuevo.
+
+### 5. M5+M10: DA periódico posiciones activas (QUINTO)
+**Por qué quinto:** Las tesis envejecen. Un DA mensual fuerza re-evaluación adversarial. Los sub-agentes ya piden esto en las meta-reflexiones.
+**Qué hacer:** El especialista añade a su session protocol: cada posición activa recibe DA cada 30 días. Usar agente devils-advocate existente.
+**Cómo verifico:** Fecha del último DA por posición activa vs 30 días.
+
+### 6. M3+Issue 8: R4 committee con rechazo real (SEXTO)
+**Por qué sexto:** 100% approval rate = rubber stamp. Pero esto requiere que los pasos anteriores funcionen primero (meta-reflexiones leídas, plantillas estándar, DAs actualizados).
+**Qué hacer:** El committee debe tener criterios DUROS de rechazo. Si MoS <10% → REJECT. Si KC >3 approaching → REJECT.
+**Cómo verifico:** Primera vez que el committee rechaza algo.
+
+### 7. M13+Issue 11+12: Limpieza legacy (SÉPTIMO)
+**Por qué último:** Una vez que el sistema nuevo funciona, limpiar lo viejo. No antes — necesitamos el estándar definido para saber qué cumple y qué no.
+**Qué hacer:** Script de renombrado automático + borrar lo que no sirve. El especialista valida qué se borra.
+**Cómo verifico:** find thesis/ -name con nombres no estándar = 0.
 
 **Semana 1 (próxima):** M1 (protocolo evento material) + Issue 7
 **Semana 2:** M5 + M10 (DA periódico posiciones activas)
