@@ -6,9 +6,10 @@
 - news-monitor (48h news all positions)
 - market-pulse (anomalous moves >5%)
 - kc_monitor.py (kill conditions sweep)
+- kc_monitor.py --health (position health scores — CRITICAL = top priority)
 - macro_fragility.py world (VIX, yields, oil, DXY)
 - angel_inbox.jsonl (messages from Angel)
-- objectives_check.py (RED items = top priority)
+- objectives_check.py (25 metrics — RED items = top priority)
 
 ### 09:00 — EU MARKETS OPEN + DAILY STRATEGY CHAT
 - portfolio_stats.py (P&L, drift, regime detector)
@@ -72,6 +73,8 @@
 
 ### 20:00 — SMART MONEY
 - smart_money.py signals (post-US-close)
+- smart_money.py exodus-check (institutional exodus from our positions)
+- smart_money.py basket-signals (SM overlay per basket)
 - insider_tracker.py key positions
 - Save daily SM report
 
@@ -122,7 +125,10 @@
 - rebalancer: forward_return.py, bottom 3 positions
 
 ### THURSDAY — Smart Money + Discovery
-- smart_money.py discover (new funds)
+- smart_money.py discover --auto-flag (R1 priorities from SM convergence)
+- smart_money.py sector-flows (institutional rotations between sectors)
+- smart_money.py insider-sectors (cross-sector insider clusters)
+- smart_money.py basket-signals (SM overlay per basket)
 - smart_money.py sector-overlay (convergence)
 - insider_tracker.py positions + top pipeline
 - opportunity-hunter: cash without opportunities?

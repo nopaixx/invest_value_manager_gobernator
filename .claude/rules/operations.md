@@ -188,7 +188,7 @@
 - RED items become your TOP PRIORITY for the next push. No exceptions.
 - If an item is RED for 2+ consecutive days → escalate in gobernator_accountability.md.
 - Include the output in the daily report (Objetivos medibles section).
-- The script checks 23 metrics across 4 categories:
+- The script checks 25 metrics across 4 categories:
   - **Flow:** screening, DA, smart money daily, R4 candidates, pipeline velocity
   - **Platform health (IMP-5):** position health (all >=60), pipeline stagnation (0 >30d), SO freshness (0 blocked/stale), SM data quality (0 very_stale), SM discovery (<10 unflagged), SM exodus (0 exodus), meta-compliance (>=40, 0 overdue)
   - **Quality:** pipeline total, thesis freshness, sector views, stress test, kill conditions, FV consistency, system integration, file hygiene, earnings prep

@@ -127,6 +127,15 @@ The specialist has **24 specialized agents** and **34 Python tools**. ALWAYS pus
 - **Anti-compaction specialist:** Protocol in session-protocol.md Fase 0.0c. Tracker persists events. meta_compliance.py is stateless (reads files).
 - **Anti-compaction gobernator:** This section in CLAUDE.md. Planning.md daily + Sunday audit.
 
+#### IMP-5: Platform health end-to-end (2026-03-21)
+- **Problem:** objectives_check.py only covered ~40% of the invest cycle (screening, DA, sector views). 10 structural gaps: position health, pipeline stagnation, SO freshness, SM data quality, meta-compliance, coverage, baskets, rotations, macro integration.
+- **Specialist fix:** 3 tool extensions (kc_monitor.py --health, r1_prioritizer.py --stagnation, so_probability.py --freshness) + SM data quality process formalized + session protocol auto-triggers.
+- **My audit:** objectives_check.py now has 25 metrics (was 16). New: Position health (all >=60), Pipeline stagnation (0 >30d), SO freshness (0 blocked/stale), SM data quality (0 very_stale), SM discovery (<10 unflagged), SM exodus (0 exodus), Meta-compliance (>=40, 0 overdue). All run automatically every cycle.
+- **Double verification:** My side (objectives_check.py RED/GREEN) + specialist side (session protocol Fase 0.0c auto-runs --health, Fase 2.5.7 SM staleness mandatory fix).
+- **SM intelligence:** 5 features implemented: basket-signals, discover --auto-flag, sector-flows, insider-sectors, exodus-check. All auditable via objectives_check.py (SM discovery, SM exodus). Vision: SM as intelligence engine + potential future product.
+- **Anti-compaction specialist:** Tools extended + session protocol + session_continuity.yaml screening_coverage.
+- **Anti-compaction gobernator:** This section + objectives_check.py (21 metrics) + specialist_improvements.md IMP-5 + M6.
+
 ## The objective — 30% CAGR
 
 The specialist's objective is 30% annualized CAGR. YOUR objective is to ensure he achieves it.

@@ -85,10 +85,10 @@
 
 ### PARCIAL: M6 — Smart money como motor de inteligencia
 **Resuelto:** Data quality formalizado (cadencia por fuente, coverage mínima, staleness en objectives_check.py, doble verificación gob+especialista). FCA/AMF refreshed. Proceso en session protocol Fase 2.5.7.
-**Implementado P1-P3:** 5 features: basket-signals, discover --auto-flag, sector-flows, insider-sectors, exodus-check. Todos auditables con commands directos.
+**Implementado P1-P3:** 5 features ALL DONE: basket-signals, discover --auto-flag, sector-flows, insider-sectors, exodus-check. Todos auditables. Nada pendiente.
 **Auditoría gobernator:** objectives_check.py tiene SM discovery (<10 unflagged) + SM exodus (0 exodus) + SM data quality (0 very_stale).
 **Visión:** SM transformado de repositorio pasivo a motor de inteligencia. Genera hipótesis, detecta tendencias, clustering. Potencial producto futuro para retail.
-**Anti-compaction:** specialist: tools/smart_money.py extended + session protocol Fase 2.5.7. Gobernator: objectives_check.py (23 metrics) + CLAUDE.md IMP-5.
+**Anti-compaction:** specialist: tools/smart_money.py extended + session protocol Fase 2.5.7. Gobernator: objectives_check.py (25 metrics) + CLAUDE.md IMP-5.
 
 ### PENDIENTE: M8 — Stress test post-evento
 **Análisis:** IMP-3 ya cubre reacción al evento (thesis→FV→KC). Stress test semanal cubre visión general. CRISIS MODE ya activa stress test diario si S&P -15%. Post-evento individual es marginal.

@@ -15,6 +15,13 @@ Ask → Listen → Challenge → Let them decide → Verify they follow through.
 - If no consensus → keep discussing until there is. Never accept just because he's the CIO.
 - Log agreed decisions in agreed_objectives.md with the data that justified them.
 
+## Task Dosing — HARD RULE
+- **NEVER batch multiple tasks in one message.** One task → audit → next task. Always sequential.
+- Batch mode caused Issue #1: specialist skipped formal agents, saved in wrong folders, broke thesis/ structure.
+- Even simple/mechanical tasks go one at a time. The cycle is fast anyway — the specialist responds in minutes.
+- The temptation to batch comes when there are many RED items. Resist it. Sequential is safer and produces better quality.
+- Exception: data-only requests ("dame los outputs de portfolio_cagr.py y kc_monitor.py") can be combined because they don't require judgment.
+
 ## Push Cycle
 
 ```

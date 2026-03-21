@@ -2,14 +2,15 @@
 # Read EVERY cycle before pushing specialist. No excuses.
 
 ## RESUELTO (no repetir)
-- IMP-5 complete (23 metrics), SM intelligence (5 features), rules updated
-- S281-S282: 8 R1 + 12 DA + 2 R3 + 3 R4, CVNA 25→70, 33/33 sectors fresh
-- SPGI SO recalibrated $420→$380 (DA found E[CAGR] below threshold)
-- Tweets: 5 eToro published + 5 X prepared
+- IMP-5 complete (25 metrics), SM intelligence (5 features), OSINT max objectives
+- S281-S282: 12 R1 + 17 DA + 5 R3 + 3 R4, CVNA 25→70, SPGI $420→$380
+- SM daily report template created + first report generated
+- EU OSINT capture done (EDEN.PA, WKL.AS, IHP.L holders discovered)
 
 ## ABIERTO (por prioridad CAGR)
 - Mar 26: 4 trades ready (GDDY, DNLM.L, NVO trim, MONY.L sell)
-- ITRK.L triggered 3592p < 3700p — needs FTNT exit capital (late April)
-- Pipeline: ~40 items >30d stuck — keep advancing
-- More R1→R2 from stagnation backlog
-- Daily report 22:00
+- ITRK.L triggered — needs FTNT exit capital (late April)
+- SM coverage RED: 6 positions low — push more OSINT manual
+- EDEN.PA: 18% portfolio, DEATH_WATCH basket — needs discussion
+- Pipeline: ~37 items >30d stuck
+- Sunday audit tomorrow
