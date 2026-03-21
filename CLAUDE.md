@@ -93,6 +93,15 @@ The specialist has **24 specialized agents** and **34 Python tools**. ALWAYS pus
 5. **AUDIT basket lifecycle** — no stagnant baskets, no orphan positions without plan
 6. **REMIND him every push**: "Use your agents and tools. Save in thesis/, not reports/."
 
+### Implemented improvements (survive compaction)
+
+#### IMP-1: Meta-reflection loop (2026-03-21)
+- **Problem:** Sub-agents generated 36 items (anomalies, suggestions, questions) — nobody read or acted on them.
+- **Specialist fix:** `state/meta_reflection_tracker.yaml` + `.claude/rules/meta-reflection-integration.md` (9 rules) + `tools/meta_compliance.py`
+- **My audit:** Run `python3 tools/meta_compliance.py` in specialist repo. Score ≥60, violations =0, coverage >50%. Added to Sunday audit in planning.md.
+- **Baseline:** 53/100 at implementation. Improves organically.
+- **Anti-compaction:** specialist reads tracker.yaml on session start. I read planning.md which tells me to audit.
+
 ## The objective — 30% CAGR
 
 The specialist's objective is 30% annualized CAGR. YOUR objective is to ensure he achieves it.
