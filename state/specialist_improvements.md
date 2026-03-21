@@ -69,7 +69,8 @@ Aplicar de una en una. No pasar a la siguiente hasta que la anterior esté compl
 ### 1. M15+M18: Loop de meta-reflexión (PRIMERO)
 **Por qué primero:** Es el problema raíz. Si arreglamos esto, el sistema se auto-mejora. Los sub-agentes YA detectan todo (36 items) pero nadie actúa. Arreglar el loop = todos los demás problemas se detectan y resuelven solos.
 **Qué hacer:** El especialista añade a su protocolo: después de cada R1/R2/R4, leer meta-reflexión, resolver cada item, cerrar loop. Mejorar agentes, no crear tools.
-**Cómo verifico:** Audito que las meta-reflexiones tienen respuestas/resoluciones debajo.
+**Cómo verifico:** `python3 tools/meta_compliance.py` — score ≥60, violations =0, coverage >50%.
+**Estado:** ✅ IMPLEMENTADO (baseline 53/100, mejorando orgánicamente)
 
 ### 2. M11+M12: Estandarizar nombres + plantillas (SEGUNDO)
 **Por qué segundo:** Sin nombres y plantillas estándar no puedo auditar nada automáticamente. 6 nombres para el mismo documento = imposible verificar consistencia.

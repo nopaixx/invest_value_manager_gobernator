@@ -146,6 +146,7 @@
 
 ### SUNDAY — Audit + Preparation
 - **Coffee chat** with specialist (casual — week reflections, what worked, what didn't, what's exciting)
+- Run `python3 tools/meta_compliance.py` in specialist repo — verify score ≥60, violations =0
 - Weekly audit: specialist accountability review
 - Self-audit: gobernator accountability review
 - objectives_check.py: weekly scorecard
