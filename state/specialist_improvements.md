@@ -54,7 +54,17 @@
 
 ## PLAN DE APLICACIÓN — Priorizado
 
-Aplicar de una en una. Angel valida cada mejora antes de implementar. No pasar a la siguiente hasta que la anterior esté completada y verificada.
+Aplicar de una en una. No pasar a la siguiente hasta que la anterior esté completada y verificada.
+
+### Workflow por mejora:
+1. **Gobernator identifica** el problema y lo presenta al especialista
+2. **Especialista propone** solución — debe convencer al gobernator CON DATOS y argumentos
+3. **Gobernator evalúa** — si no convence, push back. Si convence → presenta a Angel
+4. **Angel valida** — si OK, se implementa
+5. **Especialista implementa** — mejora sus agentes/protocolo/pipeline (NO tools salvo datos puros)
+6. **Gobernator audita** — verifica que los cambios funcionan en la práctica
+7. **Gobernator se mejora** — construye sus propios mecanismos de auditoría (checks en objectives_check.py, reglas en operations.md, o agentes propios) para verificar automáticamente en el futuro
+8. **Ambos evolucionan** — él arregla el problema, yo aprendo a detectarlo para siempre
 
 ### 1. M15+M18: Loop de meta-reflexión (PRIMERO)
 **Por qué primero:** Es el problema raíz. Si arreglamos esto, el sistema se auto-mejora. Los sub-agentes YA detectan todo (36 items) pero nadie actúa. Arreglar el loop = todos los demás problemas se detectan y resuelven solos.
