@@ -125,7 +125,53 @@ Cash: EUR X (X%)
 ### Detalle técnico
 [Link al report SM diario del especialista: https://github.com/nopaixx/value_invest2/blob/main/reports/smart_money/daily_YYYY-MM-DD.md]
 
-## 11. Objetivos — cumplimiento
+## 11. Stress Test — Resiliencia del portfolio
+
+| Métrica | Valor | Delta vs semana anterior |
+|---------|-------|------------------------|
+| Portfolio beta | X | BETTER/WORSE/SAME |
+| Monte Carlo P5 (1-in-20 bad year) | -X% | |
+| GFC 2008 drawdown estimado | -X% | |
+| GFC recovery estimado | X meses | |
+| COVID 2020 drawdown estimado | -X% | |
+| COVID recovery estimado | X meses | |
+| Posición más vulnerable | TICKER | |
+
+**¿Qué significa?** [¿El portfolio es más o menos resistente que la semana pasada? ¿La posición más vulnerable debería preocuparnos? ¿El P5 es aceptable para nuestro nivel de riesgo (Angel dijo: riesgo FULL, sin límite de drawdown)? ¿Algún cambio reciente empeoró la resiliencia?]
+
+## 12. World View — Macro, Megatrends y Baskets
+
+### Macro actual
+[Resumen del contexto macro: rates, inflation, geopolítica, oil, VIX. Con links a fuentes para lectura.]
+
+### Nuestros baskets — ¿dónde estamos?
+[Para cada basket activo: ¿qué tendencia secular lo justifica? ¿Esa tendencia sigue vigente? ¿Se ha acelerado o frenado? ¿Hay nuevos datos que cambien la tesis temática?]
+
+### Megatrends — ¿hacia dónde va el mundo?
+[Visión de largo plazo: ¿qué temas seculares están ganando fuerza? ¿Cuáles perdiendo? ¿Nuestros baskets están alineados con los megatrends más fuertes? ¿Hay un megatrend importante que no tenemos cubierto?]
+
+### Links de lectura recomendada
+- [Link 1: artículo/report relevante del día sobre macro o megatrends]
+- [Link 2: ...]
+- [Link 3: ...]
+
+**¿Qué significa?** [¿El mundo va a favor o en contra de nuestro portfolio? ¿Necesitamos reposicionarnos? ¿Hay oportunidades que no estamos viendo?]
+
+## 13. Charla estratégica — Gobernator × Especialista
+
+### Tema del día
+[¿De qué hablamos hoy? ¿Fue coffee chat casual o conversación estratégica formal?]
+
+### Resumen de la conversación
+[Los puntos clave discutidos, en lenguaje natural. ¿Qué propuso él? ¿Qué desafié yo? ¿Dónde hubo acuerdo y dónde desacuerdo?]
+
+### Decisiones y compromisos
+[¿Qué se pactó? ¿Qué se comprometió a hacer? ¿Qué queda abierto para seguir discutiendo?]
+
+### Mi evaluación
+[¿Fue una conversación productiva? ¿El especialista está enfocado en lo correcto? ¿Hay algo que me preocupe de su enfoque o actitud?]
+
+## 14. Objetivos — cumplimiento
 | Objetivo | Meta | Resultado | ✅/❌ |
 |----------|------|-----------|------|
 | ... | ... | ... | ... |
@@ -134,18 +180,18 @@ Total: X/25 (X%)
 
 **¿Qué significa?** [¿Los RED son preocupantes o esperados? ¿Cuáles son los que más impactan al 30%? ¿Qué haré mañana con los RED?]
 
-## 12. Eventos y contexto
+## 15. Eventos y contexto
 [FOMC, Iran, earnings, macro]
 
 **¿Cómo nos afecta?** [No solo qué pasó — sino qué significa para nuestro portfolio y nuestras decisiones. ¿Cambia algo? ¿Debemos actuar?]
 
-## 13. Twitter @nopaixx
+## 16. Twitter @nopaixx
 - Tweets publicados: X (X + eToro)
 - Replies: X
 - Followers: X
 - Engagement destacado: [si alguien respondió/likeó]
 
-## 14. Errores y autocrítica
+## 17. Errores y autocrítica
 | Quién | Error | Corrección |
 |-------|-------|-----------|
 | Gobernator | ... | ... |
@@ -153,7 +199,7 @@ Total: X/25 (X%)
 
 **Reflexión:** [¿Qué aprendí hoy? ¿Qué haría diferente? Ser brutalmente honesto.]
 
-## 15. Pendiente y plan mañana
+## 18. Pendiente y plan mañana
 ### Urgente
 - [lo que no puede esperar]
 
