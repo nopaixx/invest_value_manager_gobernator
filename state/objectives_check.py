@@ -674,6 +674,39 @@ def check_meta_compliance():
         return -1, f"ERROR: {e}", False
 
 
+def check_sm_daily_report():
+    """SM daily report must exist for today."""
+    sm_dir = f"{SPECIALIST_REPO}/reports/smart_money"
+    today_file = os.path.join(sm_dir, f"daily_{TODAY.isoformat()}.md")
+    exists = os.path.isfile(today_file)
+    return 1 if exists else 0, "exists" if exists else "not found", exists
+
+
+def check_sm_coverage():
+    """Active positions must have 100% SM coverage."""
+    cmd = ["python3", "tools/smart_money.py", "coverage"]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
+                                cwd=SPECIALIST_REPO)
+        output = result.stdout
+        # Check portfolio positions with 0% or 33% coverage
+        positions = parse_yaml_positions(PORTFOLIO_FILE)
+        tickers = [p["ticker"] for p in positions]
+        low_coverage = []
+        for line in output.split("\n"):
+            parts = line.strip().split()
+            if not parts:
+                continue
+            ticker = parts[0]
+            if ticker in tickers and line.strip().endswith("0%") or (ticker in tickers and "33%" in line):
+                low_coverage.append(ticker)
+        if low_coverage:
+            return len(low_coverage), f"{len(low_coverage)} low: {', '.join(low_coverage[:5])}", False
+        return 0, "all positions covered", True
+    except Exception as e:
+        return -1, f"ERROR: {e}", False
+
+
 def check_sm_discovery():
     """SM discovery should flag 0 tickers with 3+ fund convergence without R1."""
     cmd = ["python3", "tools/smart_money.py", "discover", "--auto-flag"]
@@ -772,6 +805,8 @@ def main():
         ("Pipeline stagnation", "0 items >30d", check_pipeline_stagnation),
         ("SO freshness", "0 blocked/stale", check_so_freshness),
         ("SM data quality", "0 very_stale", check_sm_data_quality),
+        ("SM daily report", "exists today", check_sm_daily_report),
+        ("SM coverage", "100% positions", check_sm_coverage),
         ("SM discovery", "<10 unflagged", check_sm_discovery),
         ("SM exodus", "0 exodus", check_sm_exodus),
         ("Meta-compliance", ">=40, 0 overdue", check_meta_compliance),

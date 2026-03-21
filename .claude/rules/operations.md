@@ -128,6 +128,21 @@
 | Smart money | 1 report/día | Diario |
 | Universo cubierto | 100% global quality (QS≥70), refresh cada 30d | Continuo |
 
+### OSINT & Smart Money objectives (MAXIMUM level)
+| Objetivo | Meta | Frecuencia | Medición |
+|----------|------|------------|----------|
+| SM coverage posiciones activas | 100% (holders+insiders+shorts) | Continuo | `smart_money.py coverage` |
+| SM coverage pipeline SO | ≥67% | Continuo | `smart_money.py coverage` |
+| SM daily report | Diario, template 10 secciones, 0 días sin report | Diario | `reports/smart_money/daily_YYYY-MM-DD.md` exists |
+| SM data freshness | 0 VERY_STALE sources | Continuo | `smart_money.py stale` |
+| EU OSINT capture manual | ≥5 búsquedas/semana (tickers sin datos automáticos) | Semanal | Count WebSearch + capture in git log |
+| Sector flows analyzed | 1 análisis/semana con conclusión alignment | Semanal | `smart_money.py sector-flows` in weekly |
+| Insider sectors analyzed | 1 análisis/semana, clusters cruzados con pipeline | Semanal | `smart_money.py insider-sectors` in weekly |
+| Discovery auto-flag | 0 tickers con 3+ fondos sin thesis | Continuo | `smart_money.py discover --auto-flag` |
+| SM→Decision tracking | ≥3 decisiones SM-driven/semana logueadas | Semanal | Log in SM daily "Actionable Items" |
+| Contrarian watchlist | Lista activa mantenida (posiciones contra consenso institucional) | Continuo | Section in SM daily report |
+| SM exodus | 0 exodus en posiciones activas | Continuo | `smart_money.py exodus-check` |
+
 ### CRITICAL: How to measure — PROCESS not VOLUME
 - **Screening** = `thesis/research/TICKER/thesis.md` created by `fundamental-analyst` agent. NOT batch reports.
 - **DA** = `devils_advocate.md` in `thesis/TICKER/` by `devils-advocate` agent. NOT embedded bear cases.
@@ -173,8 +188,13 @@
 - RED items become your TOP PRIORITY for the next push. No exceptions.
 - If an item is RED for 2+ consecutive days → escalate in gobernator_accountability.md.
 - Include the output in the daily report (Objetivos medibles section).
-- The script checks: screening, pipeline, thesis freshness, sector views, stress test, smart money, tweets, daily report, contrathesis, R4 candidates, kill conditions, FV consistency, system integration, earnings prep.
+- The script checks 23 metrics across 4 categories:
+  - **Flow:** screening, DA, smart money daily, R4 candidates, pipeline velocity
+  - **Platform health (IMP-5):** position health (all >=60), pipeline stagnation (0 >30d), SO freshness (0 blocked/stale), SM data quality (0 very_stale), SM discovery (<10 unflagged), SM exodus (0 exodus), meta-compliance (>=40, 0 overdue)
+  - **Quality:** pipeline total, thesis freshness, sector views, stress test, kill conditions, FV consistency, system integration, file hygiene, earnings prep
+  - **Growth:** tweets, daily report
 - The script verifies system integration: all portfolio tickers in SECTOR_MAP, FX defaults, etc. If the specialist adds/removes a position, the script detects missing mappings automatically.
+- Platform health metrics have DOUBLE VERIFICATION: my objectives_check.py + specialist session protocol (Fase 0.0c auto-runs --health, Fase 2.5.7 SM staleness).
 
 ## Anti-complacency — HARD RULES
 - There is ALWAYS work to do. "Nothing pending" is a LIE. NEVER say it.
