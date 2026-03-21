@@ -92,7 +92,11 @@ Aplicar de una en una. No pasar a la siguiente hasta que la anterior esté compl
 ### 3. M1+Issue 7: Protocolo evento material (TERCERO)
 **Por qué tercero:** Cuando algo cambia (news, KC, earnings) no hay protocolo para qué documentos re-run. EDEN.PA Brazil decreto: FV recalculado pero thesis/DA/moat intactos. Inconsistente.
 **Qué hacer:** Definir: evento material → qué agentes re-corren → qué documentos se actualizan. Mejorar agentes existentes, no crear nuevos.
-**Cómo verifico:** Cuando hay evento material, verifico que los documentos afectados se actualizaron.
+**Cómo verifico:** `meta_compliance.py` dimension 3 — MATERIAL EVENTS. Stale thesis vs event date = flagged.
+**Estado:** ✅ IMPLEMENTADO. 4 niveles + flujos + meta_compliance.py actualizado (baseline 35/100).
+**Tool auditada:** Verificado source 685 líneas. Score deduce desde 100. Sin silent failures. Caps razonables.
+**Anti-compaction especialista:** session-protocol.md Fase 0.0c + tracker persiste events.
+**Anti-compaction gobernator:** CLAUDE.md IMP-3 + planning.md daily audit.
 
 ### 4. M16+M17: Meta-reflexión en TODOS los agentes (CUARTO)
 **Por qué cuarto:** Ya funciona en thesis (5/5), DA (12/13), committee (4/5). Falta en R3 (0/9), moat y risk parcialmente. Ampliar a todos.

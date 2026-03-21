@@ -110,6 +110,15 @@ The specialist has **24 specialized agents** and **34 Python tools**. ALWAYS pus
 - **Anti-compaction specialist:** `state/naming_contract.md` read on session start.
 - **Anti-compaction gobernator:** This section in CLAUDE.md. Planning.md audit steps.
 
+#### IMP-3: Material event protocol (2026-03-21)
+- **Problem:** Events (news, KC, earnings) didn't trigger document updates. EDEN.PA Brazil decree: FV recalculated but thesis/DA/risk not re-run.
+- **Specialist fix:** 4-level classification (COSMETIC→CRITICAL). Table of what re-runs per level. Integrated in meta_compliance.py as MATERIAL EVENTS dimension.
+- **My audit:** `meta_compliance.py` now checks 3 dimensions: meta-reflections, pipeline violations, AND material events. Stale thesis vs event date = flagged.
+- **Tool audit:** I verified meta_compliance.py source (685 lines). Score starts at 100 and deduces. No silent failures. Penalty caps are reasonable. Not perfect but honest.
+- **Baseline:** 35/100 (dropped from 53 because material events now counted).
+- **Anti-compaction specialist:** Protocol in session-protocol.md Fase 0.0c. Tracker persists events. meta_compliance.py is stateless (reads files).
+- **Anti-compaction gobernator:** This section in CLAUDE.md. Planning.md daily + Sunday audit.
+
 ## The objective — 30% CAGR
 
 The specialist's objective is 30% annualized CAGR. YOUR objective is to ensure he achieves it.
