@@ -123,7 +123,7 @@ Cash: EUR X (X%)
 **¿Qué significa?** [Estas son las oportunidades más interesantes — donde el mercado dice una cosa y nosotros otra. Explicar por qué creemos que estamos en lo correcto.]
 
 ### Detalle técnico
-[Link al report SM diario del especialista: https://github.com/nopaixx/value_invest2/blob/develop/reports/smart_money/daily_YYYY-MM-DD.md]
+[Link al report SM diario del especialista: https://github.com/nopaixx/invest_value_manager/blob/develop/reports/smart_money/daily_YYYY-MM-DD.md]
 
 ## 11. Stress Test — Resiliencia del portfolio
 
