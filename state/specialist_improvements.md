@@ -55,10 +55,11 @@
 
 ## MEJORAS PENDIENTES (por prioridad)
 
-### PRÓXIMA: M19 — Templates + meta-reflexión para TODOS los agentes
-**Problema:** Solo thesis/ (R1-R4) tiene templates y nombres canónicos. Pero hay 24 agentes que generan outputs en world/sectors/, reports/, state/. Sector views, smart money, stress tests — sin template, sin meta-reflexión, sin nombres estándar. Caos potencial fuera de thesis/.
-**Prioridad:** CRÍTICA — es la extensión natural de IMP-2.
-**Enfoque:** El especialista identifica todos los outputs de sus 24 agentes, define canonical names + templates + meta-reflexión donde haya juicio. Gobernator audita.
+### IMP-4: M19 — Templates + meta-reflexión para TODOS los agentes ✅
+**Problema:** Solo thesis/ tenía templates. 24 agentes, 17 sin estandarizar.
+**Fix:** 24 agentes clasificados (7 juicio ya hecho, 6 juicio nuevo, 6 datos, 5 sistema). 3 cambios: sector views template + YAML meta_reflection + re_evaluation template.
+**Audit:** Verify sector views META-REFLECTION, YAML meta_reflection fields, re_evaluations follow template.
+**Anti-compaction:** specialist: naming_contract.md + templates + session protocol. Gobernator: CLAUDE.md IMP-4.
 
 ### PENDIENTE: M5+M10 — DA periódico posiciones activas
 **Problema:** Tesis envejecen sin re-challenge. DA solo se hace pre-compra (R2), nunca después.

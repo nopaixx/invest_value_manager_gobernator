@@ -111,6 +111,13 @@ The specialist has **24 specialized agents** and **34 Python tools**. ALWAYS pus
 - **Anti-compaction specialist:** `state/naming_contract.md` + templates in thesis/ read on session start.
 - **Anti-compaction gobernator:** This section in CLAUDE.md. Planning.md audit steps.
 
+#### IMP-4: Templates + meta-reflexión para TODOS los agentes (2026-03-21)
+- **Problem:** Only thesis/ (R1-R4) had templates. 24 agents, only 7 standardized. Sector views, news, risk alerts, re-evaluations had no template or meta-reflection.
+- **Specialist fix:** 3 changes: (1) META-REFLECTION added to world/sectors/_TEMPLATE.md, (2) meta_reflection field in news-monitor + risk-sentinel YAML, (3) _TEMPLATE_re_evaluation.md created (8th template).
+- **My audit:** Verify sector views have META-REFLECTION section. Verify YAML outputs have meta_reflection field. Verify re-evaluations follow template.
+- **Anti-compaction specialist:** naming_contract.md updated with non-thesis rules. Templates persist. Session protocol Fase 0.0c reads all.
+- **Anti-compaction gobernator:** This section in CLAUDE.md. meta_compliance.py extended.
+
 #### IMP-3: Material event protocol (2026-03-21)
 - **Problem:** Events (news, KC, earnings) didn't trigger document updates. EDEN.PA Brazil decree: FV recalculated but thesis/DA/risk not re-run.
 - **Specialist fix:** 4-level classification (COSMETIC→CRITICAL). Table of what re-runs per level. Integrated in meta_compliance.py as MATERIAL EVENTS dimension.
