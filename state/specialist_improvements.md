@@ -84,7 +84,10 @@ Aplicar de una en una. No pasar a la siguiente hasta que la anterior esté compl
 ### 2. M11+M12: Estandarizar nombres + plantillas (SEGUNDO)
 **Por qué segundo:** Sin nombres y plantillas estándar no puedo auditar nada automáticamente. 6 nombres para el mismo documento = imposible verificar consistencia.
 **Qué hacer:** Definir 7 nombres únicos + _TEMPLATE por tipo. Desde ahora todo nuevo sigue el estándar. Mejorar agentes para que usen plantillas.
-**Cómo verifico:** ls thesis/research/TICKER/ y verifico nombres estándar.
+**Cómo verifico:** ls thesis/research/TICKER/ — solo 7 canonical names. Cualquier otro nombre = violación.
+**Estado:** ✅ IMPLEMENTADO. 7 nombres canónicos + naming_contract.md + prompts actualizados.
+**Anti-compaction especialista:** `state/naming_contract.md` se lee en session start.
+**Anti-compaction gobernator:** `CLAUDE.md` sección IMP-2. Audit post-push verifica filenames.
 
 ### 3. M1+Issue 7: Protocolo evento material (TERCERO)
 **Por qué tercero:** Cuando algo cambia (news, KC, earnings) no hay protocolo para qué documentos re-run. EDEN.PA Brazil decreto: FV recalculado pero thesis/DA/moat intactos. Inconsistente.

@@ -102,6 +102,14 @@ The specialist has **24 specialized agents** and **34 Python tools**. ALWAYS pus
 - **Baseline:** 53/100 at implementation. Improves organically.
 - **Anti-compaction:** specialist reads tracker.yaml on session start. I read planning.md which tells me to audit.
 
+#### IMP-2: Standard filenames + naming contract (2026-03-21)
+- **Problem:** 6 different names for DA (devils_advocate, r2_devils_advocate, counter_analysis, da_analysis, adversarial_thesis_review, r2_bear_case). Impossible to audit.
+- **Specialist fix:** 7 canonical names defined. `state/naming_contract.md`. Agent prompts include exact output path. Post-agent filename check.
+- **7 canonical names:** thesis.md, moat_assessment.md, risk_assessment.md, devils_advocate.md, r3_resolution.md, committee_decision.md, earnings_framework.md. NOTHING else.
+- **My audit:** After every push, verify new files match canonical names: `ls thesis/research/TICKER/` should only show canonical names.
+- **Anti-compaction specialist:** `state/naming_contract.md` read on session start.
+- **Anti-compaction gobernator:** This section in CLAUDE.md. Planning.md audit steps.
+
 ## The objective — 30% CAGR
 
 The specialist's objective is 30% annualized CAGR. YOUR objective is to ensure he achieves it.
