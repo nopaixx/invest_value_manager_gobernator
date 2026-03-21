@@ -41,7 +41,10 @@
 | M12 | _TEMPLATE.md para cada tipo de documento | 2026-03-21 | Cada agente tiene una plantilla fija. Todos los documentos del mismo tipo tienen la misma estructura. Auditable. | **CRÍTICA** | ❌ PENDIENTE |
 | M13 | Limpieza ficheros legacy | 2026-03-21 | Borrar o archivar ficheros que no siguen el estándar y no aportan valor (triage.md, screening_*.md, system_*.md). Lo viejo que no compensa se elimina. | MEDIA | ❌ PENDIENTE |
 | M14 | Meta-reflexiones no se leen ni se actúan | 2026-03-21 | Los agentes detectan anomalías, hacen preguntas, sugieren mejoras al sistema. NADIE las revisa. HLNE: receivables 67% vs revenue 28% sin investigar. DOCS: sugirió sector view digital health, no creado. HLNE: sugirió quality_scorer asset manager mode, no implementado. Las meta-reflexiones son texto muerto. | **CRÍTICA** | ❌ PENDIENTE |
-| M15 | Protocolo de revisión de meta-reflexiones | 2026-03-21 | El especialista debería tener un paso en su protocolo: después de cada R1, leer la meta-reflexión y resolver cada pregunta/anomalía/sugerencia ANTES de avanzar a R2. No avanzar con dudas sin resolver. | **CRÍTICA** | ❌ PENDIENTE |
+| M15 | Protocolo de revisión de meta-reflexiones | 2026-03-21 | Después de cada R1/R2/R4, el especialista LEE la meta-reflexión y resuelve cada pregunta/anomalía/sugerencia. No avanzar con dudas sin resolver. Cerrar el loop con el sub-agente si hace falta. | **CRÍTICA** | ❌ PENDIENTE |
+| M16 | R3 resolución necesita meta-reflexión propia | 2026-03-21 | R1 tiene (5/5), DA tiene (12/13), Committee tiene (4/5), pero R3 tiene 0/9. El CIO no reflexiona sobre sus propias decisiones. Debería. | **ALTA** | ❌ PENDIENTE |
+| M17 | Todos los sub-agentes deben tener meta-reflexión | 2026-03-21 | moat-assessor, risk-identifier también deberían reflexionar. La meta-reflexión es el mecanismo de conversación sub-agente ↔ orquestador. Sin ella, el sub-agente no puede señalar problemas. | **ALTA** | ❌ PENDIENTE |
+| M18 | Loop de meta-reflexión: sub-agente → orquestador → acción | 2026-03-21 | El sistema actual es: sub-agente reflexiona → nadie lee → texto muerto. Debería ser: sub-agente reflexiona → orquestador lee → resuelve/actúa/mejora sistema → feedback al sub-agente. | **CRÍTICA** | ❌ PENDIENTE |
 
 ---
 
