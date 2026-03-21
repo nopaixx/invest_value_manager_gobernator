@@ -61,13 +61,19 @@
 **Audit:** Verify sector views META-REFLECTION, YAML meta_reflection fields, re_evaluations follow template.
 **Anti-compaction:** specialist: naming_contract.md + templates + session protocol. Gobernator: CLAUDE.md IMP-4.
 
+### IMP-5: Platform health end-to-end ✅
+**Problema:** objectives_check.py solo cubría ~40% del ciclo (descubrir→vender). 10 gaps estructurales: cobertura geográfica, calidad DA, pipeline stagnation, SO freshness, position health, rotaciones, baskets, macro integration.
+**Fix:** 3 tool extensions (kc_monitor.py --health, r1_prioritizer.py --stagnation, so_probability.py --freshness) + 2 campos YAML (screening_coverage, response_time) + 1 campo template (macro_sensitivity). 4 gaps ya cubiertos por tools existentes.
+**Audit:** `python3 state/objectives_check.py` — 3 nuevas métricas: Position health (all >=60), Pipeline stagnation (0 >30d), SO freshness (0 blocked/stale). Specialist: 4 commands en 2 min cubren los 10 gaps.
+**Anti-compaction:** specialist: tools extended + session_continuity.yaml + template. Gobernator: objectives_check.py + CLAUDE.md IMP-5 + specialist_improvements.md.
+
 ### PENDIENTE: M5+M10 — DA periódico posiciones activas
 **Problema:** Tesis envejecen sin re-challenge. DA solo se hace pre-compra (R2), nunca después.
 **Prioridad:** ALTA.
 
-### PENDIENTE: M3+Issue 8 — R4 committee con rechazo real
-**Problema:** 100% approval rate = rubber stamp.
-**Prioridad:** MEDIA.
+### DESCARTADO: M3+Issue 8 — R4 committee con rechazo real
+**Análisis:** Datos muestran que NO es rubber stamp. R1→R4 conversion 17.2% (83% filtrado antes). Committee rechaza (MOEVE FAIL, WKL.AS 3 gates, SPG HARD BLOCK) y exige MoS por Tier. Filtro real es precio (SOs con triggers exigentes). Endurecer R4 = riesgo de analysis paralysis.
+**Decisión:** No implementar. Angel validó.
 
 ### PENDIENTE: Issue 12+M13 — Limpieza legacy
 **Problema:** Ficheros viejos con nombres incorrectos, ruido.
@@ -77,11 +83,16 @@
 **Problema:** Baskets por geografía en vez de temas seculares.
 **Prioridad:** BAJA — pactado "no ahora".
 
-### PENDIENTE: M6 — Smart money alerts automáticos
-**Prioridad:** MEDIA.
+### PARCIAL: M6 — Smart money como motor de inteligencia
+**Resuelto:** Data quality formalizado (cadencia por fuente, coverage mínima, staleness en objectives_check.py, doble verificación gob+especialista). FCA/AMF refreshed. Proceso en session protocol Fase 2.5.7.
+**Implementado P1-P3:** 5 features: basket-signals, discover --auto-flag, sector-flows, insider-sectors, exodus-check. Todos auditables con commands directos.
+**Auditoría gobernator:** objectives_check.py tiene SM discovery (<10 unflagged) + SM exodus (0 exodus) + SM data quality (0 very_stale).
+**Visión:** SM transformado de repositorio pasivo a motor de inteligencia. Genera hipótesis, detecta tendencias, clustering. Potencial producto futuro para retail.
+**Anti-compaction:** specialist: tools/smart_money.py extended + session protocol Fase 2.5.7. Gobernator: objectives_check.py (23 metrics) + CLAUDE.md IMP-5.
 
 ### PENDIENTE: M8 — Stress test post-evento
-**Prioridad:** MEDIA.
+**Análisis:** IMP-3 ya cubre reacción al evento (thesis→FV→KC). Stress test semanal cubre visión general. CRISIS MODE ya activa stress test diario si S&P -15%. Post-evento individual es marginal.
+**Prioridad:** BAJA.
 
 ---
 

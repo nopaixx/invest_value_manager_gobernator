@@ -2,12 +2,14 @@
 # Read EVERY cycle before pushing specialist. No excuses.
 
 ## RESUELTO (no repetir)
-- S237-S244: 12 R1 + 12 R2 formales en thesis/, HALO SO paused, FOMC prep done
-- Morning sweep done (KC, macro, news, SM)
+- IMP-5 complete (23 metrics), SM intelligence (5 features), rules updated
+- S281-S282: 8 R1 + 12 DA + 2 R3 + 3 R4, CVNA 25→70, 33/33 sectors fresh
+- SPGI SO recalibrated $420→$380 (DA found E[CAGR] below threshold)
+- Tweets: 5 eToro published + 5 X prepared
 
 ## ABIERTO (por prioridad CAGR)
-- FOMC HOY 20:00 CET — score dot plot, ejecutar action tree
-- Tweets: pendiente (Chrome no disponible) — eToro posts via API
-- Mar 26: GDDY + DNLM.L + NVO trim + MONY.L sell (9 días)
-- Batch reports en reports/ — seguir limpiando progresivamente
+- Mar 26: 4 trades ready (GDDY, DNLM.L, NVO trim, MONY.L sell)
+- ITRK.L triggered 3592p < 3700p — needs FTNT exit capital (late April)
+- Pipeline: ~40 items >30d stuck — keep advancing
+- More R1→R2 from stagnation backlog
 - Daily report 22:00

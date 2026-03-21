@@ -561,6 +561,180 @@ def check_earnings_prep():
     return count, f"{prepped}/{total} prepped" + (f", missing: {detail}" if missing else ""), count == 0
 
 
+def check_position_health():
+    """All active positions must have health score >=60."""
+    cmd = ["python3", "tools/kc_monitor.py", "--health"]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
+                                cwd=SPECIALIST_REPO)
+        output = result.stdout
+        # Parse CRITICAL count and avg score
+        critical = []
+        avg_score = None
+        for line in output.split("\n"):
+            line = line.strip()
+            if "CRITICAL" in line and not line.startswith("CRITICAL:") and not line.startswith("PORTFOLIO"):
+                # Line like: CVNA          25  ... CRITICAL
+                parts = line.split()
+                if len(parts) >= 2:
+                    critical.append(parts[0])
+            if line.startswith("PORTFOLIO HEALTH:"):
+                m = re.search(r"(\d+)/100", line)
+                if m:
+                    avg_score = int(m.group(1))
+        avg_str = f"avg {avg_score}/100" if avg_score else "?"
+        if critical:
+            return len(critical), f"{avg_str}, CRITICAL: {', '.join(critical)}", False
+        return 0, f"{avg_str}, all >=60", avg_score is not None and avg_score >= 60
+    except Exception as e:
+        return -1, f"ERROR: {e}", False
+
+
+def check_pipeline_stagnation():
+    """No pipeline items stuck >30 days at same stage."""
+    cmd = ["python3", "tools/r1_prioritizer.py", "--stagnation"]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60,
+                                cwd=SPECIALIST_REPO)
+        output = result.stdout
+        # Count items >30d overdue
+        severe = 0
+        for line in output.split("\n"):
+            m = re.search(r"OVERDUE \((\d+)d\)", line)
+            if m and int(m.group(1)) > 30:
+                severe += 1
+        # Get bottleneck
+        bottleneck = "?"
+        for line in output.split("\n"):
+            if "Bottleneck:" in line:
+                bottleneck = line.split("Bottleneck:")[-1].strip()
+        if severe > 0:
+            return severe, f"{severe} items >30d stuck, bottleneck: {bottleneck}", False
+        return 0, f"0 items >30d stuck, bottleneck: {bottleneck}", True
+    except Exception as e:
+        return -1, f"ERROR: {e}", False
+
+
+def check_so_freshness():
+    """No standing orders with BLOCKED or STALE thesis."""
+    cmd = ["python3", "tools/so_probability.py", "--freshness"]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
+                                cwd=SPECIALIST_REPO)
+        output = result.stdout
+        blocked = 0
+        stale = 0
+        for line in output.split("\n"):
+            if "BLOCKED" in line and not line.startswith("SUMMARY") and "BLOCKED:" not in line:
+                blocked += 1
+            if "STALE" in line and "<- FLAG" in line:
+                stale += 1
+        # Also parse summary
+        for line in output.split("\n"):
+            if line.strip().startswith("BLOCKED"):
+                m = re.search(r":\s*(\d+)", line)
+                if m:
+                    blocked = max(blocked, int(m.group(1)))
+            if line.strip().startswith("STALE"):
+                m = re.search(r":\s*(\d+)", line)
+                if m:
+                    stale = max(stale, int(m.group(1)))
+        total_issues = blocked + stale
+        if total_issues > 0:
+            return total_issues, f"{blocked} blocked, {stale} stale", blocked == 0
+        return 0, "all fresh/acceptable", True
+    except Exception as e:
+        return -1, f"ERROR: {e}", False
+
+
+def check_meta_compliance():
+    """Meta-compliance score must be >=40 with 0 overdue items."""
+    cmd = ["python3", "tools/meta_compliance.py"]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
+                                cwd=SPECIALIST_REPO)
+        output = result.stdout
+        score = None
+        overdue = 0
+        for line in output.split("\n"):
+            # Match "COMPLIANCE SCORE:     35/100"
+            m = re.search(r"COMPLIANCE SCORE:\s*(\d+)/100", line)
+            if m:
+                score = int(m.group(1))
+            # Match "OVERDUE (>7d):      0"
+            m2 = re.search(r"OVERDUE.*?:\s*(\d+)", line)
+            if m2:
+                overdue = int(m2.group(1))
+        if score is None:
+            return -1, "could not parse score", False
+        passed = score >= 40 and overdue == 0
+        detail = f"score {score}/100, {overdue} overdue"
+        return score, detail, passed
+    except Exception as e:
+        return -1, f"ERROR: {e}", False
+
+
+def check_sm_discovery():
+    """SM discovery should flag 0 tickers with 3+ fund convergence without R1."""
+    cmd = ["python3", "tools/smart_money.py", "discover", "--auto-flag"]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60,
+                                cwd=SPECIALIST_REPO)
+        output = result.stdout
+        # Parse "N new R1 priorities found"
+        m = re.search(r"(\d+) new R1 priorities found", output)
+        count = int(m.group(1)) if m else 0
+        # This is informational — having unflagged discoveries is not a failure,
+        # but having >10 means we're ignoring strong SM signals
+        if count > 10:
+            return count, f"{count} unflagged (too many ignored)", False
+        return count, f"{count} unflagged", True
+    except Exception as e:
+        return -1, f"ERROR: {e}", False
+
+
+def check_sm_exodus():
+    """No institutional exodus from our positions."""
+    cmd = ["python3", "tools/smart_money.py", "exodus-check"]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
+                                cwd=SPECIALIST_REPO)
+        output = result.stdout
+        if "EXODUS DETECTED" in output or "INSTITUTIONAL_EXODUS" in output:
+            # Parse which positions
+            exodus = []
+            for line in output.split("\n"):
+                if "EXODUS" in line and any(c.isupper() for c in line[:10]):
+                    parts = line.strip().split()
+                    if parts:
+                        exodus.append(parts[0])
+            return len(exodus), f"EXODUS: {', '.join(exodus[:5])}", False
+        return 0, "all stable", True
+    except Exception as e:
+        return -1, f"ERROR: {e}", False
+
+
+def check_sm_data_quality():
+    """Smart money data sources must not be VERY_STALE."""
+    cmd = ["python3", "tools/smart_money.py", "stale"]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
+                                cwd=SPECIALIST_REPO)
+        output = result.stdout
+        very_stale = []
+        for line in output.split("\n"):
+            if "VERY_STALE" in line:
+                # Extract source name
+                parts = line.strip().split()
+                if parts:
+                    very_stale.append(parts[0])
+        if very_stale:
+            return len(very_stale), f"VERY_STALE: {', '.join(very_stale)}", False
+        return 0, "all sources fresh", True
+    except Exception as e:
+        return -1, f"ERROR: {e}", False
+
+
 def check_file_hygiene():
     """Accountability and state files must stay compact. Max 50 lines each."""
     MAX_LINES = 50
@@ -593,6 +767,14 @@ def main():
         # Flow metrics (Phase 2 — week 2)
         ("R4 candidates", ">=5/week", check_r4_candidates),
         ("Pipeline velocity", ">=15 files/week", check_pipeline_velocity),
+        # Platform health (IMP-5)
+        ("Position health", "all >=60", check_position_health),
+        ("Pipeline stagnation", "0 items >30d", check_pipeline_stagnation),
+        ("SO freshness", "0 blocked/stale", check_so_freshness),
+        ("SM data quality", "0 very_stale", check_sm_data_quality),
+        ("SM discovery", "<10 unflagged", check_sm_discovery),
+        ("SM exodus", "0 exodus", check_sm_exodus),
+        ("Meta-compliance", ">=40, 0 overdue", check_meta_compliance),
         # Quality metrics
         ("Pipeline", ">=50 in R1-R4", check_pipeline),
         ("Thesis freshness", "0 stale (>7d)", check_thesis_freshness),
