@@ -40,6 +40,8 @@
 | M11 | Estandarizar nombres ficheros thesis/ | 2026-03-21 | 7 nombres únicos: thesis.md, moat_assessment.md, risk_assessment.md, devils_advocate.md, r3_resolution.md, committee_decision.md, earnings_framework.md. Desde ahora todo nuevo usa estos nombres. Migrar viejo gradualmente. | **CRÍTICA** | ❌ PENDIENTE |
 | M12 | _TEMPLATE.md para cada tipo de documento | 2026-03-21 | Cada agente tiene una plantilla fija. Todos los documentos del mismo tipo tienen la misma estructura. Auditable. | **CRÍTICA** | ❌ PENDIENTE |
 | M13 | Limpieza ficheros legacy | 2026-03-21 | Borrar o archivar ficheros que no siguen el estándar y no aportan valor (triage.md, screening_*.md, system_*.md). Lo viejo que no compensa se elimina. | MEDIA | ❌ PENDIENTE |
+| M14 | Meta-reflexiones no se leen ni se actúan | 2026-03-21 | Los agentes detectan anomalías, hacen preguntas, sugieren mejoras al sistema. NADIE las revisa. HLNE: receivables 67% vs revenue 28% sin investigar. DOCS: sugirió sector view digital health, no creado. HLNE: sugirió quality_scorer asset manager mode, no implementado. Las meta-reflexiones son texto muerto. | **CRÍTICA** | ❌ PENDIENTE |
+| M15 | Protocolo de revisión de meta-reflexiones | 2026-03-21 | El especialista debería tener un paso en su protocolo: después de cada R1, leer la meta-reflexión y resolver cada pregunta/anomalía/sugerencia ANTES de avanzar a R2. No avanzar con dudas sin resolver. | **CRÍTICA** | ❌ PENDIENTE |
 
 ---
 
