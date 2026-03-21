@@ -48,9 +48,13 @@
 
 ---
 
+## PRINCIPIO FUNDAMENTAL
+
+**Agentes > Tools.** Si un problema se puede resolver mejorando un agente (que razona, adapta, meta-reflexiona) NO crear un nuevo tool (que es código estático, puede fallar silenciosamente, no piensa). Tools = datos y cálculos. Agentes = juicio e inteligencia. Menos tools, mejores agentes.
+
 ## PLAN DE APLICACIÓN
 
-Aplicar gradualmente, no todo de golpe. Prioridades:
+Aplicar gradualmente, no todo de golpe. Angel valida cada mejora.
 
 **Semana 1 (próxima):** M1 (protocolo evento material) + Issue 7
 **Semana 2:** M5 + M10 (DA periódico posiciones activas)
