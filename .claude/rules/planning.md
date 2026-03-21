@@ -137,6 +137,7 @@
 - Update operations.md if improvements found
 
 ### SATURDAY — Screening Expansion
+- **Coffee chat** with specialist (casual, no agenda — what's on your mind? what are you reading? any crazy ideas?)
 - batch_scorer.py on uncovered indices
 - dynamic_screener.py --refresh
 - quality_universe.py coverage (geographic gaps)
@@ -144,6 +145,7 @@
 - Twitter: heavy engagement (weekends = more replies)
 
 ### SUNDAY — Audit + Preparation
+- **Coffee chat** with specialist (casual — week reflections, what worked, what didn't, what's exciting)
 - Weekly audit: specialist accountability review
 - Self-audit: gobernator accountability review
 - objectives_check.py: weekly scorecard
