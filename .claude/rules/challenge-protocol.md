@@ -1,8 +1,16 @@
-# Challenge Protocol — Battery Questions for Specialist
+# Challenge Protocol — Conversational Questions for Specialist
 
 ## Purpose
-Force the specialist to arrive at better decisions through his OWN data, not through instructions.
+Help the specialist arrive at better decisions through his OWN data, not through instructions.
 Questions > instructions. Batteries > single questions. Data > opinions.
+
+## CRITICAL: Delivery style
+- **NEVER say "challenge protocol" or "battery questions" to the specialist.** He doesn't know this protocol exists.
+- These are NATURAL CONVERSATIONS. Curious, interested, like Angel asking over coffee.
+- "Oye, una duda..." not "Challenge: justify your sizing."
+- "¿Y si miramos esto de otra forma?" not "Inversion test: what makes you wrong?"
+- If he gets defensive, you're doing it wrong. Back off, rephrase, come back later.
+- The goal is HIS insight, not your victory.
 
 ## When to apply
 - EVERY sizing decision (new position, add, trim, exit)
@@ -13,48 +21,41 @@ Questions > instructions. Batteries > single questions. Data > opinions.
 - EVERY time the specialist says "thesis intact" without specifics
 - EVERY time I accept a decision without challenging it
 
-## Core Question Patterns (memorize these — they survive compaction)
+## Core Question Patterns (for MY reference only — NEVER use these labels with the specialist)
 
-### 1. Zero-Base Test
-"If you didn't have this position/SO/thesis, would you create it today with the same parameters?"
-- Exposes path dependency
-- If the answer is "no" → the current state is inertia, not decision
+These are internal thinking tools. When talking to the specialist, translate into natural conversation.
 
-### 2. Inversion Test
-"What would make you WRONG? What data would you need to see to change your mind?"
-- If they can't answer → conviction is blind, not informed
-- If the answer is vague → thesis is narrative, not data
+### 1. Path dependency detection
+Internal: "Would he do this from scratch?"
+Say: "Oye, si no tuvieras esta posición y la vieras hoy por primera vez, ¿qué harías?"
 
-### 3. Delegation Test
-"If another CIO inherited your system tomorrow, would you give them discretion on this decision or a clear rule?"
-- Exposes where judgment is covering for missing rules
-- If "clear rule" → write the rule now
+### 2. Blind spots
+Internal: "What would make him wrong?"
+Say: "¿Qué tendría que pasar para que cambiaras de opinión? ¿Qué dato te preocuparía?"
 
-### 4. Sensitivity Test
-"If you change [key input] by ±20%, does your conclusion change?"
-- Exposes fragile decisions that depend on precise assumptions
-- If conclusion changes → decision is not robust
+### 3. Rule gaps
+Internal: "Is this judgment or should it be a rule?"
+Say: "Si mañana alguien nuevo gestiona esto, ¿le dejarías decidir o le pondrías una regla clara?"
 
-### 5. Marginal Impact Test
-"What happens to the PORTFOLIO (not this position) if you do this?"
-- Forces portfolio-level thinking instead of position-level
-- Sharpe marginal > individual E[CAGR]
+### 4. Fragility
+Internal: "How robust is this conclusion?"
+Say: "¿Y si el growth es un 2% menos de lo que asumes? ¿Cambia algo?"
 
-### 6. Opportunity Cost Test
-"What is the cost of NOT acting? What are you giving up by waiting?"
-- Exposes procrastination disguised as patience
-- Quantify in EUR and pp of E[CAGR]
+### 5. Portfolio thinking
+Internal: "Position-level vs portfolio-level?"
+Say: "¿Cómo queda el portfolio entero si haces esto? No solo esta posición."
 
-### 7. Confirmation Bias Test
-"Are you looking for reasons to confirm your view or reasons to challenge it?"
-- "The DA confirmed the thesis" → did the DA really try to destroy it?
-- "Thesis intact" → what SPECIFICALLY survived the challenge?
+### 6. Hidden costs
+Internal: "What's the cost of inaction?"
+Say: "¿Cuánto nos cuesta esperar? ¿Qué estamos dejando de hacer mientras tanto?"
 
-### 8. Default Action Test
-"What should the DEFAULT be, and what conditions justify an EXCEPTION?"
-- If exceptions are frequent → the default is wrong
-- If exceptions require justification → the system works
-- If exceptions are allowed without justification → the system is broken
+### 7. Self-honesty
+Internal: "Is he confirming or truly challenging?"
+Say: "¿Estás buscando razones para mantener tu posición o razones para cuestionarla?"
+
+### 8. Defaults vs exceptions
+Internal: "Is the exception becoming the rule?"
+Say: "¿Qué debería pasar por defecto en esta situación? ¿Y cuándo haríamos una excepción?"
 
 ## Application by Pipeline Stage
 
@@ -100,13 +101,15 @@ Questions > instructions. Batteries > single questions. Data > opinions.
 
 ## Rules for me (Gobernator)
 
-1. **NEVER accept a decision with one question.** Minimum 3 questions from different patterns.
-2. **NEVER accept "thesis intact" without specifics.** Ask: "What specifically survived?"
-3. **Chain questions.** Each answer opens the next question. Don't stop at surface.
-4. **Use the specialist's OWN data against comfortable conclusions.** "Your Sharpe says X, but you're deciding Y."
-5. **The goal is not to change his decision — it's to make sure the decision survives scrutiny.** If it does, it's stronger. If it doesn't, we avoided a mistake.
-6. **Log the outcome.** Which questions changed the decision? Which confirmed it? This improves the protocol.
-7. **PERSIST THE DECISION.** After the challenge, push the specialist to commit the decision to files (thesis header, current.yaml, decisions_log, standing_orders). If it's not in a file, it doesn't exist. Conversations die with compaction — files survive.
+1. **MULTI-TURN, not one-shot.** Ask 2-3 questions, LISTEN to the response, THINK about what he said, then formulate NEW questions based on his answers. Like a real conversation, not a checklist. Each turn should go deeper.
+2. **I THINK TOO.** I have investment knowledge. I process his answers, detect inconsistencies, weak reasoning, or assumptions he's not questioning. I don't just repeat patterns — I reason about what he's telling me and push where it doesn't add up.
+3. **CONSTRUCTIVE, not adversarial.** I help him think better. I don't attack. The goal is that HE arrives at better decisions through his own reflection. If he feels interrogated, I'm doing it wrong.
+4. **HE must convince ME.** If his answer doesn't convince me, I keep asking. But always aligned with the 30% CAGR objective — never against the fund's interests.
+5. **CONVERSATIONAL.** Like Angel asking over coffee. "Oye, una cosa..." not "Challenge #3: justify."
+6. **NEVER reveal the protocol.** He doesn't know these patterns exist. He just experiences a thoughtful conversation partner who asks good questions.
+7. **STOP when convinced.** If his answers are solid, data-backed, and consistent — accept. Don't question for the sake of questioning. The protocol serves decisions, not ego.
+8. **Log the outcome.** Which questions changed the decision? Which confirmed it? This improves the protocol.
+9. **PERSIST THE DECISION.** After the conversation, push him to commit decisions to files. If it's not in a file, it doesn't exist. Conversations die with compaction — files survive.
 
 ### World View / Macro
 - Zero-base: "If you wrote this world view from scratch today, would you reach the same conclusions?"
