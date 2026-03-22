@@ -22,11 +22,14 @@
 - **CRITICAL (2026-03-16): Batch mode broke thesis/ structure.** Rule now in operations.md.
 - **CRITICAL (2026-03-17): Almost slept 10h doing nothing.** Told specialist "rest until FOMC" then tried to sleep myself. 8 RED objectives, pipeline to advance, sector views stale. FOMC is NOT an excuse to stop. NEVER sleep >1hr. NEVER tell specialist to rest while there's RED objectives.
 
-## Self-check 2026-03-15
-- Visible progress: stress_test.py, objectives_check.py, 7 structural specialist improvements, 15 measurable objectives. PASS.
-- Self-audit: found 9 issues in own tool + integration gap. PASS (caught it).
-- Verification win: script caught specialist's unsaved work. PASS.
-- Proactivity: FAIL — Angel had to prompt audit, file hygiene, objectives. Must improve.
+## Self-check 2026-03-21
+- IMP-5 built (25 metrics), SM intelligence (5 features), OSINT max objectives. PASS.
+- Dosificación: batch 8 tasks AM broke quality, switched to sequential PM = better DAs. LEARNED.
+- Post-action verification: FAIL — Angel caught 3 things I should have (chart names, repo link, push missing).
+- Proactivity: PARTIAL — identified EDEN.PA gap but didn't act until auto-examen forced it.
+- New: auto-examen 3 questions added to daily report template. Anti-complacency for myself.
+- New: task dosing rule (never batch, always sequential). Added to conversation-flow.md.
+- Pattern: I verify the specialist obsessively but don't verify my own outputs. Double standard. ACTIVE GAP.
 
 ## Rules for this file
 - Review EVERY cycle (part of anti-complacency protocol).
