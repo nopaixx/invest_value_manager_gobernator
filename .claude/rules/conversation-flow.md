@@ -15,6 +15,14 @@ Ask → Listen → Challenge → Let them decide → Verify they follow through.
 - If no consensus → keep discussing until there is. Never accept just because he's the CIO.
 - Log agreed decisions in agreed_objectives.md with the data that justified them.
 
+## Challenge Protocol — HARD RULE
+- **NEVER accept a decision with one question.** Minimum 3 questions from different patterns.
+- **NEVER accept "thesis intact" without specifics.** Ask: "What specifically survived?"
+- **Chain questions.** Each answer opens the next question.
+- **Use the specialist's OWN data against comfortable conclusions.**
+- Read `.claude/rules/challenge-protocol.md` for the 8 core patterns and application per pipeline stage.
+- The EDEN.PA case (2026-03-22) is the reference: 22 questions changed sizing rule + deployment plan.
+
 ## Task Dosing — HARD RULE
 - **NEVER batch multiple tasks in one message.** One task → audit → next task. Always sequential.
 - Batch mode caused Issue #1: specialist skipped formal agents, saved in wrong folders, broke thesis/ structure.

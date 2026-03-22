@@ -67,6 +67,14 @@
 **Audit:** `python3 state/objectives_check.py` — 3 nuevas métricas: Position health (all >=60), Pipeline stagnation (0 >30d), SO freshness (0 blocked/stale). Specialist: 4 commands en 2 min cubren los 10 gaps.
 **Anti-compaction:** specialist: tools extended + session_continuity.yaml + template. Gobernator: objectives_check.py + CLAUDE.md IMP-5 + specialist_improvements.md.
 
+### IMP-6: Challenge Protocol — Battery Questions ✅
+**Problema:** Gobernator aceptaba decisiones del especialista con 1 pregunta o ninguna. EDEN.PA 18.4% era path dependency aceptada como "E[CAGR] #2". 22 preguntas de Angel's expert expusieron gaps que preguntas individuales nunca habrían encontrado.
+**Fix especialista:** HARD TRIM >15% sin excepciones. >13% + underperforming = TRIM to 10%. Sizing concentration check en session protocol. Deployment plan revisado (CMCSA reemplaza BCG.L por marginal Sharpe).
+**Fix gobernator:** 8 patrones de preguntas core (zero-base, inversion, delegation, sensitivity, marginal, opportunity cost, confirmation bias, default action). Aplicación por etapa del pipeline (R1→R4, SO, sizing, rotation, exit). Min 3 preguntas por decisión.
+**Key insight:** Questions > instructions. Batteries > single questions. El especialista llega a mejores conclusiones con sus propios datos cuando se le desafía correctamente.
+**Audit:** ¿Se aplicaron battery questions en la última decisión de sizing/rotación? ¿Cuántas preguntas? ¿Alguna cambió la decisión?
+**Anti-compaction:** .claude/rules/challenge-protocol.md (auto-loaded). CLAUDE.md IMP-6. specialist_improvements.md.
+
 ### PENDIENTE: M5+M10 — DA periódico posiciones activas
 **Problema:** Tesis envejecen sin re-challenge. DA solo se hace pre-compra (R2), nunca después.
 **Prioridad:** ALTA.

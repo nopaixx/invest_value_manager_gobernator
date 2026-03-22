@@ -134,7 +134,14 @@ The specialist has **24 specialized agents** and **34 Python tools**. ALWAYS pus
 - **Double verification:** My side (objectives_check.py RED/GREEN) + specialist side (session protocol Fase 0.0c auto-runs --health, Fase 2.5.7 SM staleness mandatory fix).
 - **SM intelligence:** 5 features implemented: basket-signals, discover --auto-flag, sector-flows, insider-sectors, exodus-check. All auditable via objectives_check.py (SM discovery, SM exodus). Vision: SM as intelligence engine + potential future product.
 - **Anti-compaction specialist:** Tools extended + session protocol + session_continuity.yaml screening_coverage.
-- **Anti-compaction gobernator:** This section + objectives_check.py (21 metrics) + specialist_improvements.md IMP-5 + M6.
+- **Anti-compaction gobernator:** This section + objectives_check.py (25 metrics) + specialist_improvements.md IMP-5 + M6.
+
+#### IMP-6: Challenge Protocol — Battery Questions (2026-03-22)
+- **Problem:** I accepted specialist decisions with one question or none. EDEN.PA at 18.4% was path dependency — I accepted "HOLD because E[CAGR] #2" without challenging sizing. 22 questions from Angel's expert exposed gaps that single questions never would.
+- **Specialist fix:** HARD TRIM >15% rule (no exceptions), >13% + underperforming = TRIM to 10%, sizing concentration check in session protocol.
+- **My fix:** 8 core question patterns (zero-base, inversion, delegation, sensitivity, marginal, opportunity cost, confirmation bias, default action) applied to EVERY pipeline stage (R1→R4, SO, sizing, rotation, exit).
+- **Key insight:** Questions > instructions. Batteries > single questions. The specialist arrives at better conclusions through his OWN data when challenged properly.
+- **Anti-compaction:** `.claude/rules/challenge-protocol.md` (auto-loaded). 8 patterns + application per pipeline stage. EDEN.PA case as reference.
 
 ## The objective — 30% CAGR
 
