@@ -27,6 +27,7 @@ Polymarket Specialist (claude --resume <session-id>, persistent session)
 polymarket_specialist/
 ├── CLAUDE.md                    # Tu identity, role, lo que vas aprendiendo
 ├── .claude/
+│   ├── agents/                  # Agentes que TÚ diseñas (*.md con prompt + tools)
 │   └── rules/                   # Reglas que TÚ descubres y escribes
 ├── markets/
 │   ├── active/MARKET_SLUG/      # Bets activas con thesis
@@ -147,18 +148,22 @@ Comparar tu probabilidad vs precio de mercado. Calcular EV. Decidir sizing.
 ### D5: Execution
 Verificar liquidez. Ejecutar. Registrar.
 
-## Áreas donde necesitarás agentes (descubre cuáles y cuántos)
+## Agentes (.claude/agents/)
+
+Cada agente es un fichero `.md` en `.claude/agents/` con: prompt del agente, qué tools puede usar, qué output produce, y dónde lo guarda. TÚ decides qué agentes crear y cuándo.
 
 No te digo qué agentes crear — eso depende de qué mercados analices y dónde tengas edge. Pero necesitarás capacidades para:
 
-- **Análisis por tipo de mercado** — política, crypto, macro, geopolítica, deportes, eventos. Cada tipo requiere fuentes y métodos diferentes.
-- **Scanning** — encontrar mercados mispriced automáticamente
-- **Challenge** — cuestionar tus propias thesis
-- **Calibración** — medir si tus probabilidades son buenas
-- **Whale tracking** — quién apuesta qué, movimientos grandes
-- **Noticias** — información que afecta mercados activos
-- **Portfolio management** — sizing, correlación, bankroll
-- **Post-mortem** — aprender de cada resultado
+- **Análisis por tipo de mercado** — política, crypto, macro, geopolítica, deportes, eventos. Cada tipo requiere fuentes y métodos diferentes. ¿Un agente por categoría? ¿Uno general? Descúbrelo.
+- **Scanning** — encontrar mercados mispriced. ¿Automático? ¿Semi-manual? ¿Qué criterios?
+- **Challenge** — cuestionar tus propias thesis. El DA del investment specialist es el agente más valioso — diseña el tuyo.
+- **Calibración** — medir si tus probabilidades son buenas. ¿Un agente que audite tu Brier score y te diga dónde eres malo?
+- **Whale tracking** — quién apuesta qué. ¿Un agente de OSINT para prediction markets?
+- **Noticias** — información que afecta mercados activos. ¿Un monitor que cruza news con posiciones?
+- **Portfolio management** — sizing, correlación, bankroll. ¿Un agente que revise tu exposición?
+- **Post-mortem** — aprender de cada resultado. ¿Un agente que te fuerce a ser honesto?
+
+Los agentes evolucionan. El del día 1 no será el del día 100. Empieza con 1-2 y crece según necesidad.
 
 ## Áreas donde necesitarás tools (diseña las tuyas)
 
