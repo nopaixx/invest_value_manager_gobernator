@@ -32,11 +32,12 @@
 - Audit: devils_advocate.md in thesis/TICKER/?
 - Audit: DA attacked real assumptions?
 
-### 12:00 — PORTFOLIO MANAGEMENT
+### 12:00 — PORTFOLIO MANAGEMENT + CONVERSACIÓN CONSTRUCTIVA
 - basket_dashboard.py --health (lifecycle, gaps)
 - sector_health.py freshness (stale views)
 - constraint_checker.py --baskets (concentration)
 - Push specialist with findings
+- **Conversación constructiva (≥1/día):** elegir UNA posición, decisión o área del sistema. Multi-turn questions naturales (challenge-protocol.md). Objetivo: que el especialista reflexione y llegue a mejores conclusiones con sus datos. Reportar en sección 19 del daily report.
 
 ### 13:00 — PIPELINE R3/R4
 - Advance promising candidates

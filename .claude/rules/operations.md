@@ -105,16 +105,17 @@
 ## Push priorities (ordered by CAGR impact)
 1. Rotaciones (cambiar posición débil por fuerte)
 2. Desplegar cash (cash no genera retorno)
-3. Pipeline (R1→R4, sin candidatos no hay rotaciones)
-4. Thesis + earnings con catalizadores próximos
-5. Kill conditions (detectar problemas antes de que cuesten)
-6. Auditoría de cambios del sistema (error patterns, silent defaults, hardcoded values)
-7. Health check / consistencia (FVs, QS, datos stale)
-8. Sector views / macro
-9. Smart money / OSINT
-10. Screening (expandir universo)
-11. Evolución del sistema (mejorar herramientas y protocolos)
-12. Housekeeping
+3. **Conversación constructiva** (≥1/día — cuestionar una decisión, posición, o proceso con multi-turn questions. See challenge-protocol.md)
+4. Pipeline (R1→R4, sin candidatos no hay rotaciones)
+5. Thesis + earnings con catalizadores próximos
+6. Kill conditions (detectar problemas antes de que cuesten)
+7. Auditoría de cambios del sistema (error patterns, silent defaults, hardcoded values)
+8. Health check / consistencia (FVs, QS, datos stale)
+9. Sector views / macro
+10. Smart money / OSINT
+11. Screening (expandir universo)
+12. Evolución del sistema (mejorar herramientas y protocolos)
+13. Housekeeping
 
 ## Measurable objectives (report daily to Angel)
 ### Flow metrics (the real bottleneck for 30% CAGR)

@@ -220,7 +220,34 @@ Total: X/25 (X%)
 **3. ¿En qué fui menos exigente conmigo mismo que con el especialista?**
 [Respuesta honesta. Si "nada", justificar.]
 
-## 19. Pendiente y plan mañana
+## 19. Conversación constructiva del día
+
+### Tema
+[¿Qué posición, decisión o área del sistema cuestioné hoy con el especialista?]
+
+### Preguntas y respuestas (multi-turn)
+[Resumen de cada turno de la conversación:]
+
+**Turn 1 — Pregunta:** [Qué pregunté]
+**Respuesta:** [Qué respondió — resumen honesto]
+**Mi análisis:** [Qué detecté en su respuesta que me llevó a la siguiente pregunta]
+
+**Turn 2 — Pregunta:** [Siguiente pregunta basada en su respuesta]
+**Respuesta:** [...]
+**Mi análisis:** [...]
+
+[Continuar turnos hasta conclusión]
+
+### Hallazgos
+[¿Qué descubrió la conversación que no sabíamos antes? ¿Cambió alguna decisión?]
+
+### Acciones resultantes
+[¿Qué se decidió? ¿Se persistió en ficheros? ¿Qué regla o proceso cambió?]
+
+### Evaluación del protocolo
+[¿Funcionó? ¿El especialista llegó a mejores conclusiones? ¿Se puso a la defensiva o reflexionó? ¿Qué mejoraría?]
+
+## 20. Pendiente y plan mañana
 ### Urgente
 - [lo que no puede esperar]
 
