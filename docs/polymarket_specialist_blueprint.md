@@ -120,6 +120,13 @@ polymarket_specialist/
 2. [Qué cambio de precio me haría salir]
 3. [Qué noticia invalidaría mi thesis]
 
+## Links y referencias
+- [Fuente 1: dato clave que soporta la thesis — URL]
+- [Fuente 2: modelo o dataset usado — URL]
+- [Fuente 3: artículo/análisis relevante — URL]
+- [Polymarket market page — URL]
+- [Source of truth para resolución — URL]
+
 ## META-REFLECTION
 - ¿Qué asunción es la más frágil?
 - ¿Dónde podría estar equivocado?
@@ -165,6 +172,11 @@ polymarket_specialist/
 - **Revised edge:** Xpp
 - **Verdict:** BET / REDUCE / PASS / OPPOSITE
 
+## Links y referencias
+- [Fuente que contradice la thesis — URL]
+- [Datos del smart money / whale tracker — URL]
+- [Historical analogy source — URL]
+
 ## META-REFLECTION
 - ¿El DA atacó la asunción más fuerte o la más fácil?
 - ¿Cambió mi probabilidad? ¿Por qué o por qué no?
@@ -197,6 +209,12 @@ polymarket_specialist/
 
 ## Risk de resolución incorrecta
 [¿Puede Polymarket resolver de forma inesperada? ¿Hay disputa mechanism?]
+
+## Links y referencias
+- [Polymarket resolution rules — URL]
+- [Source of truth official — URL]
+- [Precedentes de resolución similar — URL]
+- [Dispute mechanism documentation — URL]
 ```
 
 ---
@@ -276,6 +294,11 @@ close_reason: null  # RESOLVED_WIN / RESOLVED_LOSS / STOPPED_OUT / KC_TRIGGERED 
 
 ## Cambios al sistema
 [¿Qué cambio en mi proceso/modelo/reglas basado en esta bet?]
+
+## Links y referencias
+- [Noticia/evento que determinó la resolución — URL]
+- [Datos que debería haber visto — URL]
+- [Análisis post-hoc relevante — URL]
 
 ## META-REFLECTION
 - ¿Soy más listo después de esta bet? ¿Qué aprendí?
