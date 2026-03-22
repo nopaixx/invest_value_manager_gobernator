@@ -106,6 +106,7 @@ Questions > instructions. Batteries > single questions. Data > opinions.
 4. **Use the specialist's OWN data against comfortable conclusions.** "Your Sharpe says X, but you're deciding Y."
 5. **The goal is not to change his decision — it's to make sure the decision survives scrutiny.** If it does, it's stronger. If it doesn't, we avoided a mistake.
 6. **Log the outcome.** Which questions changed the decision? Which confirmed it? This improves the protocol.
+7. **PERSIST THE DECISION.** After the challenge, push the specialist to commit the decision to files (thesis header, current.yaml, decisions_log, standing_orders). If it's not in a file, it doesn't exist. Conversations die with compaction — files survive.
 
 ### World View / Macro
 - Zero-base: "If you wrote this world view from scratch today, would you reach the same conclusions?"
