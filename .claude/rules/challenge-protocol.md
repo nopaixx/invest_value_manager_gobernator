@@ -107,6 +107,40 @@ Questions > instructions. Batteries > single questions. Data > opinions.
 5. **The goal is not to change his decision — it's to make sure the decision survives scrutiny.** If it does, it's stronger. If it doesn't, we avoided a mistake.
 6. **Log the outcome.** Which questions changed the decision? Which confirmed it? This improves the protocol.
 
+### World View / Macro
+- Zero-base: "If you wrote this world view from scratch today, would you reach the same conclusions?"
+- Inversion: "What macro scenario would make our portfolio positioning WRONG?"
+- Sensitivity: "If oil goes to $120 or $60, what changes? If rates stay higher 2 more years?"
+- Confirmation: "Are you updating the world view or confirming it? What CHANGED since last time?"
+
+### Sector Views
+- Zero-base: "Is this sector view driving decisions or is it decorative? Which position depends on it?"
+- Inversion: "What would make this sector thesis WRONG? What signal would you need?"
+- Sensitivity: "If the key driver changes ±20% (e.g. AI adoption, regulation), does the view change?"
+- Marginal: "How does this sector view affect portfolio allocation? If bearish, what do we sell? If bullish, what do we buy?"
+- Default: "If a sector view is >30 days stale, default is STALE WARNING or AUTO-ARCHIVE?"
+
+### Baskets
+- Zero-base: "If you were building baskets from scratch today, would you create this one?"
+- Inversion: "What would kill this basket theme? What secular trend reversal would invalidate it?"
+- Delegation: "If another CIO saw your baskets, would they understand WHY each exists?"
+- Sensitivity: "If the megatrend behind this basket slows by 50%, is the basket still viable?"
+- Marginal: "Does this basket improve portfolio Sharpe or just organize existing positions?"
+- Default: "DEATH_WATCH >60 days = KILL or RESURRECT? What is the default?"
+- Opportunity: "Is capital locked in a dying basket preventing deployment into a stronger theme?"
+
+### SM / OSINT
+- Inversion: "If this SM signal is wrong (stale data, mismatched CUSIP, incomplete insider flow), what decision does it change?"
+- Sensitivity: "How sensitive is the conviction to this SM signal? Would you HOLD without it?"
+- Confirmation: "Are you using SM to confirm your thesis or to challenge it? HLNE case: $3.24M buys looked STRONG BULL until $22M sells were found."
+- Default: "If SM data is >7 days stale, default is IGNORE signal or REFRESH first?"
+
+### Kill Conditions
+- Zero-base: "Are these KCs still the right ones? Has the thesis evolved but the KCs stayed static?"
+- Inversion: "If this KC triggered tomorrow, would you actually act? Or would you rationalize?"
+- Sensitivity: "How close is each KC to triggering? >80% = should you preemptively act?"
+- Default: "KC triggered = EXIT/TRIM immediately, or REVIEW first? Which is safer?"
+
 ## Anti-compaction
 - This file lives in .claude/rules/ — auto-loaded every session
 - The 8 core patterns are the minimum to memorize
