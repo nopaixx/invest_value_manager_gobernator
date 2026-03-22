@@ -151,25 +151,36 @@ Polymarket es binario: YES o NO. Esto permite un pipeline más poderoso que el t
 D1: DISCOVERY
     └── Scanner agent → encuentra mercados con edge potencial
 
-D2: DUAL THESIS (en paralelo)
-    ┌── YES Agent → construye el caso completo para YES
-    │   └── Output: yes_thesis.md (probabilidad, argumentos, datos, fuentes)
+D2: DUAL PIPELINE COMPLETO (en paralelo)
+
+    ┌── YES PIPELINE (pipeline completo independiente)
+    │   ├── YES Analyst → construye caso para YES con datos y fuentes
+    │   │   └── Output: yes_thesis.md
+    │   └── YES DA → ataca el caso YES (busca por qué YES está equivocado)
+    │       └── Output: yes_devils_advocate.md
     │
-    └── NO Agent → construye el caso completo para NO
-        └── Output: no_thesis.md (probabilidad, argumentos, datos, fuentes)
+    └── NO PIPELINE (pipeline completo independiente)
+        ├── NO Analyst → construye caso para NO con datos y fuentes
+        │   └── Output: no_thesis.md
+        └── NO DA → ataca el caso NO (busca por qué NO está equivocado)
+            └── Output: no_devils_advocate.md
 
-    REGLA: Ambos agentes trabajan INDEPENDIENTEMENTE.
-    El YES agent NO ve el output del NO agent y viceversa.
-    Ambos estiman probabilidad ANTES de ver el precio del mercado.
+    REGLA: Los 4 agentes trabajan INDEPENDIENTEMENTE.
+    YES pipeline NO ve el output del NO pipeline y viceversa.
+    Cada DA ataca SU PROPIO lado — no defiende el contrario.
+    Todos estiman probabilidad ANTES de ver el precio del mercado.
 
-D3: RESOLUTION CRITERIA
+D3: RESOLUTION CRITERIA + TIMELINE
     └── Agent → analiza el fine print de resolución
         └── Output: resolution_criteria.md (ambigüedades, edge cases, precedentes)
+    └── Timeline agent → mapea eventos intermedios que afectan la probabilidad
+        └── Output: timeline.md (ver sección "Dimensión temporal" abajo)
 
 D4: JUDGE / CIO
-    └── Lee yes_thesis.md + no_thesis.md + resolution_criteria.md
-    └── Evalúa: ¿quién tiene el caso más fuerte? ¿Dónde están los puntos débiles?
-    └── Asigna probabilidad final (ponderada por calidad de argumentos)
+    └── Lee: yes_thesis.md + yes_da.md + no_thesis.md + no_da.md + resolution_criteria.md + timeline.md
+    └── Evalúa: ¿qué lado sobrevivió mejor a su propio DA?
+    └── Pondera: calidad de argumentos × resistencia al DA × datos × timeline
+    └── Asigna probabilidad final
     └── Compara con precio de mercado → ¿hay edge?
     └── Output: judgment.md (probabilidad final, edge, sizing, decisión)
 
@@ -186,6 +197,41 @@ D6: POST-MORTEM (OBLIGATORIO)
     └── Output: post_mortem.md
 ```
 
+### Dimensión temporal — Las fechas como catalizadores
+
+Los mercados de Polymarket no son estáticos — la probabilidad evoluciona con el tiempo según eventos intermedios. Un mercado que resuelve en 90 días puede tener 5-10 catalizadores antes de resolución.
+
+```
+Ejemplo: "Will X win the election?" (resuelve Nov 5)
+
+Timeline:
+  Mar 15 → Primary results (P sube/baja)
+  Apr 2  → Debate scheduled (P puede saltar)
+  May 10 → Poll release (datos nuevos)
+  Jun 30 → VP pick (narrativa cambia)
+  Sep 15 → October surprise window opens
+  Nov 5  → RESOLUCIÓN
+
+Cada fecha es un punto donde:
+  - La probabilidad puede saltar (edge aparece/desaparece)
+  - Puedes entrar/salir/ajustar sizing
+  - Nueva información invalida thesis anteriores
+```
+
+El **timeline agent** debe:
+- Mapear TODOS los eventos intermedios con fechas
+- Estimar impacto de cada evento en la probabilidad
+- Identificar cuándo entrar (pre-catalizador con edge) vs esperar (post-catalizador con más información)
+- Re-evaluar el dual thesis después de cada evento material
+
+**Output: timeline.md** con:
+- Eventos ordenados cronológicamente
+- Probabilidad estimada en cada punto
+- Decisiones de sizing por fase (más sizing cuando más conviction, menos cuando incertidumbre)
+- Triggers para re-evaluar (si evento X produce resultado Y → re-correr dual pipeline)
+
+La dimensión temporal es lo que hace Polymarket diferente de inversión — no solo "¿qué probabilidad?" sino "¿qué probabilidad CUÁNDO y cómo evoluciona?"
+
 ### ¿Por qué Dual Thesis es mejor que Thesis + DA?
 
 | Aspecto | Thesis + DA (inversión) | Dual Thesis YES/NO (Polymarket) |
@@ -197,15 +243,18 @@ D6: POST-MORTEM (OBLIGATORIO)
 | Output | Una probabilidad ajustada | DOS probabilidades independientes → juez pondera |
 | Calibración | Difícil saber si el DA fue suficientemente duro | Fácil: compara P(YES agent) vs P(NO agent) vs resultado real |
 
-### Templates adicionales para Dual Thesis
+### Templates adicionales para Dual Thesis Pipeline
 
-Además de los 7 canónicos, el Dual Thesis pipeline sugiere:
+Además de los 7 canónicos, el pipeline completo produce:
 
-- **yes_thesis.md** — caso completo para YES (mismo formato que thesis.md pero solo argumenta YES)
-- **no_thesis.md** — caso completo para NO (mismo formato, solo argumenta NO)
-- **judgment.md** — el juez evalúa ambos lados y decide
+- **yes_thesis.md** — caso completo para YES (argumentos, datos, probabilidad, fuentes)
+- **yes_devils_advocate.md** — DA que ataca el caso YES
+- **no_thesis.md** — caso completo para NO
+- **no_devils_advocate.md** — DA que ataca el caso NO
+- **timeline.md** — eventos intermedios, catalizadores, evolución de probabilidad por fecha
+- **judgment.md** — el juez evalúa los 4 documentos + timeline y decide
 
-Estos pueden ser variantes de thesis.md o templates separados — el especialista decide.
+Total por mercado: hasta 11 ficheros (7 canónicos + 4 del dual pipeline + timeline + judgment). El especialista decide cuáles son obligatorios y cuáles opcionales según la complejidad del mercado.
 
 ### Calibración del Dual Thesis
 
