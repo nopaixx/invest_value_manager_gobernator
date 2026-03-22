@@ -131,22 +131,89 @@ Debe incluir como mínimo:
 - **Post-mortem OBLIGATORIO** para CADA bet — win AND loss. Sin excepción.
 - **Resolution criteria OBLIGATORIO** antes de apostar — el fine print mata.
 
-## Pipeline sugerido (Discovery → Bet)
+## Principio fundamental: DELEGAR EN AGENTES
 
-### D1: Discovery
-Buscar mercados con edge potencial. Definir tus propios criterios de filtrado.
+Cada paso importante del proceso debe ser un agente formal. No hacer análisis inline — siempre delegar a un agente especializado que produce un output estructurado en un fichero.
 
-### D2: Analysis
-Construir modelo independiente de probabilidad. REGLA FUNDAMENTAL: estimar tu probabilidad ANTES de ver el precio del mercado.
+¿Por qué? Porque los agentes:
+- Producen outputs auditables (ficheros, no conversación)
+- Son reproducibles (mismo prompt, mismo tipo de output)
+- Sobreviven compaction (el fichero persiste, la conversación no)
+- Se pueden mejorar independientemente (mejorar un agente no rompe los demás)
 
-### D3: Devil's Advocate
-Cuestionar cada asunción. Buscar quién está del otro lado y por qué.
+Si te encuentras haciendo algo manualmente que un agente podría hacer → crea el agente.
 
-### D4: Edge Calculation
-Comparar tu probabilidad vs precio de mercado. Calcular EV. Decidir sizing.
+## Pipeline sugerido — Dual Thesis (YES vs NO)
 
-### D5: Execution
-Verificar liquidez. Ejecutar. Registrar.
+Polymarket es binario: YES o NO. Esto permite un pipeline más poderoso que el tradicional "thesis + devil's advocate". En vez de un analista que dice "YES 70%" y un DA que ataca, creas DOS thesis independientes y un juez:
+
+```
+D1: DISCOVERY
+    └── Scanner agent → encuentra mercados con edge potencial
+
+D2: DUAL THESIS (en paralelo)
+    ┌── YES Agent → construye el caso completo para YES
+    │   └── Output: yes_thesis.md (probabilidad, argumentos, datos, fuentes)
+    │
+    └── NO Agent → construye el caso completo para NO
+        └── Output: no_thesis.md (probabilidad, argumentos, datos, fuentes)
+
+    REGLA: Ambos agentes trabajan INDEPENDIENTEMENTE.
+    El YES agent NO ve el output del NO agent y viceversa.
+    Ambos estiman probabilidad ANTES de ver el precio del mercado.
+
+D3: RESOLUTION CRITERIA
+    └── Agent → analiza el fine print de resolución
+        └── Output: resolution_criteria.md (ambigüedades, edge cases, precedentes)
+
+D4: JUDGE / CIO
+    └── Lee yes_thesis.md + no_thesis.md + resolution_criteria.md
+    └── Evalúa: ¿quién tiene el caso más fuerte? ¿Dónde están los puntos débiles?
+    └── Asigna probabilidad final (ponderada por calidad de argumentos)
+    └── Compara con precio de mercado → ¿hay edge?
+    └── Output: judgment.md (probabilidad final, edge, sizing, decisión)
+
+D5: EXECUTION
+    └── Si edge > threshold → ejecutar bet
+    └── Registrar en position.yaml
+    └── Monitorizar hasta resolución
+
+D6: POST-MORTEM (OBLIGATORIO)
+    └── Agent → analiza resultado vs predicción
+    └── ¿Quién tenía razón, YES o NO agent?
+    └── ¿El juez ponderó bien?
+    └── ¿Qué información existía y nadie usó?
+    └── Output: post_mortem.md
+```
+
+### ¿Por qué Dual Thesis es mejor que Thesis + DA?
+
+| Aspecto | Thesis + DA (inversión) | Dual Thesis YES/NO (Polymarket) |
+|---------|------------------------|--------------------------------|
+| Profundidad | DA es reactivo — ataca la thesis | Ambos lados son proactivos — construyen caso desde cero |
+| Sesgo | DA tiene sesgo bear (su trabajo es atacar) | Ambos tienen sesgo neutral (su trabajo es CONVENCER) |
+| Datos | DA usa los datos de la thesis | Cada lado busca sus PROPIOS datos |
+| Independencia | DA depende de la thesis | YES y NO son completamente independientes |
+| Output | Una probabilidad ajustada | DOS probabilidades independientes → juez pondera |
+| Calibración | Difícil saber si el DA fue suficientemente duro | Fácil: compara P(YES agent) vs P(NO agent) vs resultado real |
+
+### Templates adicionales para Dual Thesis
+
+Además de los 7 canónicos, el Dual Thesis pipeline sugiere:
+
+- **yes_thesis.md** — caso completo para YES (mismo formato que thesis.md pero solo argumenta YES)
+- **no_thesis.md** — caso completo para NO (mismo formato, solo argumenta NO)
+- **judgment.md** — el juez evalúa ambos lados y decide
+
+Estos pueden ser variantes de thesis.md o templates separados — el especialista decide.
+
+### Calibración del Dual Thesis
+
+Con el tiempo, puedes medir:
+- ¿El YES agent sobreestima? ¿El NO agent sobreestima?
+- ¿El juez pondera bien o siempre favorece un lado?
+- ¿En qué categorías el dual thesis produce mejor calibración?
+- ¿Cuándo el YES y NO agent están de acuerdo (ambos >70% o ambos <30%) — ¿hay más edge o menos?
 
 ## Agentes (.claude/agents/)
 
