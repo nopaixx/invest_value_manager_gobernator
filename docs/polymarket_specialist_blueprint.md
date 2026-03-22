@@ -2,21 +2,18 @@
 
 ## Qué es esto
 
-Documento para construir un especialista AI para Polymarket, siguiendo el mismo patrón que el especialista de inversión (value_invest2). Misma arquitectura: gobernator empuja, especialista decide y trabaja, sistema de agentes formales, pipeline, auditoría, anti-compaction.
+Blueprint para construir un especialista AI autónomo para Polymarket. Sesión persistente (`claude --resume`) con repo propio, agentes formales, pipeline, tools, y estado persistente.
 
 ## Arquitectura
 
 ```
-Angel (Telegram) → Gobernator
-Gobernator → Polymarket Specialist (claude -p --resume <session-id>)
-Specialist:
+Polymarket Specialist (claude --resume <session-id>, persistent session)
   └── 24/7 análisis de mercados de predicción
   └── Pipeline de oportunidades (Discovery → Analysis → Bet → Monitor → Exit)
   └── Agentes especializados por tipo de mercado
   └── Tools de datos (APIs, scrapers, modelos probabilísticos)
+  └── Estado persistente en ficheros (sobrevive compaction)
 ```
-
-El gobernator puede ser el mismo o uno separado. Lo importante: el especialista es una sesión persistente con su propio repo, rules, tools, y estado.
 
 ## Repo structure
 
@@ -265,16 +262,7 @@ def scan_new_markets(hours=24)               # Mercados nuevos
 6. **Iterar**: post-mortem de cada bet, ajustar modelo, mejorar calibración
 7. **Escalar**: añadir agentes por categoría según dónde haya mejor calibración
 
-## Integración con Gobernator
-
-El gobernator puede gestionar ambos especialistas:
-- Mismo inbox/outbox
-- Mismo challenge protocol (preguntas constructivas)
-- Mismo daily report (sección para cada especialista)
-- Bankrolls SEPARADOS — nunca mezclar capital de inversión con betting
-- Audit independiente — cada especialista se audita por separado
-
-## Lecciones del Investment Specialist que aplican
+## Lecciones aprendidas de sistemas similares
 
 1. **Agentes > Tools** — el juicio importa más que los cálculos
 2. **Pipeline formal** — no apostar sin thesis escrita
