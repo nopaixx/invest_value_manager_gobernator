@@ -2,15 +2,15 @@
 # Read EVERY cycle before pushing specialist. No excuses.
 
 ## RESUELTO (no repetir)
-- EDEN.PA: HOLD orphan confirmed (E[CAGR] 21.5% #2, nada mejor en pipeline)
-- Sunday audit: meta-compliance 35→67, KC clean, SM daily, 3 sectors refreshed
-- HLNE insider signal corrected (net NEGATIVE $19M, not STRONG BULL)
-- ADBE CMA UK material event resolved (3 days response time)
-- Coffee chat done — specialist proposes 3:1 ratio (depth > breadth)
+- Challenge protocol: HLNE trim 10→5%, ADBE FV $406→$385, TW EXIT CONDITIONAL, IHP.L trim 11→7-8%, DOCS KC NRR<110%
+- SM buyback bug fixed (252 false edges removed), DNLM.L EUR 300→200
+- Sunday audit: meta-compliance 67, portfolio health 88, KC clean
+- MELI DA done (MODERATE-STRONG)
 
 ## ABIERTO (por prioridad CAGR)
-- Mar 26: 4 trades ready (4 días) — GDDY, DNLM.L, NVO trim, MONY.L sell
-- ITRK.L triggered — needs FTNT exit capital (late April)
+- Mar 26: 4 trades ready (3 días) — GDDY EUR 720, DNLM.L EUR 200, NVO trim, MONY.L sell
+- ITRK.L triggered — FTNT exit capital (late April)
+- EDEN.PA trim 18.4%→12-13% (post-FTNT exit)
 - SM coverage RED: 6 positions low
-- Pipeline: ~42 items >30d stuck
-- Sector views: 27/33 stale (new week, normal)
+- Sector views: 27/33 stale (new week)
+- Daily report 22:00 with all challenge results
