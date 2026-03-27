@@ -28,7 +28,11 @@ def get_portfolio_value():
     for pos in pnl_positions:
         total_pnl += pos.get("unrealizedPnL", {}).get("pnL", 0)
 
-    return round(total_invested + total_pnl, 2)
+    # Include pending buy orders (not yet settled but capital committed)
+    pending_buys = portfolio.get("clientPortfolio", {}).get("ordersForOpen", [])
+    pending_buy_amount = sum(o.get("amount", 0) for o in pending_buys)
+
+    return round(total_invested + total_pnl + pending_buy_amount, 2)
 
 
 def get_sp500():
