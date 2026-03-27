@@ -2,16 +2,16 @@
 # Read EVERY cycle before pushing specialist. No excuses.
 
 ## RESUELTO (no repetir)
-- Stress test Monday STABLE, MEGP.L R4 BUY (#7), NVO Wegovy corrected
-- FTNT exit accelerated to Mar 26 (was late April) — ITRK.L triggered
-- 3 DAs: MELI, LNTH, WRB. SM daily report generated.
-- Challenge: NVO trim justified, FTNT timing challenged → accelerated
+- 8 trades EJECUTADOS en eToro (3 sells + 5 buys including ALFA.L)
+- MONY.L + FTNT sold, NVO trimmed, GDDY + DNLM.L + ITRK.L + MEGP.L + ALFA.L bought
 
 ## ABIERTO (por prioridad CAGR)
-- Mar 26: 6 trades (SELL MONY.L+FTNT, TRIM NVO, BUY GDDY+DNLM.L+ITRK.L)
-- MEGP.L near trigger (136.6p vs 135p) — monitor
-- EDEN.PA trim 18.4%→12-13% (when capital destination available)
-- HLNE trim 10.1%→5% (when capital destination available)
+- Post-execution: specialist updating current.yaml + thesis moves
+- Stress test post-restructuring needed
+- kc_monitor --health new baseline
+- SM daily report + OSINT for new positions
+- EDEN.PA trim 18.4%→12-13% (pending)
+- HLNE trim 10.1%→5% (pending)
 - TW EXIT CONDITIONAL (Q1 gate)
-- SM coverage: 6 positions low
-- Daily report tonight with challenge section
+- Daily report with execution details
+- 90-day clocks started for DNLM.L, ITRK.L, MEGP.L, ALFA.L
