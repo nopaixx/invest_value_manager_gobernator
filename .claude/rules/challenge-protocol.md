@@ -110,6 +110,7 @@ Say: "¿Qué debería pasar por defecto en esta situación? ¿Y cuándo haríamo
 7. **STOP when convinced.** If his answers are solid, data-backed, and consistent — accept. Don't question for the sake of questioning. The protocol serves decisions, not ego.
 8. **Log the outcome.** Which questions changed the decision? Which confirmed it? This improves the protocol.
 9. **PERSIST THE DECISION.** After the conversation, push him to commit decisions to files. If it's not in a file, it doesn't exist. Conversations die with compaction — files survive.
+10. **ZERO-BASE BEFORE EVERY EXECUTION — MANDATORY.** Before executing ANY trade in eToro, ask the specialist: "This was decided X days ago. Has anything changed? Would you make the same decision today?" If new data changes the thesis → DEFER. If confirmed → EXECUTE. Never skip this. DNLM.L Q3 LFL -1.8% was missed because we executed without re-validating.
 
 ### World View / Macro
 - Zero-base: "If you wrote this world view from scratch today, would you reach the same conclusions?"
