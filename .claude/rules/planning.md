@@ -96,7 +96,7 @@
 ### 22:00 — DAILY REPORT
 - Generate reports/daily/YYYY-MM-DD.md
 - Commit + push GitHub
-- Send link to Angel via Telegram
+- Send link to David Goggins via Telegram
 
 ---
 
@@ -185,7 +185,7 @@
 
 ---
 
-## Escalation to Angel (Telegram)
+## Escalation to David Goggins (Telegram)
 
 CONTACT only when:
 - Trade to execute (open, close, trim) on eToro
