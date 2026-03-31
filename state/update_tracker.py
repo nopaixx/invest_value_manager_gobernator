@@ -3,6 +3,10 @@
 Daily portfolio tracker — updates portfolio_tracker.csv and prints comparison vs S&P 500.
 Run at end of each day before daily report.
 
+NAV calculation: tracks total account change (credit + positions + unrealized PnL)
+since inception, NOT just current positions. This correctly handles sells/trims
+where capital moves from positions to demo cash.
+
 Usage: python3 state/update_tracker.py
 """
 
@@ -13,30 +17,50 @@ from datetime import datetime
 
 TRACKER_FILE = os.path.join(os.path.dirname(__file__), "portfolio_tracker.csv")
 
+# Total account value at inception (Mar 16 2026): credit + positions
+# credit was ~$81,752, positions ~$11,798, total ~$93,550
+INCEPTION_TOTAL_ACCOUNT = 93550.0
+INCEPTION_PORTFOLIO = 11798.0
+
+
 def get_portfolio_value():
-    """Get current portfolio value from eToro demo."""
+    """Get current NAV by tracking total account change since inception."""
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
     from etoro.client import EtoroClient
     c = EtoroClient()
     portfolio = c.get_portfolio()
     positions = portfolio.get("clientPortfolio", {}).get("positions", [])
+    credit = portfolio.get("clientPortfolio", {}).get("credit", 0)
     pnl_data = c.get_pnl()
     pnl_positions = pnl_data.get("clientPortfolio", {}).get("positions", [])
 
     total_invested = sum(p.get("amount", 0) for p in positions)
-    total_pnl = 0
-    for pos in pnl_positions:
-        total_pnl += pos.get("unrealizedPnL", {}).get("pnL", 0)
+    total_pnl = sum(pos.get("unrealizedPnL", {}).get("pnL", 0) for pos in pnl_positions)
 
-    # Include pending buy orders (not yet settled but capital committed)
+    # Include pending orders
     pending_buys = portfolio.get("clientPortfolio", {}).get("ordersForOpen", [])
     pending_buy_amount = sum(o.get("amount", 0) for o in pending_buys)
 
-    return round(total_invested + total_pnl + pending_buy_amount, 2)
+    # Total account value now
+    current_total = credit + total_invested + total_pnl + pending_buy_amount
+
+    # NAV = inception_portfolio + change_in_total_account
+    nav = INCEPTION_PORTFOLIO + (current_total - INCEPTION_TOTAL_ACCOUNT)
+
+    return round(nav, 2)
 
 
 def get_sp500():
-    """Get S&P 500 current price via specialist's price_checker."""
+    """Get S&P 500 current price via yfinance."""
+    try:
+        import yfinance as yf
+        sp = yf.Ticker("^GSPC")
+        hist = sp.history(period="1d")
+        if len(hist) > 0:
+            return round(hist["Close"].iloc[-1], 2)
+    except Exception:
+        pass
+    # Fallback to price_checker
     import subprocess
     try:
         result = subprocess.run(
