@@ -1,12 +1,16 @@
-{"event": "SELL AUTO.L", "date": "2026-03-09", "status": "done"}
-{"event": "ORCL earnings", "date": "2026-03-10", "status": "done", "result": "beat"}
-{"event": "FTNT Investor Briefing", "date": "2026-03-10", "status": "done", "result": "NEUTRAL"}
-{"event": "ADBE earnings", "date": "2026-03-11", "status": "done", "result": "CONDITIONAL BEAT, CEO stepping down"}
-{"event": "ALFA.L FY2025", "date": "2026-03-12", "status": "done", "result": "PASS low end, SO 165p"}
-{"event": "BZU.MI market buy", "date": "2026-03-13", "status": "done", "result": "EUR 370 at EUR 42"}
-{"event": "FOUR.L FY2025", "date": "2026-03-11", "status": "done", "result": "CONDITIONAL PASS, FV 4400→4000p, entry 3400→3200p"}
-{"event": "SELL BZU.MI at market open", "date": "2026-03-16", "exchange": "BIT", "action": "remind specialist — 8.81 shares at market. Oil crisis decision."}
-{"event": "FOMC decision", "date": "2026-03-18", "exchange": "NYSE", "action": "remind specialist — hawkish prob 50%, oil $126 Hormuz closed. CRITICAL."}
-{"event": "ECB decision", "date": "2026-03-19", "action": "remind specialist"}
-{"event": "BoE decision + HLNE ex-div", "date": "2026-03-20", "exchange": "LSE/NYSE", "action": "remind specialist"}
-{"event": "EXECUTION DAY: SELL MONY.L + TRIM NVO + BUY GDDY + BUY DNLM.L", "date": "2026-03-26", "action": "remind specialist — 4 trades planned"}
+{"event": "Orforglipron FDA decision", "date": "2026-04-01", "status": "done", "result": "APPROVED. NVO exit Mar 31 validated. Re-entry CLOSED."}
+{"event": "DNLM.L Q3 trading update", "date": "2026-04-16", "status": "pending", "action": "Binary for starter position. UK consumer DETERIORATING. 10 days."}
+{"event": "EDEN.PA Q1 revenue", "date": "2026-04-23", "status": "pending", "action": "Confirms rebasing trajectory. Shorts 10%. Consensus collapsed. 17 days."}
+{"event": "DSY.PA Q1 — SO review", "date": "2026-04-15", "status": "pending", "action": "Cancel SO if growth <3%"}
+{"event": "TSLA Q1 earnings", "date": "2026-04-21", "status": "pending", "action": "CVNA short catalyst #2"}
+{"event": "CVNA earnings prep", "date": "2026-04-25", "status": "pending", "action": "Framework done, review pre-earnings"}
+{"event": "SPGI Q1 earnings", "date": "2026-04-28", "status": "pending", "action": "SO at $380, gate check"}
+{"event": "TW Q1 earnings", "date": "2026-04-29", "status": "pending", "action": "RPM compression test. EXIT CONDITIONAL decision."}
+{"event": "Italy AGCM consultation EDEN.PA", "date": "2026-04-30", "status": "pending", "action": "6th regulatory front risk."}
+{"event": "DOCS Q4 FY2026 earnings", "date": "2026-05-15", "status": "pending", "action": "NRR binary. KC#8 test."}
+{"event": "HLNE Q4 FY2026 earnings", "date": "2026-05-25", "status": "pending", "action": "Evergreen inflows binary."}
+{"event": "CVNA Q1 earnings", "date": "2026-05-06", "status": "pending", "action": "EBITDA margin test. Short thesis."}
+{"event": "DNLM.L 90-day clock", "date": "2026-06-25", "status": "pending", "action": "Prove-or-exit"}
+{"event": "ITRK.L 90-day clock", "date": "2026-06-24", "status": "pending", "action": "Prove-or-exit"}
+{"event": "MEGP.L 90-day clock", "date": "2026-06-24", "status": "pending", "action": "Prove-or-exit"}
+{"event": "ALFA.L 90-day clock", "date": "2026-06-27", "status": "pending", "action": "Prove-or-exit"}
